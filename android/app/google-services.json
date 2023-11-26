@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1041849992046",
+    "project_id": "ek-shobde-quran",
+    "storage_bucket": "ek-shobde-quran.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1041849992046:android:ffb47641bf7d5d49d2377f",
+        "android_client_info": {
+          "package_name": "cse.ruet.ek_shodbe_quran"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFMj21HGFMAAK49O8mDEDJLjL7zjTjpSE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

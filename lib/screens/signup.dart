@@ -1,21 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ek_shodbe_quran/screens/home.dart';
-import 'package:ek_shodbe_quran/screens/signup.dart';
+import 'package:ek_shodbe_quran/screens/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ek_shodbe_quran/component/wide_button.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+class SignUp extends StatefulWidget {
+  const SignUp({super.key});
 
   @override
-  State<Login> createState() => _LoginState();
+  State<SignUp> createState() => _SignUpState();
 }
 
-class _LoginState extends State<Login> {
+class _SignUpState extends State<SignUp> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _nameEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -59,11 +60,11 @@ class _LoginState extends State<Login> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
+                      const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 15, 8, 8),
+                            padding: EdgeInsets.fromLTRB(0, 15, 8, 8),
                             child: Text(
                               'এক শব্দে কুরআন',
                               style: TextStyle(
@@ -73,6 +74,52 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                         ],
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(0, 15, 8, 8),
+                        child: Text(
+                          'নাম',
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      TextFormField(
+                        controller: _nameEditingController,
+                        keyboardType: TextInputType.name,
+                        style: const TextStyle(
+                          fontSize: 18,
+                        ),
+                        cursorColor: Colors.black54,
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 0,
+                          ),
+                          hintText: 'নাম লিখুন',
+                          hintStyle: const TextStyle(
+                            color: Colors.black54,
+                          ),
+                          filled: true,
+                          fillColor: Colors.green[100],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                              color: Color.fromRGBO(191, 153, 245, 1),
+                              width: 2.0,
+                            ),
+                          ),
+                        ),
+                        onSaved: (newValue) {
+                          setState(() {
+                            // Handle the value if needed
+                          });
+                        },
                       ),
                       const Padding(
                         padding: EdgeInsets.fromLTRB(0, 15, 8, 8),
@@ -167,29 +214,25 @@ class _LoginState extends State<Login> {
                           });
                         },
                       ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, 15, 8, 8),
-                        child: Text(
-                          'পাসওয়ার্ড ভুলে গেছেন?',
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).primaryColor),
-                        ),
-                      ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       WideButton(
-                        'লগ ইন',
+                        'সাইন আপ',
                         onPressed: () async {
                           try {
                             await FirebaseAuth.instance
-                                .signInWithEmailAndPassword(
+                                .createUserWithEmailAndPassword(
                               email: _emailController.text,
                               password: _passwordController.text,
-                            ).then((value){
-                              
+                            )
+                                .then((value) async{
+                                  await FirebaseFirestore.instance
+                                  .collection('users')
+                                  .doc(value.user!.uid)
+                                  .set({
+                                'name': _nameEditingController.text,
+                              });
                               Fluttertoast.showToast(
                                   msg: 'একাউন্ট সফলভাবে তৈরি হয়েছে');
                               Navigator.of(context).pushAndRemoveUntil(
@@ -199,13 +242,16 @@ class _LoginState extends State<Login> {
                               );
                             });
                           } on FirebaseAuthException catch (e) {
-                            if (e.code == 'user-not-found') {
+                            if (e.code == 'weak-password') {
                               Fluttertoast.showToast(
-                                  msg: 'এই ইমেইল দিয়ে কোন একাউন্ট খুঁজে পাওয়া যায় নি');
-                            } else if (e.code == 'wrong-password') {
+                                  msg: 'পাসসওয়ার্ড অনেক সহজ');
+                            } else if (e.code == 'email-already-in-use') {
                               Fluttertoast.showToast(
-                                  msg: 'ভুল ইমেল বা পাসওয়ার্ড');
+                                  msg:
+                                      'সেই ইমেলের জন্য অ্যাকাউন্টটি ইতিমধ্যেই বিদ্যমান');
                             }
+                          } catch (e) {
+                            Fluttertoast.showToast(msg: e.toString());
                           }
                         },
                         backgroundcolor: Theme.of(context).primaryColor,
@@ -225,7 +271,7 @@ class _LoginState extends State<Login> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'একাউন্ট নেই? ',
+                      'একাউন্ট  আছে? ',
                       style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -236,10 +282,10 @@ class _LoginState extends State<Login> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const SignUp()));
+                                builder: (context) => const Login()));
                       },
                       child: Text(
-                        'সাইন আপ',
+                        'লগ ইন',
                         style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
