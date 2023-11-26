@@ -220,7 +220,10 @@ class _SignUpState extends State<SignUp> {
                       WideButton(
                         'সাইন আপ',
                         onPressed: () async {
-                          try {
+                          if(_nameEditingController.text.trim().isEmpty){
+                            Fluttertoast.showToast(msg: 'নাম লিখুন');
+                          }else{
+                            try {
                             await FirebaseAuth.instance
                                 .createUserWithEmailAndPassword(
                               email: _emailController.text,
@@ -252,6 +255,7 @@ class _SignUpState extends State<SignUp> {
                             }
                           } catch (e) {
                             Fluttertoast.showToast(msg: e.toString());
+                          }
                           }
                         },
                         backgroundcolor: Theme.of(context).primaryColor,
