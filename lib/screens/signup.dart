@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ek_shodbe_quran/component/progressbar.dart';
+import 'package:ek_shodbe_quran/provider/userDetailsProvider.dart';
 import 'package:ek_shodbe_quran/screens/home.dart';
 import 'package:ek_shodbe_quran/screens/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,12 +19,13 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameEditingController = TextEditingController();
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Stack(
+        body: _isLoading ? ProgressBar(): Stack(
           children: [
             Positioned(
               top: -MediaQuery.of(context).padding.top,
@@ -219,10 +222,13 @@ class _SignUpState extends State<SignUp> {
                       ),
                       WideButton(
                         'সাইন আপ',
-                        onPressed: () async {
+                        onPressed:  () async {
                           if(_nameEditingController.text.trim().isEmpty){
                             Fluttertoast.showToast(msg: 'নাম লিখুন');
                           }else{
+                            setState(() {
+                              _isLoading = true;
+                            });
                             try {
                             await FirebaseAuth.instance
                                 .createUserWithEmailAndPassword(
@@ -230,12 +236,16 @@ class _SignUpState extends State<SignUp> {
                               password: _passwordController.text,
                             )
                                 .then((value) async{
+                                  UserDetailsProvider().updateId(value.user!.uid);
                                   await FirebaseFirestore.instance
                                   .collection('users')
                                   .doc(value.user!.uid)
                                   .set({
                                 'name': _nameEditingController.text,
+                                'email': _emailController.text,
                               });
+                              UserDetailsProvider().updateName(_nameEditingController.text);
+                              UserDetailsProvider().updateEmail(_emailController.text);
                               Fluttertoast.showToast(
                                   msg: 'একাউন্ট সফলভাবে তৈরি হয়েছে');
                               Navigator.of(context).pushAndRemoveUntil(
@@ -253,8 +263,14 @@ class _SignUpState extends State<SignUp> {
                                   msg:
                                       'সেই ইমেলের জন্য অ্যাকাউন্টটি ইতিমধ্যেই বিদ্যমান');
                             }
+                            setState(() {
+                              _isLoading = false;
+                            });
                           } catch (e) {
-                            Fluttertoast.showToast(msg: e.toString());
+                            Fluttertoast.showToast(msg: '$e');
+                            setState(() {
+                              _isLoading = false;
+                            });
                           }
                           }
                         },
