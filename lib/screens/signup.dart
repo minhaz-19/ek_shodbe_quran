@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ek_shodbe_quran/component/progressbar.dart';
+import 'package:ek_shodbe_quran/component/shared_preference.dart';
 import 'package:ek_shodbe_quran/provider/userDetailsProvider.dart';
 import 'package:ek_shodbe_quran/screens/home.dart';
 import 'package:ek_shodbe_quran/screens/login.dart';
@@ -112,7 +113,7 @@ class _SignUpState extends State<SignUp> {
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                               color: Color.fromRGBO(191, 153, 245, 1),
                               width: 2.0,
                             ),
@@ -158,7 +159,7 @@ class _SignUpState extends State<SignUp> {
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
+                            borderSide:const  BorderSide(
                               color: Color.fromRGBO(191, 153, 245, 1),
                               width: 2.0,
                             ),
@@ -205,7 +206,7 @@ class _SignUpState extends State<SignUp> {
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
+                            borderSide:const  BorderSide(
                               color: Color.fromRGBO(191, 153, 245, 1),
                               width: 2.0,
                             ),
@@ -253,6 +254,9 @@ class _SignUpState extends State<SignUp> {
                                     builder: (context) => const Home()),
                                 (Route<dynamic> route) => false,
                               );
+                            }).then((value) {
+                              saveDataToDevice('email', _emailController.text);
+                              saveDataToDevice('password', _passwordController.text);
                             });
                           } on FirebaseAuthException catch (e) {
                             if (e.code == 'weak-password') {
@@ -286,11 +290,11 @@ class _SignUpState extends State<SignUp> {
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: EdgeInsets.only(bottom: 30),
+                padding: const EdgeInsets.only(bottom: 30),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       'একাউন্ট  আছে? ',
                       style: TextStyle(
                           fontSize: 18,

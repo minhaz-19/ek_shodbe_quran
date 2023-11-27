@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ek_shodbe_quran/component/progressbar.dart';
+import 'package:ek_shodbe_quran/component/shared_preference.dart';
 import 'package:ek_shodbe_quran/provider/userDetailsProvider.dart';
 import 'package:ek_shodbe_quran/screens/home.dart';
 import 'package:ek_shodbe_quran/screens/signup.dart';
@@ -21,11 +22,61 @@ class _LoginState extends State<Login> {
   bool _isLoading = false;
 
   @override
+  void initState() {
+    initializeLogin();
+    super.initState();
+  }
+
+  void initializeLogin()async{
+    setState(() {
+      _isLoading = true;
+    });
+    final email = await getDataFromDevice('email') ?? "";
+    final password = await getDataFromDevice('password') ?? "";
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    )
+        .then((value) {
+          UserDetailsProvider().updateId(value.user!.uid);
+      FirebaseFirestore.instance
+              .collection('users')
+              .doc(value.user!.uid)
+              .snapshots()
+              .listen(
+            (event) {
+              final data = event.data() as Map<String, dynamic>;
+             UserDetailsProvider().updateName(data['name']);
+              UserDetailsProvider().updateEmail(data['email']);
+              Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+            builder: (context) => const Home()),
+        (Route<dynamic> route) => false,
+      );
+            },
+            
+          );
+      
+    });
+    
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+setState(() {
+      _isLoading = false;
+});
+    
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         body: _isLoading
-            ? ProgressBar()
+            ?const ProgressBar()
             : Stack(
                 children: [
                   Positioned(
@@ -64,12 +115,12 @@ class _LoginState extends State<Login> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
+                           const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Padding(
                                   padding:
-                                      const EdgeInsets.fromLTRB(0, 15, 8, 8),
+                                      EdgeInsets.fromLTRB(0, 15, 8, 8),
                                   child: Text(
                                     'এক শব্দে কুরআন',
                                     style: TextStyle(
@@ -114,7 +165,7 @@ class _LoginState extends State<Login> {
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
+                                  borderSide:const BorderSide(
                                     color: Color.fromRGBO(191, 153, 245, 1),
                                     width: 2.0,
                                   ),
@@ -161,7 +212,7 @@ class _LoginState extends State<Login> {
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
+                                  borderSide: const BorderSide(
                                     color: Color.fromRGBO(191, 153, 245, 1),
                                     width: 2.0,
                                   ),
@@ -174,7 +225,7 @@ class _LoginState extends State<Login> {
                               },
                             ),
                             Padding(
-                              padding: EdgeInsets.fromLTRB(0, 15, 8, 8),
+                              padding:const EdgeInsets.fromLTRB(0, 15, 8, 8),
                               child: Text(
                                 'পাসওয়ার্ড ভুলে গেছেন?',
                                 style: TextStyle(
@@ -183,7 +234,7 @@ class _LoginState extends State<Login> {
                                     color: Theme.of(context).primaryColor),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 20,
                             ),
                             WideButton(
@@ -198,10 +249,12 @@ class _LoginState extends State<Login> {
                                     email: _emailController.text,
                                     password: _passwordController.text,
                                   )
-                                      .then((value) {
+                                      .then((value) async{
+                                       await saveDataToDevice('email', _emailController.text);
+                                       await saveDataToDevice('password', _passwordController.text);
                                         UserDetailsProvider().updateId(value.user!.uid);
                                     FirebaseFirestore.instance
-              .collection('admin')
+              .collection('users')
               .doc(value.user!.uid)
               .snapshots()
               .listen(
@@ -214,7 +267,7 @@ class _LoginState extends State<Login> {
                 Fluttertoast.showToast(msg: "Listen failed: $error"),
           );
                                     Fluttertoast.showToast(
-                                        msg: 'একাউন্ট সফলভাবে তৈরি হয়েছে');
+                                        msg: 'লগ ইন সফল হয়েছে');
                                     Navigator.of(context).pushAndRemoveUntil(
                                       MaterialPageRoute(
                                           builder: (context) => const Home()),
@@ -252,11 +305,11 @@ class _LoginState extends State<Login> {
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Padding(
-                      padding: EdgeInsets.only(bottom: 30),
+                      padding:const EdgeInsets.only(bottom: 30),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
+                        const  Text(
                             'একাউন্ট নেই? ',
                             style: TextStyle(
                                 fontSize: 18,

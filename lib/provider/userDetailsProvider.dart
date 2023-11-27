@@ -13,7 +13,7 @@ class UserDetailsProvider with ChangeNotifier {
     notifyListeners();
   }
   void updateId(String id) {
-    userName = id;
+    userId = id;
     notifyListeners();
   }
   String getName() {

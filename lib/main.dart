@@ -5,9 +5,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main()async {
   WidgetsFlutterBinding.ensureInitialized();
+  await SharedPreferences.getInstance();
   await Firebase.initializeApp();
   runApp(const MyApp());
 }
@@ -23,7 +25,7 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Color(0xFF007C49), // You can set any color here
       statusBarIconBrightness:
           Brightness.light, // Change the status bar icons' color
@@ -47,7 +49,7 @@ class _MyAppState extends State<MyApp> {
             splash: Center(
               child: SingleChildScrollView(
                 child: Container(
-                  padding: EdgeInsets.all(15),
+                  padding: const EdgeInsets.all(15),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -56,8 +58,8 @@ class _MyAppState extends State<MyApp> {
                         height: 250,
                         width: 250,
                       ),
-                      Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 15, 8, 8),
+                      const Padding(
+                              padding: EdgeInsets.fromLTRB(0, 15, 8, 8),
                               child: Text(
                                 'এক শব্দে কুরআন',
                                 style: TextStyle(
