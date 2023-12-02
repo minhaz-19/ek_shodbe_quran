@@ -125,6 +125,171 @@ class _HomeState extends State<Home> {
                       )),
                 ]),
               ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.25,
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 70,
+                          width: 70,
+                          margin: const EdgeInsets.only(bottom: 8),
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Image.asset('assets/icons/namaz_time.png'),
+                        ),
+                        Text(
+                          'নামাজের সময়',
+                          style: TextStyle(fontWeight: FontWeight.w500),
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.25,
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 70,
+                          width: 70,
+                          margin: const EdgeInsets.only(bottom: 8),
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Image.asset('assets/icons/ayat.png'),
+                        ),
+                        Text(
+                          ' আয়াত',
+                          style: TextStyle(fontWeight: FontWeight.w500),
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.25,
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 70,
+                          width: 70,
+                          margin: const EdgeInsets.only(bottom: 8),
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Image.asset('assets/icons/durud.png'),
+                        ),
+                        Text(
+                          'তিলাওয়াত',
+                          style: TextStyle(fontWeight: FontWeight.w500),
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.25,
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 70,
+                          width: 70,
+                          margin: const EdgeInsets.only(bottom: 8),
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Image.asset('assets/icons/compass.png'),
+                        ),
+                        Text(
+                          'কিবলা',
+                          style: TextStyle(fontWeight: FontWeight.w500),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  SizedBox(
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 70,
+                          width: 70,
+                          margin: const EdgeInsets.only(bottom: 8),
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Image.asset('assets/icons/book.png'),
+                        ),
+                        Text(
+                          'কোর্স সমূহ',
+                          style: TextStyle(fontWeight: FontWeight.w500),
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.33,
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 70,
+                          width: 70,
+                          margin: const EdgeInsets.only(bottom: 8),
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Image.asset('assets/icons/calendar.png'),
+                        ),
+                        Text(
+                          'ক্যালেন্ডার',
+                          style: TextStyle(fontWeight: FontWeight.w500),
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 70,
+                          width: 70,
+                          margin: const EdgeInsets.only(bottom: 8),
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Image.asset('assets/icons/durud.png'),
+                        ),
+                        Text(
+                          'দুরুদ',
+                          style: TextStyle(fontWeight: FontWeight.w500),
+                        )
+                      ],
+                    ),
+                  ),
+                  Spacer()
+                ],
+              ),
             ],
           ),
         ));
