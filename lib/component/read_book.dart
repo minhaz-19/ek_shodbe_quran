@@ -20,7 +20,7 @@ class _ReadBookState extends State<ReadBook> {
                 BorderRadius.circular(10), // Set the desired border radius
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image(
                 image: AssetImage('assets/images/toprectangle.png'),
@@ -33,7 +33,7 @@ class _ReadBookState extends State<ReadBook> {
                 child: Text('Title',
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.start,
+                    textAlign: TextAlign.center,
                     style:
                         TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
               ),

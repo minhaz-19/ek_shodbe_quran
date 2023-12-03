@@ -1,6 +1,9 @@
 import 'package:ek_shodbe_quran/provider/userDetailsProvider.dart';
 import 'package:ek_shodbe_quran/screens/drawer.dart';
+import 'package:ek_shodbe_quran/screens/tabs/book_tab.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab.dart';
+import 'package:ek_shodbe_quran/screens/tabs/question_tab.dart';
+import 'package:ek_shodbe_quran/screens/tabs/video_tab.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
@@ -30,7 +33,7 @@ class _HomeState extends State<Home> {
   PersistentTabController _controller =
       PersistentTabController(initialIndex: 0);
   List<Widget> _buildScreens() {
-    return [HomeTab(), HomeTab(), HomeTab(), HomeTab()];
+    return [HomeTab(), BookTab(), VideoTab(), QuestionTab()];
   }
 
   List<PersistentBottomNavBarItem> _navBarsItems() {
@@ -39,7 +42,7 @@ class _HomeState extends State<Home> {
           icon: ImageIcon(
             AssetImage('assets/icons/home.png'),
           ),
-          title: ("Home"),
+          title: (""),
           activeColorPrimary: Theme.of(context).primaryColor,
           inactiveColorPrimary: CupertinoColors.systemGrey,
           activeColorSecondary: Colors.white,
@@ -48,7 +51,7 @@ class _HomeState extends State<Home> {
           icon: ImageIcon(
             AssetImage('assets/icons/book.png'),
           ),
-          title: ("Courses"),
+          title: ("বই"),
           activeColorPrimary: Theme.of(context).primaryColor,
           inactiveColorPrimary: CupertinoColors.systemGrey,
           activeColorSecondary: Colors.white,
@@ -57,7 +60,7 @@ class _HomeState extends State<Home> {
           icon: ImageIcon(
             AssetImage('assets/icons/play.png'),
           ),
-          title: ("Books"),
+          title: ("ভিডিও"),
           activeColorPrimary: Theme.of(context).primaryColor,
           inactiveColorPrimary: CupertinoColors.systemGrey,
           activeColorSecondary: Colors.white,
@@ -66,7 +69,7 @@ class _HomeState extends State<Home> {
           icon: ImageIcon(
             AssetImage('assets/icons/chat.png'),
           ),
-          title: ("More"),
+          title: ("প্রশ্নোত্তর"),
           activeColorPrimary: Theme.of(context).primaryColor,
           inactiveColorPrimary: CupertinoColors.systemGrey,
           activeColorSecondary: Colors.white,
@@ -79,7 +82,13 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
-        title: const Text('Home Page'),
+        title: (_controller.index == 0)
+            ? const Text('একশব্দে কুরআন শিক্ষা')
+            : (_controller.index == 1)
+                ? const Text('বই পড়া')
+                : (_controller.index == 2)
+                    ? const Text('ভিডিও')
+                    : const Text('প্রশ্নোত্তর'),
         centerTitle: true,
       ),
       drawer: const drawer(),

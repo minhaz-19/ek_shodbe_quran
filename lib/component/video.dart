@@ -30,7 +30,7 @@ class _VideoState extends State<Video> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text('Title',
+                child: Text('মিশারী রশিদ আল-আফসী',
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.start,

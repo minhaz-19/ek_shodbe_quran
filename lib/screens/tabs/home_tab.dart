@@ -1,3 +1,4 @@
+import 'package:ek_shodbe_quran/component/feature_icon.dart';
 import 'package:ek_shodbe_quran/component/read_book.dart';
 import 'package:ek_shodbe_quran/component/video.dart';
 import 'package:ek_shodbe_quran/component/wide_button.dart';
@@ -115,7 +116,8 @@ class _HomeTabState extends State<HomeTab> {
                   left: 0,
                   right: 0,
                   child: WideButton(
-                    'Read Quran',
+                    'আল-কুরআন পড়ুন',
+                    textColor: Colors.white,
                     onPressed: () {},
                     backgroundcolor: const Color(0xFF007C49),
                     padding: MediaQuery.of(context).size.width * 0.25,
@@ -125,92 +127,29 @@ class _HomeTabState extends State<HomeTab> {
           Row(
             children: [
               SizedBox(
-                width: MediaQuery.of(context).size.width * 0.25,
-                child: Column(
-                  children: [
-                    Container(
-                      height: 70,
-                      width: 70,
-                      margin: const EdgeInsets.only(bottom: 8),
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Image.asset('assets/icons/namaz_time.png'),
-                    ),
-                    const Text(
-                      'নামাজের সময়',
-                      style: TextStyle(fontWeight: FontWeight.w500),
-                    )
-                  ],
-                ),
-              ),
+                  width: MediaQuery.of(context).size.width * 0.25,
+                  child: FeatureIcon(
+                      label: 'নামাজের সময়',
+                      iconPath: 'assets/icons/namaz_time.png',
+                      onPressed: () {})),
+              SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.25,
+                  child: FeatureIcon(
+                      label: 'আয়াত',
+                      iconPath: 'assets/icons/ayat.png',
+                      onPressed: () {})),
+              SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.25,
+                  child: FeatureIcon(
+                      label: 'তিলাওয়াত',
+                      iconPath: 'assets/icons/durud.png',
+                      onPressed: () {})),
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.25,
-                child: Column(
-                  children: [
-                    Container(
-                      height: 70,
-                      width: 70,
-                      margin: const EdgeInsets.only(bottom: 8),
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Image.asset('assets/icons/ayat.png'),
-                    ),
-                    const Text(
-                      ' আয়াত',
-                      style: TextStyle(fontWeight: FontWeight.w500),
-                    )
-                  ],
-                ),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.25,
-                child: Column(
-                  children: [
-                    Container(
-                      height: 70,
-                      width: 70,
-                      margin: const EdgeInsets.only(bottom: 8),
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Image.asset('assets/icons/durud.png'),
-                    ),
-                    const Text(
-                      'তিলাওয়াত',
-                      style: TextStyle(fontWeight: FontWeight.w500),
-                    )
-                  ],
-                ),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.25,
-                child: Column(
-                  children: [
-                    Container(
-                      height: 70,
-                      width: 70,
-                      margin: const EdgeInsets.only(bottom: 8),
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Image.asset('assets/icons/compass.png'),
-                    ),
-                    const Text(
-                      'কিবলা',
-                      style: TextStyle(fontWeight: FontWeight.w500),
-                    )
-                  ],
-                ),
+                child: FeatureIcon(
+                    label: 'কিবলা',
+                    iconPath: 'assets/icons/compass.png',
+                    onPressed: () {}),
               ),
             ],
           ),
@@ -220,66 +159,20 @@ class _HomeTabState extends State<HomeTab> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Column(
-                children: [
-                  Container(
-                    height: 70,
-                    width: 70,
-                    margin: const EdgeInsets.only(bottom: 8),
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Image.asset('assets/icons/book.png'),
-                  ),
-                  const Text(
-                    'কোর্স সমূহ',
-                    style: TextStyle(fontWeight: FontWeight.w500),
-                  )
-                ],
-              ),
+              FeatureIcon(
+                  label: 'কোর্স সমূহ',
+                  iconPath: 'assets/icons/book.png',
+                  onPressed: () {}),
               SizedBox(
-                width: MediaQuery.of(context).size.width * 0.33,
-                child: Column(
-                  children: [
-                    Container(
-                      height: 70,
-                      width: 70,
-                      margin: const EdgeInsets.only(bottom: 8),
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Image.asset('assets/icons/calendar.png'),
-                    ),
-                    const Text(
-                      'ক্যালেন্ডার',
-                      style: TextStyle(fontWeight: FontWeight.w500),
-                    )
-                  ],
-                ),
-              ),
-              Column(
-                children: [
-                  Container(
-                    height: 70,
-                    width: 70,
-                    margin: const EdgeInsets.only(bottom: 8),
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Image.asset('assets/icons/durud.png'),
-                  ),
-                  const Text(
-                    'দুরুদ',
-                    style: TextStyle(fontWeight: FontWeight.w500),
-                  )
-                ],
-              ),
+                  width: MediaQuery.of(context).size.width * 0.33,
+                  child: FeatureIcon(
+                      label: 'ক্যালেন্ডার',
+                      iconPath: 'assets/icons/calendar.png',
+                      onPressed: () {})),
+              FeatureIcon(
+                  label: 'দুরুদ',
+                  iconPath: 'assets/icons/durud.png',
+                  onPressed: () {}),
             ],
           ),
           const SizedBox(
