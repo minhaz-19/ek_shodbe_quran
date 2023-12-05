@@ -4,6 +4,7 @@ import 'package:ek_shodbe_quran/component/video.dart';
 import 'package:ek_shodbe_quran/component/wide_button.dart';
 import 'package:ek_shodbe_quran/provider/userDetailsProvider.dart';
 import 'package:ek_shodbe_quran/screens/drawer.dart';
+import 'package:ek_shodbe_quran/screens/read_quran.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
@@ -118,7 +119,11 @@ class _HomeTabState extends State<HomeTab> {
                   child: WideButton(
                     'আল-কুরআন পড়ুন',
                     textColor: Colors.white,
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context, rootNavigator: true).push(
+                          MaterialPageRoute(
+                              builder: (context) => const ReadQuran()));
+                    },
                     backgroundcolor: const Color(0xFF007C49),
                     padding: MediaQuery.of(context).size.width * 0.25,
                   )),

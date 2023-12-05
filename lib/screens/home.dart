@@ -42,7 +42,7 @@ class _HomeState extends State<Home> {
           icon: ImageIcon(
             AssetImage('assets/icons/home.png'),
           ),
-          title: (""),
+          title: ("হোম"),
           activeColorPrimary: Theme.of(context).primaryColor,
           inactiveColorPrimary: CupertinoColors.systemGrey,
           activeColorSecondary: Colors.white,
@@ -81,6 +81,13 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        flexibleSpace: (_controller.index != 0)
+            ? const Image(
+                image: AssetImage(
+                    'assets/images/toprectangle.png'), // Replace with your image path
+                fit: BoxFit.cover,
+              )
+            : null,
         foregroundColor: Colors.white,
         title: (_controller.index == 0)
             ? const Text('একশব্দে কুরআন শিক্ষা')
