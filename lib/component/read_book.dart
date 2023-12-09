@@ -1,3 +1,4 @@
+import 'package:ek_shodbe_quran/screens/tabs/book_tab_details/book_details.dart';
 import 'package:flutter/material.dart';
 
 class ReadBook extends StatefulWidget {
@@ -11,6 +12,10 @@ class _ReadBookState extends State<ReadBook> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      onTap: () {
+        Navigator.of(context, rootNavigator: true)
+            .push(MaterialPageRoute(builder: (context) => const BookDetails()));
+      },
       child: Container(
         margin: const EdgeInsets.fromLTRB(10, 0, 0, 10),
         width: 250,

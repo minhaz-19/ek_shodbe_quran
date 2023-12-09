@@ -7,6 +7,7 @@ class WideButton extends StatefulWidget {
     this.padding = 0.0,
     this.textColor = Colors.black,
     this.height = 45,
+    this.borderColor ,
     required this.onPressed,
     required this.backgroundcolor,
   }) : super(key: key);
@@ -16,7 +17,8 @@ class WideButton extends StatefulWidget {
   final double height;
   final Color backgroundcolor;
   final Color textColor;
-  final  Function() onPressed;
+  final dynamic borderColor;
+  final Function() onPressed;
 
   @override
   State<WideButton> createState() => _WideButtonState();
@@ -38,6 +40,7 @@ class _WideButtonState extends State<WideButton> {
             backgroundColor: MaterialStateProperty.all(widget.backgroundcolor),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
+                 side:(widget.borderColor != null)? BorderSide(color: Theme.of(context).primaryColor): BorderSide.none,
                 borderRadius: BorderRadius.circular(15),
               ),
             ),
@@ -46,7 +49,8 @@ class _WideButtonState extends State<WideButton> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(widget.text, style: TextStyle(color: widget.textColor, fontSize: 18)),
+              Text(widget.text,
+                  style: TextStyle(color: widget.textColor, fontSize: 18)),
             ],
           ),
         ),
