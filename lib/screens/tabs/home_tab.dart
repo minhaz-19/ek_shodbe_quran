@@ -3,11 +3,9 @@ import 'package:ek_shodbe_quran/component/read_book.dart';
 import 'package:ek_shodbe_quran/component/video.dart';
 import 'package:ek_shodbe_quran/component/wide_button.dart';
 import 'package:ek_shodbe_quran/provider/userDetailsProvider.dart';
-import 'package:ek_shodbe_quran/screens/drawer.dart';
 import 'package:ek_shodbe_quran/screens/read_quran.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/namaz_time.dart';
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -136,7 +134,11 @@ class _HomeTabState extends State<HomeTab> {
                   child: FeatureIcon(
                       label: 'নামাজের সময়',
                       iconPath: 'assets/icons/namaz_time.png',
-                      onPressed: () {})),
+                      onPressed: () {
+                        Navigator.of(context, rootNavigator: true).push(
+                            MaterialPageRoute(
+                                builder: (context) => const NamazTime()));
+                      })),
               SizedBox(
                   width: MediaQuery.of(context).size.width * 0.25,
                   child: FeatureIcon(
