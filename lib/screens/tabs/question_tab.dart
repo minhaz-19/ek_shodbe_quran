@@ -1,4 +1,4 @@
- import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 class QuestionTab extends StatefulWidget {
   const QuestionTab({super.key});
@@ -37,6 +37,7 @@ class _QuestionTabState extends State<QuestionTab> {
             ),
           ),
           Card(
+            color: Colors.green[100],
             elevation: 3,
             child: SizedBox(
               height: 70,
@@ -46,16 +47,20 @@ class _QuestionTabState extends State<QuestionTab> {
                     child: TextField(
                       maxLines: 2,
                       controller: _questionController,
-                      decoration: const InputDecoration(
+                      decoration:const InputDecoration(
                         hintText: 'প্রশ্ন জিজ্ঞাসা করুন',
-                        border: OutlineInputBorder(
+                        // fillColor: Colors.green[100],
+                        // filled: true,
+                        border:  OutlineInputBorder(
                           borderSide: BorderSide.none,
                         ),
                       ),
                     ),
                   ),
                   const Image(
-                    image: AssetImage('assets/icons/send.png'),
+                    image: AssetImage(
+                      'assets/icons/send.png',
+                    ),
                     height: 40,
                   ),
                   const SizedBox(width: 10),

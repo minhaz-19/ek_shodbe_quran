@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class NamazWakto extends StatefulWidget {
-  NamazWakto({
+class SunTime extends StatefulWidget {
+  SunTime({
     super.key,
     required this.imagePath,
     required this.waktoName,
@@ -14,19 +14,19 @@ class NamazWakto extends StatefulWidget {
   final String waktoTime;
   var color;
   @override
-  State<NamazWakto> createState() => _NamazWaktoState();
+  State<SunTime> createState() => _SunTimeState();
 }
 
-class _NamazWaktoState extends State<NamazWakto> {
+class _SunTimeState extends State<SunTime> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 120,
-        width: 120,
+        height: 127,
+        width: 194,
         decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage(widget.imagePath),
-              fit: BoxFit.cover,
+              // fit: BoxFit.cover,
             ),
             borderRadius: BorderRadius.circular(20)),
         child: Column(
@@ -38,8 +38,8 @@ class _NamazWaktoState extends State<NamazWakto> {
                   Text(
                     widget.waktoName,
                     style: TextStyle(
-                        color: widget.color,
-                        fontSize: (widget.waktoName == 'তাহাজ্জুদ') ? 15 : 20,
+                        color: Colors.white,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold),
                   ),
                   Spacer(),
@@ -52,15 +52,20 @@ class _NamazWaktoState extends State<NamazWakto> {
               ),
             ),
             Spacer(),
-            Padding(
-              padding: const EdgeInsets.all(11),
-              child: Text(
-                widget.waktoTime,
-                style: TextStyle(
-                  color: widget.color,
-                  fontSize: 20,
+            Row(
+              children: [
+                Spacer(),
+                Padding(
+                  padding: const EdgeInsets.all(11),
+                  child: Text(
+                    widget.waktoTime,
+                    style: TextStyle(
+                      color: widget.color,
+                      fontSize: 20,
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
           ],
         ));
