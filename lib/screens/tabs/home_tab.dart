@@ -4,7 +4,9 @@ import 'package:ek_shodbe_quran/component/video.dart';
 import 'package:ek_shodbe_quran/component/wide_button.dart';
 import 'package:ek_shodbe_quran/provider/userDetailsProvider.dart';
 import 'package:ek_shodbe_quran/screens/read_quran.dart';
+import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/donate.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/namaz_time.dart';
+import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/todays_ayat.dart';
 import 'package:flutter/material.dart';
 
 class HomeTab extends StatefulWidget {
@@ -144,7 +146,11 @@ class _HomeTabState extends State<HomeTab> {
                   child: FeatureIcon(
                       label: 'আয়াত',
                       iconPath: 'assets/icons/ayat.png',
-                      onPressed: () {})),
+                      onPressed: () {
+                        Navigator.of(context, rootNavigator: true).push(
+                            MaterialPageRoute(
+                                builder: (context) => const TodaysAyat()));
+                      })),
               SizedBox(
                   width: MediaQuery.of(context).size.width * 0.25,
                   child: FeatureIcon(
@@ -310,31 +316,37 @@ class _HomeTabState extends State<HomeTab> {
           const SizedBox(
             height: 30,
           ),
-          Column(
-            children: [
-              Container(
-                height: 100,
-                width: 100,
-                margin: const EdgeInsets.only(bottom: 8),
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  borderRadius: BorderRadius.circular(20),
+          InkWell(
+            onTap: () {
+              Navigator.of(context, rootNavigator: true).push(
+                  MaterialPageRoute(builder: (context) => const Donate()));
+            },
+            child: Column(
+              children: [
+                Container(
+                  height: 100,
+                  width: 100,
+                  margin: const EdgeInsets.only(bottom: 8),
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Image.asset('assets/images/donate.png'),
                 ),
-                child: Image.asset('assets/images/donate.png'),
-              ),
-              Text(
-                'ইসলামের খেদমতে দান করুন ->',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black54,
+                Text(
+                  'ইসলামের খেদমতে দান করুন ->',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black54,
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 70,
-              ),
-            ],
+                const SizedBox(
+                  height: 70,
+                ),
+              ],
+            ),
           ),
           Column(
             children: [
