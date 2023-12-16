@@ -5,6 +5,7 @@ import 'package:ek_shodbe_quran/component/wide_button.dart';
 import 'package:ek_shodbe_quran/provider/userDetailsProvider.dart';
 import 'package:ek_shodbe_quran/screens/read_quran.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/donate.dart';
+import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/kiblah.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/namaz_time.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/todays_ayat.dart';
 import 'package:flutter/material.dart';
@@ -162,7 +163,11 @@ class _HomeTabState extends State<HomeTab> {
                 child: FeatureIcon(
                     label: 'কিবলা',
                     iconPath: 'assets/icons/compass.png',
-                    onPressed: () {}),
+                    onPressed: () {
+                      Navigator.of(context, rootNavigator: true).push(
+                          MaterialPageRoute(
+                              builder: (context) => const Kiblah()));
+                    }),
               ),
             ],
           ),
