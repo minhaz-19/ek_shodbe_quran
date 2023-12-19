@@ -1,3 +1,4 @@
+import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/course_details.dart';
 import 'package:flutter/material.dart';
 
 class CoursesWidget extends StatefulWidget {
@@ -11,6 +12,9 @@ class _CoursesWidgetState extends State<CoursesWidget> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      onTap: (){
+        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CourseDetails()));
+      },
       child: Container(
         margin: const EdgeInsets.fromLTRB(10, 0, 0, 10),
         width: 250,
