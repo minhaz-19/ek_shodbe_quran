@@ -98,7 +98,7 @@ class _HomeState extends State<Home> {
                     : const Text('প্রশ্নোত্তর'),
         centerTitle: true,
       ),
-      drawer: const drawer(),
+      drawer: const MyDrawer(),
       body: PersistentTabView(
         context,
         controller: _controller,

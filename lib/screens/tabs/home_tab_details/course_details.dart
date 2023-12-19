@@ -1,4 +1,5 @@
 import 'package:ek_shodbe_quran/component/wide_button.dart';
+import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/contact_in_course_details.dart';
 import 'package:flutter/material.dart';
 
 class CourseDetails extends StatefulWidget {
@@ -78,7 +79,10 @@ class _CourseDetailsState extends State<CourseDetails> {
               ),
               WideButton(
                 'যোগাযোগ',
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => ContactInCourseDetails()));
+                },
                 backgroundcolor: Theme.of(context).primaryColor,
                 textColor: Colors.white,
                 padding: 20,
