@@ -15,7 +15,7 @@ class _ReadQuranState extends State<ReadQuran>
   int _selectedIndex = 0;
   ScrollController _customtabController = ScrollController();
 
-  final List<String> tabTitles = ['Dashboard', 'Exams'];
+  final List<String> tabTitles = ['সুরা', 'পারা'];
 
   @override
   void initState() {

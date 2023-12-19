@@ -1,15 +1,32 @@
-import 'package:ek_shodbe_quran/component/namaz_time.dart';
-import 'package:ek_shodbe_quran/component/sun_time.dart';
+import 'package:ek_shodbe_quran/component/shared_preference.dart';
 import 'package:flutter/material.dart';
 
-class NamazTime extends StatefulWidget {
-  const NamazTime({super.key});
+class Durud extends StatefulWidget {
+  const Durud({super.key});
 
   @override
-  State<NamazTime> createState() => _NamazTimeState();
+  State<Durud> createState() => _DurudState();
 }
 
-class _NamazTimeState extends State<NamazTime> {
+class _DurudState extends State<Durud> {
+  bool _on = true;
+  @override
+  void initState() {
+    getDataFromDevice('durud').then((value) {
+      if (value == null) {
+        setState(() {
+          _on = true;
+        });
+      } else {
+        setState(() {
+          _on = false;
+        });
+      }
+    });
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +61,7 @@ class _NamazTimeState extends State<NamazTime> {
                         child: Align(
                           alignment: Alignment.center,
                           child: Text(
-                            'নামাজের সময়',
+                            'দরুদ',
                             style: TextStyle(fontSize: 23, color: Colors.white),
                           ),
                         ),
@@ -100,92 +117,89 @@ class _NamazTimeState extends State<NamazTime> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+              padding: const EdgeInsets.all(10),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const SizedBox(
                     height: 20,
                   ),
                   Text(
-                    'নামাজের সময়',
+                    'আপনার লোকেশন এর উপর ভিত্তি করে দিন এর বেশ কিছু সময় আপনাকে রসুল (সাঃ) প্রতি দরুদ পাঠ করে শোনাবে ',
                     style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).primaryColor),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      NamazWakto(
-                          imagePath: 'assets/images/fazar.png',
-                          waktoName: 'ফজর',
-                          waktoTime: '4:30 AM'),
-                      NamazWakto(
-                          imagePath: 'assets/images/johor.png',
-                          waktoName: 'যোহর',
-                          waktoTime: '12:30 PM'),
-                      NamazWakto(
-                          imagePath: 'assets/images/fazar.png',
-                          waktoName: 'আসর',
-                          waktoTime: '4:30 PM'),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      NamazWakto(
-                          imagePath: 'assets/images/magrib.png',
-                          waktoName: 'মাগরিব',
-                          waktoTime: '6:30 PM'),
-                      NamazWakto(
-                        imagePath: 'assets/images/esha.png',
-                        waktoName: 'এশা',
-                        waktoTime: '8:30 PM',
-                        color: Colors.white,
-                      ),
-                      NamazWakto(
-                        imagePath: 'assets/images/esha.png',
-                        waktoName: 'তাহাজ্জুদ',
-                        waktoTime: '4:30 PM',
-                        color: Colors.white,
-                      ),
-                    ],
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 20,
+                      // fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
                   const SizedBox(
                     height: 30,
                   ),
-                  Text(
-                    'সূর্যোদয় এবং সূর্যাস্ত',
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).primaryColor),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SunTime(
-                          imagePath: 'assets/images/sunrise.png',
-                          waktoName: 'সূর্যোদয়',
-                          waktoTime: '6:30 AM'),
-                      SunTime(
-                        imagePath: 'assets/images/sunset.png',
-                        waktoName: 'সূর্যাস্ত',
-                        waktoTime: '6:30 PM',
-                        color: Colors.white,
+                      Text('বন্ধ',
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 20,
+                          )),
+                      const SizedBox(
+                        width: 10,
                       ),
+                      InkWell(
+                        onTap: () async {
+                          setState(() async {
+                            _on = !_on;
+                            if (_on) {
+                              await removeDataFromDevice('durud');
+                              setState(() {
+                                _on = true;
+                              });
+                            } else {
+                              await saveDataToDevice('durud', 'off');
+                              setState(() {
+                                _on = false;
+                              });
+                            }
+                          });
+                        },
+                        child: Container(
+                          width: 60,
+                          height: 30,
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[400],
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Center(
+                            child: Row(
+                              children: [
+                                if (_on) const Spacer(),
+                                Container(
+                                  height: 20,
+                                  width: 20,
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).primaryColor,
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                ),
+                                if (!_on) const Spacer(),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text('চালু',
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 20,
+                          )),
                     ],
-                  ),
+                  )
                 ],
               ),
             ),

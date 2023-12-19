@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<void> main()async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPreferences.getInstance();
   await Firebase.initializeApp();
@@ -26,7 +26,8 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Color(0xFF007C49), // You can set any color here
+      statusBarColor:
+          Color.fromRGBO(0, 36, 22, 1.0), // You can set any color here
       statusBarIconBrightness:
           Brightness.light, // Change the status bar icons' color
     ));
@@ -37,12 +38,10 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primaryColor: const Color(
-              0xFF007C49), 
-              appBarTheme: const AppBarTheme(
-          color: Color(0xFF012A1A),
-        ),
-
+          primaryColor: const Color(0xFF007C49),
+          appBarTheme: const AppBarTheme(
+            color: Color.fromRGBO(0, 36, 22, 1.0),
+          ),
         ),
         home: AnimatedSplashScreen(
             duration: 1500,
@@ -59,15 +58,15 @@ class _MyAppState extends State<MyApp> {
                         width: 250,
                       ),
                       const Padding(
-                              padding: EdgeInsets.fromLTRB(0, 15, 8, 8),
-                              child: Text(
-                                'এক শব্দে কুরআন',
-                                style: TextStyle(
-                                    fontSize: 25,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
+                        padding: EdgeInsets.fromLTRB(0, 15, 8, 8),
+                        child: Text(
+                          'এক শব্দে কুরআন',
+                          style: TextStyle(
+                              fontSize: 25,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
                     ],
                   ),
                 ),

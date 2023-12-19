@@ -4,11 +4,15 @@ import 'package:ek_shodbe_quran/component/video.dart';
 import 'package:ek_shodbe_quran/component/wide_button.dart';
 import 'package:ek_shodbe_quran/provider/userDetailsProvider.dart';
 import 'package:ek_shodbe_quran/screens/read_quran.dart';
+import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/courses.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/donate.dart';
+import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/durud.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/kiblah.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/namaz_time.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/todays_ayat.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -30,6 +34,15 @@ class _HomeTabState extends State<HomeTab> {
       email = UserDetailsProvider().getEmail();
     });
     super.initState();
+  }
+
+  _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      Fluttertoast.showToast(msg: 'Could not launch $url');
+      throw 'Could not launch $url';
+    }
   }
 
   @override
@@ -180,7 +193,11 @@ class _HomeTabState extends State<HomeTab> {
               FeatureIcon(
                   label: 'কোর্স সমূহ',
                   iconPath: 'assets/icons/book.png',
-                  onPressed: () {}),
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).push(
+                        MaterialPageRoute(
+                            builder: (context) => const Courses()));
+                  }),
               SizedBox(
                   width: MediaQuery.of(context).size.width * 0.33,
                   child: FeatureIcon(
@@ -190,7 +207,10 @@ class _HomeTabState extends State<HomeTab> {
               FeatureIcon(
                   label: 'দুরুদ',
                   iconPath: 'assets/icons/durud.png',
-                  onPressed: () {}),
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).push(
+                        MaterialPageRoute(builder: (context) => const Durud()));
+                  }),
             ],
           ),
           const SizedBox(
@@ -353,28 +373,33 @@ class _HomeTabState extends State<HomeTab> {
               ],
             ),
           ),
-          Column(
-            children: [
-              Text(
-                'This Application is Developed by',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).primaryColor,
+          InkWell(
+            onTap: () async {
+              await _launchURL('https://niharon.com/');
+            },
+            child: Column(
+              children: [
+                Text(
+                  'This Application is Developed by',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).primaryColor,
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 50,
-                // width: MediaQuery.of(context).size.width * 0.7,
-                child: Image.asset(
-                  'assets/images/niharon.png',
-                  fit: BoxFit.cover,
+                SizedBox(
+                  height: 50,
+                  // width: MediaQuery.of(context).size.width * 0.7,
+                  child: Image.asset(
+                    'assets/images/niharon.png',
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-            ],
+                const SizedBox(
+                  height: 30,
+                ),
+              ],
+            ),
           ),
         ],
       ),
