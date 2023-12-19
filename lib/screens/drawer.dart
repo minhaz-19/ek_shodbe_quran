@@ -1,5 +1,11 @@
+import 'package:ek_shodbe_quran/screens/aboutUs.dart';
+import 'package:ek_shodbe_quran/screens/cart.dart';
+import 'package:ek_shodbe_quran/screens/change_password.dart';
+import 'package:ek_shodbe_quran/screens/edit_profile.dart';
 import 'package:ek_shodbe_quran/screens/home.dart';
 import 'package:ek_shodbe_quran/screens/login.dart';
+import 'package:ek_shodbe_quran/screens/order_list_page.dart';
+import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/donate.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ek_shodbe_quran/component/dwater_icon.dart';
 import 'package:ek_shodbe_quran/provider/userDetailsProvider.dart';
@@ -63,7 +69,13 @@ class MyDrawer extends StatelessWidget {
               style: TextStyle(
                   color: Theme.of(context).primaryColor, fontSize: 20),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Cart()),
+              );
+            },
           ),
           ListTile(
             leading: DrawerIcon(
@@ -74,7 +86,13 @@ class MyDrawer extends StatelessWidget {
               style: TextStyle(
                   color: Theme.of(context).primaryColor, fontSize: 20),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const OrderList()),
+              );
+            },
           ),
           ListTile(
             leading: DrawerIcon(
@@ -85,7 +103,13 @@ class MyDrawer extends StatelessWidget {
               style: TextStyle(
                   color: Theme.of(context).primaryColor, fontSize: 20),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Donate()),
+              );
+            },
           ),
           ListTile(
             leading: DrawerIcon(
@@ -97,7 +121,11 @@ class MyDrawer extends StatelessWidget {
                   color: Theme.of(context).primaryColor, fontSize: 20),
             ),
             onTap: () {
-              Fluttertoast.showToast(msg: 'প্রোফাইল সম্পাদনা');
+              Navigator.of(context).pop();
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const EditProfile()),
+              );
             },
           ),
           ListTile(
@@ -109,7 +137,13 @@ class MyDrawer extends StatelessWidget {
               style: TextStyle(
                   color: Theme.of(context).primaryColor, fontSize: 20),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ChangePassword()),
+              );
+            },
           ),
           ListTile(
             leading: DrawerIcon(
@@ -120,7 +154,13 @@ class MyDrawer extends StatelessWidget {
               style: TextStyle(
                   color: Theme.of(context).primaryColor, fontSize: 20),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AboutUs()),
+              );
+            },
           ),
           FirebaseAuth.instance.currentUser == null
               ? ListTile(
