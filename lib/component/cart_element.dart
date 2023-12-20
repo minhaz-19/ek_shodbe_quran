@@ -1,4 +1,7 @@
+import 'package:ek_shodbe_quran/component/shared_preference.dart';
+import 'package:ek_shodbe_quran/provider/cartProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CartElement extends StatefulWidget {
   const CartElement(
@@ -20,7 +23,17 @@ class _CartElementState extends State<CartElement> {
   int quantity = 1;
   int totalamount = 0;
   @override
+  void initState() {
+    setState(() {
+      var cartDetails = Provider.of<CartProvider>(context, listen: false);
+      quantity = cartDetails.getBookQuantityCart(widget.book_name);
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    var cartDetails = Provider.of<CartProvider>(context);
     return ListTile(
         leading: Container(
             // width: 60,
@@ -41,9 +54,16 @@ class _CartElementState extends State<CartElement> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   InkWell(
-                    onTap: () {
-                      setState(() {
+                    onTap: () async {
+                      setState(() async {
                         quantity++;
+                        cartDetails.addBookQuantityCart(
+                            widget.book_name, quantity);
+                        cartDetails.calculateTotalPrice();
+                        await saveMap(
+                            'bookquantity', cartDetails.bookQuantityCart);
+                        await saveDataToDevice(
+                            'totalprice', cartDetails.totalPrice.toString());
                       });
                     },
                     child: Container(
@@ -63,10 +83,18 @@ class _CartElementState extends State<CartElement> {
                     child: Text('$quantity'),
                   ),
                   InkWell(
-                    onTap: () {
+                    onTap: () async {
                       if (quantity > 1) {
-                        setState(() {
+                        setState(() async {
                           quantity--;
+                          cartDetails.addBookQuantityCart(
+                              widget.book_name, quantity);
+
+                          cartDetails.calculateTotalPrice();
+                          await saveMap(
+                              'bookquantity', cartDetails.bookQuantityCart);
+                          await saveDataToDevice(
+                              'totalprice', cartDetails.totalPrice.toString());
                         });
                       }
                     },
@@ -100,16 +128,30 @@ class _CartElementState extends State<CartElement> {
             )
           ],
         ),
-        trailing: Container(
-            width: 20,
-            height: 20,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-                color: Theme.of(context).primaryColor),
-            child: Icon(
-              Icons.close,
-              color: Colors.white,
-              size: 15,
-            )));
+        trailing: InkWell(
+          onTap: ()async {
+            setState(()async {
+              cartDetails.deleteBook(widget.book_name);
+              cartDetails.calculateTotalPrice();
+              await saveList('bookname', cartDetails.bookList);
+                      await saveMap('bookprice', cartDetails.bookPriceCart);
+                      await saveMap('bookauthor', cartDetails.bookAuthorCart);
+                      await saveMap('bookimage', cartDetails.bookImagePath);
+                      await saveMap('bookquantity', cartDetails.bookQuantityCart);
+                      await saveDataToDevice('totalprice', cartDetails.totalPrice.toString());
+            });
+          },
+          child: Container(
+              width: 20,
+              height: 20,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  color: Theme.of(context).primaryColor),
+              child: Icon(
+                Icons.close,
+                color: Colors.white,
+                size: 15,
+              )),
+        ));
   }
 }

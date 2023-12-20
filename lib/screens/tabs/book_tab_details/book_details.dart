@@ -1,9 +1,22 @@
+import 'package:ek_shodbe_quran/component/shared_preference.dart';
 import 'package:ek_shodbe_quran/component/wide_button.dart';
+import 'package:ek_shodbe_quran/provider/cartProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 
 class BookDetails extends StatefulWidget {
-  const BookDetails({super.key});
+  BookDetails(
+      {super.key,
+      required this.book_name,
+      required this.book_image,
+      required this.author_name,
+      required this.book_price});
 
+  String book_name;
+  String book_image;
+  int book_price;
+  String author_name;
   @override
   State<BookDetails> createState() => _BookDetailsState();
 }
@@ -11,6 +24,7 @@ class BookDetails extends StatefulWidget {
 class _BookDetailsState extends State<BookDetails> {
   @override
   Widget build(BuildContext context) {
+    var cartDetails = Provider.of<CartProvider>(context);
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: const Image(
@@ -19,7 +33,7 @@ class _BookDetailsState extends State<BookDetails> {
           fit: BoxFit.cover,
         ),
         foregroundColor: Colors.white,
-        title: const Text('তাকওয়ার মহত্ব'),
+        title: Text(widget.book_name),
         centerTitle: true,
       ),
       body: Padding(
@@ -35,19 +49,19 @@ class _BookDetailsState extends State<BookDetails> {
                   children: [
                     SizedBox(height: 50),
                     Image.asset(
-                      'assets/images/toprectangle.png',
+                      'assets/images/${widget.book_image}.png',
                       width: MediaQuery.of(context).size.width * 0.6,
                     ),
                     SizedBox(height: 20),
                     Text(
-                      'তাকওয়ার মহত্ব',
+                      widget.book_name,
                       style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: Colors.black),
                     ),
                     Text(
-                      '350 TK',
+                      '${widget.book_price}',
                       style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -60,7 +74,7 @@ class _BookDetailsState extends State<BookDetails> {
                         Container(
                           width: MediaQuery.of(context).size.width - 40,
                           child: Text(
-                            'লেখক : মুহাম্মাদ সালেহ আল মুনাজ্জিদ',
+                            widget.author_name,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             style: TextStyle(fontSize: 16),
@@ -138,7 +152,34 @@ class _BookDetailsState extends State<BookDetails> {
                 children: [
                   WideButton(
                     'কার্ট এ যুক্ত করুন',
-                    onPressed: () {},
+                    onPressed: () async{
+                      cartDetails.addBookName(widget.book_name);
+                      cartDetails.addBookPriceCart(
+                          widget.book_name, widget.book_price);
+                      cartDetails.addBookAuthorCart(
+                          widget.book_name, widget.author_name);
+                      cartDetails.addBookImagePath(
+                          widget.book_name, widget.book_image);
+                      cartDetails.addBookQuantityCart(widget.book_name, 1);
+                      cartDetails.updateTotalPrice(widget.book_price);
+
+                      await saveList('bookname', cartDetails.bookList);
+                      await saveMap('bookprice', cartDetails.bookPriceCart);
+                      await saveMap('bookauthor', cartDetails.bookAuthorCart);
+                      await saveMap('bookimage', cartDetails.bookImagePath);
+                      await saveMap('bookquantity', cartDetails.bookQuantityCart);
+                      await saveDataToDevice('totalprice', cartDetails.totalPrice.toString());
+
+                      Fluttertoast.showToast(
+                          msg: 'বইটি কার্টে যুক্ত করা হয়েছে');
+                      // print('####################################');
+                      // print('${cartDetails.bookList}');
+                      // print('${cartDetails.bookAuthorCart}');
+                      // print('${cartDetails.bookImagePath}');
+                      // print('${cartDetails.bookPriceCart}');
+                      // print('${cartDetails.bookQuantityCart}');
+                      // print('${cartDetails.totalPrice}');
+                    },
                     backgroundcolor: Colors.white,
                     textColor: Theme.of(context).primaryColor,
                     borderColor: Theme.of(context).primaryColor,

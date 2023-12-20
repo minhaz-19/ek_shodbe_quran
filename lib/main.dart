@@ -1,4 +1,5 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:ek_shodbe_quran/provider/cartProvider.dart';
 import 'package:ek_shodbe_quran/provider/userDetailsProvider.dart';
 import 'package:ek_shodbe_quran/screens/login.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -34,6 +35,7 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => UserDetailsProvider()),
+        ChangeNotifierProvider(create: (_) => CartProvider())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

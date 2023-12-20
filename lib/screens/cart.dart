@@ -1,6 +1,8 @@
 import 'package:ek_shodbe_quran/component/cart_element.dart';
 import 'package:ek_shodbe_quran/component/wide_button.dart';
+import 'package:ek_shodbe_quran/provider/cartProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Cart extends StatefulWidget {
   const Cart({super.key});
@@ -11,7 +13,22 @@ class Cart extends StatefulWidget {
 
 class _CartState extends State<Cart> {
   @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      var cartDetails = Provider.of<CartProvider>(context, listen: false);
+      // Calculate and set the initial total price after the build process is complete
+      Future.delayed(Duration.zero, () {
+        cartDetails.calculateTotalPrice();
+      });
+    });
+    // Provider.of<CartProvider>(context, listen: false).calculateTotalPrice();
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    var cartDetails = Provider.of<CartProvider>(context);
     return Scaffold(
         appBar: AppBar(
           flexibleSpace: const Image(
@@ -28,14 +45,19 @@ class _CartState extends State<Cart> {
             Expanded(
               child: ListView.builder(
                 itemBuilder: (context, index) {
-                  return const CartElement(
-                    book_name: 'আল-কোরআনুল কারিম',
-                    book_image: 'assets/images/toprectangle.png',
-                    book_price: 500,
-                    author_name: 'মুহাম্মাদ মুজাহিদুল ইসলাম',
+                  // cartDetails.updateTotalPrice(cartDetails
+                  //     .getBookPriceCart(cartDetails.bookList[index]));
+                  return CartElement(
+                    book_name: cartDetails.bookList[index],
+                    book_image:
+                        'assets/images/${cartDetails.getBookImagePath(cartDetails.bookList[index])}.png',
+                    book_price: cartDetails
+                        .getBookPriceCart(cartDetails.bookList[index]),
+                    author_name: cartDetails
+                        .getBookAuthorCart(cartDetails.bookList[index]),
                   );
                 },
-                itemCount: 10,
+                itemCount: cartDetails.bookList.length,
               ),
             ),
             Card(
@@ -59,7 +81,7 @@ class _CartState extends State<Cart> {
                           ),
                           Spacer(),
                           Text(
-                            '১০০০ ৳',
+                            '${cartDetails.totalPrice} ৳',
                             style: TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.bold),
                           ),

@@ -1,7 +1,9 @@
 import 'package:ek_shodbe_quran/component/feature_icon.dart';
 import 'package:ek_shodbe_quran/component/read_book.dart';
+import 'package:ek_shodbe_quran/component/shared_preference.dart';
 import 'package:ek_shodbe_quran/component/video.dart';
 import 'package:ek_shodbe_quran/component/wide_button.dart';
+import 'package:ek_shodbe_quran/provider/cartProvider.dart';
 import 'package:ek_shodbe_quran/provider/userDetailsProvider.dart';
 import 'package:ek_shodbe_quran/screens/read_quran.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/courses.dart';
@@ -12,6 +14,7 @@ import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/namaz_time.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/todays_ayat.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomeTab extends StatefulWidget {
@@ -33,8 +36,11 @@ class _HomeTabState extends State<HomeTab> {
       name = UserDetailsProvider().getName();
       email = UserDetailsProvider().getEmail();
     });
+ 
     super.initState();
   }
+
+
 
   _launchURL(String url) async {
     if (await canLaunch(url)) {
@@ -47,6 +53,7 @@ class _HomeTabState extends State<HomeTab> {
 
   @override
   Widget build(BuildContext context) {
+    // var cartDetails = Provider.of<CartProvider>(context);
     return Scaffold(
         body: SingleChildScrollView(
       child: Column(
@@ -226,7 +233,17 @@ class _HomeTabState extends State<HomeTab> {
                     style:
                         TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
                 TextButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      // print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+                      // // await getMap('bookprice').then((value) {
+                      // //   cartDetails.createMapFromSharedPreference(
+                      // //       value, 'bookprice');
+
+                      // // });
+                      // await cartDetails.initializeFromSharedPreferences();
+                      // print(cartDetails.bookAuthorCart);
+                      // print(cartDetails.bookList);
+
                       // Navigator.of(context, rootNavigator: true)
                       //     .push(MaterialPageRoute(
                       //         builder: (context) =>

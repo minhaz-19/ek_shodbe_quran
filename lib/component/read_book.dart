@@ -14,7 +14,7 @@ class _ReadBookState extends State<ReadBook> {
     return InkWell(
       onTap: () {
         Navigator.of(context, rootNavigator: true)
-            .push(MaterialPageRoute(builder: (context) => const BookDetails()));
+            .push(MaterialPageRoute(builder: (context) =>  BookDetails(book_name: 'তাকওয়ার মহত্ব', book_image: 'toprectangle', author_name: 'Minhazul Islam', book_price: 14)));
       },
       child: Container(
         margin: const EdgeInsets.fromLTRB(10, 0, 0, 10),

@@ -1,3 +1,4 @@
+import 'package:ek_shodbe_quran/provider/cartProvider.dart';
 import 'package:ek_shodbe_quran/screens/aboutUs.dart';
 import 'package:ek_shodbe_quran/screens/cart.dart';
 import 'package:ek_shodbe_quran/screens/change_password.dart';
@@ -19,6 +20,7 @@ class MyDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var userdata = Provider.of<UserDetailsProvider>(context, listen: false);
+    var cartDetails = Provider.of<CartProvider>(context);
     return Drawer(
       child: Column(
         // padding: EdgeInsets.zero,
@@ -69,7 +71,12 @@ class MyDrawer extends StatelessWidget {
               style: TextStyle(
                   color: Theme.of(context).primaryColor, fontSize: 20),
             ),
-            onTap: () {
+            onTap: () async {
+              if (cartDetails.bookList.length == 0) {
+          
+                await cartDetails.initializeFromSharedPreferences();
+              }
+
               Navigator.of(context).pop();
               Navigator.push(
                 context,
