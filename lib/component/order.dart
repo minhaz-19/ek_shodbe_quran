@@ -1,3 +1,4 @@
+import 'package:ek_shodbe_quran/screens/order_details.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -31,19 +32,22 @@ class _OrderElementState extends State<OrderElement> {
     return Card(
       elevation: 3,
       child: ListTile(
+        onTap: (){
+          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>OrderDetails(order_id: widget.order_id,)));
+        },
         title: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
           child: Text.rich(
             TextSpan(
               text: 'অর্ডার আইডি: ',
-              style: TextStyle(
+              style:const  TextStyle(
                 fontSize: 16,
                 color: Colors.black, // Customize the color as needed
               ),
               children: [
                 TextSpan(
-                  text: '${widget.order_id}',
-                  style: TextStyle(
+                  text: widget.order_id,
+                  style:const  TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -68,7 +72,7 @@ class _OrderElementState extends State<OrderElement> {
                       ? Colors.yellow[700]
                       : widget.status == 'Delivered'
                           ? Colors.green[700]
-                          : Color.fromARGB(255, 98, 9, 187),
+                          : const Color.fromARGB(255, 98, 9, 187),
                 ),
                 child: Text(widget.status,
                     style: const TextStyle(color: Colors.white)),

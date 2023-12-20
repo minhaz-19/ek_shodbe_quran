@@ -21,9 +21,9 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
           title: const Text('অর্ডার নিশ্চিত'),
           centerTitle: true,
         ),
-        body: SingleChildScrollView(
+        body:const SingleChildScrollView(
             child: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding:  EdgeInsets.all(10.0),
           child: Column(
             children: [],
           ),
