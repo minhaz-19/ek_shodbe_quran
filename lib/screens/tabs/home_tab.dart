@@ -5,7 +5,7 @@ import 'package:ek_shodbe_quran/component/video.dart';
 import 'package:ek_shodbe_quran/component/wide_button.dart';
 import 'package:ek_shodbe_quran/provider/cartProvider.dart';
 import 'package:ek_shodbe_quran/provider/userDetailsProvider.dart';
-import 'package:ek_shodbe_quran/screens/read_quran.dart';
+import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/read_quran.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/courses.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/donate.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/durud.dart';

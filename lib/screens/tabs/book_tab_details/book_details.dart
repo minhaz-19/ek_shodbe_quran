@@ -152,26 +152,34 @@ class _BookDetailsState extends State<BookDetails> {
                 children: [
                   WideButton(
                     'কার্ট এ যুক্ত করুন',
-                    onPressed: () async{
-                      cartDetails.addBookName(widget.book_name);
-                      cartDetails.addBookPriceCart(
-                          widget.book_name, widget.book_price);
-                      cartDetails.addBookAuthorCart(
-                          widget.book_name, widget.author_name);
-                      cartDetails.addBookImagePath(
-                          widget.book_name, widget.book_image);
-                      cartDetails.addBookQuantityCart(widget.book_name, 1);
-                      cartDetails.updateTotalPrice(widget.book_price);
+                    onPressed: () async {
+                      if (cartDetails.bookList.contains(widget.book_name)) {
+                        Fluttertoast.showToast(
+                            msg: 'বইটি আগে থেকেই কার্টে যুক্ত করা হয়েছে');
+                      } else {
+                        cartDetails.addBookName(widget.book_name);
+                        cartDetails.addBookPriceCart(
+                            widget.book_name, widget.book_price);
+                        cartDetails.addBookAuthorCart(
+                            widget.book_name, widget.author_name);
+                        cartDetails.addBookImagePath(
+                            widget.book_name, widget.book_image);
+                        cartDetails.addBookQuantityCart(widget.book_name, 1);
+                        cartDetails.updateTotalPrice(widget.book_price);
 
-                      await saveList('bookname', cartDetails.bookList);
-                      await saveMap('bookprice', cartDetails.bookPriceCart);
-                      await saveMap('bookauthor', cartDetails.bookAuthorCart);
-                      await saveMap('bookimage', cartDetails.bookImagePath);
-                      await saveMap('bookquantity', cartDetails.bookQuantityCart);
-                      await saveDataToDevice('totalprice', cartDetails.totalPrice.toString());
+                        await saveList('bookname', cartDetails.bookList);
+                        await saveMap('bookprice', cartDetails.bookPriceCart);
+                        await saveMap('bookauthor', cartDetails.bookAuthorCart);
+                        await saveMap('bookimage', cartDetails.bookImagePath);
+                        await saveMap(
+                            'bookquantity', cartDetails.bookQuantityCart);
+                        await saveDataToDevice(
+                            'totalprice', cartDetails.totalPrice.toString());
 
-                      Fluttertoast.showToast(
-                          msg: 'বইটি কার্টে যুক্ত করা হয়েছে');
+                        Fluttertoast.showToast(
+                            msg: 'বইটি কার্টে যুক্ত করা হয়েছে');
+                      }
+
                       // print('####################################');
                       // print('${cartDetails.bookList}');
                       // print('${cartDetails.bookAuthorCart}');
