@@ -1,6 +1,7 @@
 import 'package:ek_shodbe_quran/component/cart_element.dart';
 import 'package:ek_shodbe_quran/component/wide_button.dart';
 import 'package:ek_shodbe_quran/provider/cartProvider.dart';
+import 'package:ek_shodbe_quran/screens/comfirm_order.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -90,7 +91,10 @@ class _CartState extends State<Cart> {
                     ),
                     WideButton(
                       'চেক আউট',
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const ConfirmOrder()));
+                      },
                       backgroundcolor: Theme.of(context).primaryColor,
                       textColor: Colors.white,
                       borderColor: Theme.of(context).primaryColor,
@@ -103,6 +107,7 @@ class _CartState extends State<Cart> {
             // Add some space below the bottom sheet
             const SizedBox(height: 16),
           ],
-        ));
+        )
+        );
   }
 }

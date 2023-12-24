@@ -1,3 +1,4 @@
+import 'package:ek_shodbe_quran/component/cart_details_element.dart';
 import 'package:ek_shodbe_quran/screens/order_details.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -29,60 +30,69 @@ class _OrderElementState extends State<OrderElement> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 3,
-      child: ListTile(
-        onTap: (){
-          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>OrderDetails(order_id: widget.order_id,)));
-        },
-        title: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          child: Text.rich(
-            TextSpan(
-              text: 'অর্ডার আইডি: ',
-              style:const  TextStyle(
-                fontSize: 16,
-                color: Colors.black, // Customize the color as needed
-              ),
-              children: [
-                TextSpan(
-                  text: widget.order_id,
-                  style:const  TextStyle(
-                    fontWeight: FontWeight.bold,
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => const OrderDetails(order_id: 'ansdfdf')));
+      },
+      child: Card(
+        elevation: 3,
+        child: ListTile(
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => OrderDetails(
+                      order_id: widget.order_id,
+                    )));
+          },
+          title: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Text.rich(
+              TextSpan(
+                text: 'অর্ডার আইডি: ',
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.black, // Customize the color as needed
+                ),
+                children: [
+                  TextSpan(
+                    text: widget.order_id,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
+                ],
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          subtitle: Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Row(
+              children: [
+                Text('$time'),
+                const SizedBox(
+                  width: 10,
+                ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(6, 2, 6, 2),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: widget.status == 'Pending'
+                        ? Colors.yellow[700]
+                        : widget.status == 'Delivered'
+                            ? Colors.green[700]
+                            : const Color.fromARGB(255, 98, 9, 187),
+                  ),
+                  child: Text(widget.status,
+                      style: const TextStyle(color: Colors.white)),
+                ),
+                const Spacer(),
+                Text(
+                  '${widget.price} ৳',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ],
             ),
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        subtitle: Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          child: Row(
-            children: [
-              Text('$time'),
-              const SizedBox(
-                width: 10,
-              ),
-              Container(
-                padding: const EdgeInsets.fromLTRB(6, 2, 6, 2),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: widget.status == 'Pending'
-                      ? Colors.yellow[700]
-                      : widget.status == 'Delivered'
-                          ? Colors.green[700]
-                          : const Color.fromARGB(255, 98, 9, 187),
-                ),
-                child: Text(widget.status,
-                    style: const TextStyle(color: Colors.white)),
-              ),
-              const Spacer(),
-              Text(
-                '${widget.price} ৳',
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ],
           ),
         ),
       ),

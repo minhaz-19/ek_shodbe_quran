@@ -12,19 +12,20 @@ class _OrderDetailsState extends State<OrderDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+        appBar: AppBar(
           flexibleSpace: const Image(
             image: AssetImage(
                 'assets/images/toprectangle.png'), // Replace with your image path
             fit: BoxFit.cover,
           ),
           foregroundColor: Colors.white,
-          title:  Text('অর্ডার ${widget.order_id}'),
+          title: Text('অর্ডার ${widget.order_id}'),
           centerTitle: true,
         ),
-        body: SingleChildScrollView(child: Column(children: [
-
-        ],),)
-    );
+        body: SingleChildScrollView(
+          child: Column(
+            children: [],
+          ),
+        ));
   }
 }
