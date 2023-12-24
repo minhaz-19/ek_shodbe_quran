@@ -28,10 +28,9 @@ class _KiblahState extends State<Kiblah> {
     }).then((value) {
       if (_hasPermissions == false) {
         Permission.locationWhenInUse.request().then((ignored) {
-                _fetchPermissionStatus();
-              });
+          _fetchPermissionStatus();
+        });
       }
-    
     });
   }
 
@@ -78,8 +77,6 @@ class _KiblahState extends State<Kiblah> {
     );
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,10 +92,13 @@ class _KiblahState extends State<Kiblah> {
         ),
         body: Builder(builder: (context) {
           if (_hasPermissions) {
-            return Column(
-              children: <Widget>[
-                Expanded(child: _buildCompass()),
-              ],
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: <Widget>[
+                  Expanded(child: _buildCompass()),
+                ],
+              ),
             );
           } else {
             return const ProgressBar();
