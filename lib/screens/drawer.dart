@@ -1,3 +1,4 @@
+import 'package:ek_shodbe_quran/component/shared_preference.dart';
 import 'package:ek_shodbe_quran/provider/cartProvider.dart';
 import 'package:ek_shodbe_quran/screens/aboutUs.dart';
 import 'package:ek_shodbe_quran/screens/cart.dart';
@@ -13,6 +14,7 @@ import 'package:ek_shodbe_quran/provider/userDetailsProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({Key? key}) : super(key: key);
@@ -73,7 +75,6 @@ class MyDrawer extends StatelessWidget {
             ),
             onTap: () async {
               if (cartDetails.bookList.length == 0) {
-          
                 await cartDetails.initializeFromSharedPreferences();
               }
 
@@ -221,21 +222,26 @@ class MyDrawer extends StatelessWidget {
                                           Navigator.of(context).pop();
                                           Navigator.of(context).pop();
                                         },
-                                        child: const Text(
+                                        child: Text(
                                           'না',
                                           style: TextStyle(
                                               fontSize: 20,
-                                              fontWeight: FontWeight.bold),
+                                              fontWeight: FontWeight.bold,
+                                              color: Theme.of(context)
+                                                  .primaryColor),
                                         ),
                                       ),
                                       TextButton(
                                         onPressed: () async {
                                           await FirebaseAuth.instance
                                               .signOut()
-                                              .then((value) {
+                                              .then((value) async {
                                             userdata.updateEmail('');
                                             userdata.updateName('');
                                             userdata.updateId('');
+                                            await removeDataFromDevice('email');
+                                            await removeDataFromDevice(
+                                                'password');
                                           });
                                           Navigator.of(context)
                                               .pushAndRemoveUntil(
@@ -244,11 +250,13 @@ class MyDrawer extends StatelessWidget {
                                             (route) => false,
                                           );
                                         },
-                                        child: const Text(
+                                        child: Text(
                                           'হ্যাঁ',
                                           style: TextStyle(
                                               fontSize: 20,
-                                              fontWeight: FontWeight.bold),
+                                              fontWeight: FontWeight.bold,
+                                              color: Theme.of(context)
+                                                  .primaryColor),
                                         ),
                                       ),
                                     ],
@@ -269,10 +277,21 @@ class MyDrawer extends StatelessWidget {
                 fit: BoxFit.contain,
               ),
             ),
-            onTap: () {},
+            onTap: () async {
+              await _launchURL('https://niharon.com/');
+            },
           ),
         ],
       ),
     );
+  }
+}
+
+_launchURL(String url) async {
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    Fluttertoast.showToast(msg: 'Could not launch $url');
+    throw 'Could not launch $url';
   }
 }

@@ -1,6 +1,7 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:ek_shodbe_quran/provider/cartProvider.dart';
 import 'package:ek_shodbe_quran/provider/userDetailsProvider.dart';
+import 'package:ek_shodbe_quran/screens/home.dart';
 import 'package:ek_shodbe_quran/screens/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -12,12 +13,17 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPreferences.getInstance();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var email = prefs.getString('email');
+  runApp( MyApp( email: email,));
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
-
+  const MyApp({
+    super.key,
+    this.email,
+  });
+  final String? email;
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -74,7 +80,7 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
             ),
-            nextScreen: const Login(),
+            nextScreen: widget.email == null ? const Home() : const Login(),
             splashIconSize: 550,
             splashTransition: SplashTransition.scaleTransition,
             // pageTransitionType:  Animation(),

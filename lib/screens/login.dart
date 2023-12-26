@@ -33,7 +33,8 @@ class _LoginState extends State<Login> {
     });
     final email = await getDataFromDevice('email') ?? "";
     final password = await getDataFromDevice('password') ?? "";
-    try {
+    if(email != ""){
+      try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
       email: email,
       password: password,
@@ -61,10 +62,13 @@ class _LoginState extends State<Login> {
     });
     
     } catch (e) {
+      Fluttertoast.showToast(msg: '$e');
       setState(() {
         _isLoading = false;
       });
     }
+    }
+    
 setState(() {
       _isLoading = false;
 });
