@@ -187,7 +187,7 @@ class _NamazTimeState extends State<NamazTime> {
                                 ),
                                 Text(
                                   (_country == null)
-                                      ? 'খিলগাঁও, ঢাকা, বাংলাদেশ'
+                                      ? 'লোকেশন পাওয়া যায়নি'
                                       : (_subLocality != "")
                                           ? "$_subLocality, $_locality, $_country"
                                           : '$_locality, $_country',
