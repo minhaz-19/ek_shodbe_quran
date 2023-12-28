@@ -3,6 +3,7 @@ import 'package:ek_shodbe_quran/component/progressbar.dart';
 import 'package:ek_shodbe_quran/component/shared_preference.dart';
 import 'package:ek_shodbe_quran/provider/userDetailsProvider.dart';
 import 'package:ek_shodbe_quran/screens/home.dart';
+import 'package:ek_shodbe_quran/screens/recover_password.dart';
 import 'package:ek_shodbe_quran/screens/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -27,52 +28,48 @@ class _LoginState extends State<Login> {
     super.initState();
   }
 
-  void initializeLogin()async{
+  void initializeLogin() async {
     setState(() {
       _isLoading = true;
     });
     final email = await getDataFromDevice('email') ?? "";
     final password = await getDataFromDevice('password') ?? "";
-    if(email != ""){
+    if (email != "") {
       try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    )
-        .then((value) {
+        await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
+          email: email,
+          password: password,
+        )
+            .then((value) {
           UserDetailsProvider().updateId(value.user!.uid);
-      FirebaseFirestore.instance
+          FirebaseFirestore.instance
               .collection('users')
               .doc(value.user!.uid)
               .snapshots()
               .listen(
             (event) {
               final data = event.data() as Map<String, dynamic>;
-             UserDetailsProvider().updateName(data['name']);
+              UserDetailsProvider().updateName(data['name']);
               UserDetailsProvider().updateEmail(data['email']);
               Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-            builder: (context) => const Home()),
-        (Route<dynamic> route) => false,
-      );
+                MaterialPageRoute(builder: (context) => const Home()),
+                (Route<dynamic> route) => false,
+              );
             },
-            
           );
-      
-    });
-    
-    } catch (e) {
-      Fluttertoast.showToast(msg: '$e');
-      setState(() {
-        _isLoading = false;
-      });
+        });
+      } catch (e) {
+        Fluttertoast.showToast(msg: '$e');
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
-    }
-    
-setState(() {
+
+    setState(() {
       _isLoading = false;
-});
-    
+    });
   }
 
   @override
@@ -80,7 +77,7 @@ setState(() {
     return SafeArea(
       child: Scaffold(
         body: _isLoading
-            ?const ProgressBar()
+            ? const ProgressBar()
             : Stack(
                 children: [
                   Positioned(
@@ -119,12 +116,11 @@ setState(() {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                           const Row(
+                            const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Padding(
-                                  padding:
-                                      EdgeInsets.fromLTRB(0, 15, 8, 8),
+                                  padding: EdgeInsets.fromLTRB(0, 15, 8, 8),
                                   child: Text(
                                     'এক শব্দে কুরআন',
                                     style: TextStyle(
@@ -169,7 +165,7 @@ setState(() {
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
-                                  borderSide:const BorderSide(
+                                  borderSide: const BorderSide(
                                     color: Color.fromRGBO(191, 153, 245, 1),
                                     width: 2.0,
                                   ),
@@ -228,14 +224,23 @@ setState(() {
                                 });
                               },
                             ),
-                            Padding(
-                              padding:const EdgeInsets.fromLTRB(0, 15, 8, 8),
-                              child: Text(
-                                'পাসওয়ার্ড ভুলে গেছেন?',
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).primaryColor),
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const RecoverPassword()));
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 15, 8, 8),
+                                child: Text(
+                                  'পাসওয়ার্ড ভুলে গেছেন?',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context).primaryColor),
+                                ),
                               ),
                             ),
                             const SizedBox(
@@ -253,23 +258,30 @@ setState(() {
                                     email: _emailController.text,
                                     password: _passwordController.text,
                                   )
-                                      .then((value) async{
-                                       await saveDataToDevice('email', _emailController.text);
-                                       await saveDataToDevice('password', _passwordController.text);
-                                        UserDetailsProvider().updateId(value.user!.uid);
+                                      .then((value) async {
+                                    await saveDataToDevice(
+                                        'email', _emailController.text);
+                                    await saveDataToDevice(
+                                        'password', _passwordController.text);
+                                    UserDetailsProvider()
+                                        .updateId(value.user!.uid);
                                     FirebaseFirestore.instance
-              .collection('users')
-              .doc(value.user!.uid)
-              .snapshots()
-              .listen(
-            (event) {
-              final data = event.data() as Map<String, dynamic>;
-              UserDetailsProvider().updateName(data['name']);
-              UserDetailsProvider().updateEmail(data['email']);
-            },
-            onError: (error) =>
-                Fluttertoast.showToast(msg: "Listen failed: $error"),
-          );
+                                        .collection('users')
+                                        .doc(value.user!.uid)
+                                        .snapshots()
+                                        .listen(
+                                      (event) {
+                                        final data = event.data()
+                                            as Map<String, dynamic>;
+                                        UserDetailsProvider()
+                                            .updateName(data['name']);
+                                        UserDetailsProvider()
+                                            .updateEmail(data['email']);
+                                      },
+                                      onError: (error) =>
+                                          Fluttertoast.showToast(
+                                              msg: "Listen failed: $error"),
+                                    );
                                     Fluttertoast.showToast(
                                         msg: 'লগ ইন সফল হয়েছে');
                                     Navigator.of(context).pushAndRemoveUntil(
@@ -309,11 +321,11 @@ setState(() {
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Padding(
-                      padding:const EdgeInsets.only(bottom: 30),
+                      padding: const EdgeInsets.only(bottom: 30),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                        const  Text(
+                          const Text(
                             'একাউন্ট নেই? ',
                             style: TextStyle(
                                 fontSize: 18,
