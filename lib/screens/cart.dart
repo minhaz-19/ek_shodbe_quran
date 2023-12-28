@@ -3,6 +3,7 @@ import 'package:ek_shodbe_quran/component/wide_button.dart';
 import 'package:ek_shodbe_quran/provider/cartProvider.dart';
 import 'package:ek_shodbe_quran/screens/comfirm_order.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class Cart extends StatefulWidget {
@@ -92,8 +93,12 @@ class _CartState extends State<Cart> {
                     WideButton(
                       'চেক আউট',
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const ConfirmOrder()));
+                        if (cartDetails.bookList.isEmpty) {
+                          Fluttertoast.showToast(msg: 'কার্টে কোন বই নেই');
+                        } else {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const ConfirmOrder()));
+                        }
                       },
                       backgroundcolor: Theme.of(context).primaryColor,
                       textColor: Colors.white,
@@ -107,7 +112,6 @@ class _CartState extends State<Cart> {
             // Add some space below the bottom sheet
             const SizedBox(height: 16),
           ],
-        )
-        );
+        ));
   }
 }

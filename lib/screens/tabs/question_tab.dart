@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ek_shodbe_quran/component/progressbar.dart';
 import 'package:ek_shodbe_quran/screens/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class QuestionTab extends StatefulWidget {
-  const QuestionTab({super.key});
+  const QuestionTab({Key? key}) : super(key: key);
 
   @override
   State<QuestionTab> createState() => _QuestionTabState();
@@ -25,19 +26,21 @@ class _QuestionTabState extends State<QuestionTab> {
                   child: Container(),
                 )
               : Expanded(
-                  child: FutureBuilder<QuerySnapshot>(
-                    future: FirebaseFirestore.instance
-                        .collection(
-                            'users/${FirebaseAuth.instance.currentUser!.uid}/questions')
-                        .get(),
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('questions')
+                        .where('uid',
+                            isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                        .orderBy('time', descending: false)
+                        .snapshots(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
+                        return const Center(child: ProgressBar());
                       } else if (snapshot.hasError) {
                         return Center(child: Text('Error: ${snapshot.error}'));
                       } else if (!snapshot.hasData ||
                           snapshot.data!.docs.isEmpty) {
-                        return Center(child: Text('No questions available'));
+                        return const Center();
                       } else {
                         // Iterate through documents and build the list
                         List<Widget> listTiles = snapshot.data!.docs.map((doc) {
@@ -50,13 +53,13 @@ class _QuestionTabState extends State<QuestionTab> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              subtitle: (doc['answer'] == null ||
-                                      !snapshot.data.)
+                              subtitle: (doc['answer'] == '')
                                   ? null
                                   : Text(
-                                      doc['answer']
-                                          .toString(), // Adjust as needed
-                                      style: TextStyle(color: Colors.black54),
+                                      doc['answer'],
+                                      style: TextStyle(
+                                          color: Color.fromRGBO(
+                                              108, 104, 138, 1.0)),
                                     ),
                             ),
                           );
@@ -80,6 +83,8 @@ class _QuestionTabState extends State<QuestionTab> {
                     child: TextField(
                       maxLines: 2,
                       controller: _questionController,
+                      autofocus: false,
+                      
                       decoration: const InputDecoration(
                         hintText: 'প্রশ্ন জিজ্ঞাসা করুন',
                         border: OutlineInputBorder(
@@ -98,6 +103,7 @@ class _QuestionTabState extends State<QuestionTab> {
                               .add({
                             'question': _questionController.text,
                             'time': Timestamp.now(),
+                            'answer': '',
                           }).then((value) async {
                             await FirebaseFirestore.instance
                                 .collection('questions/')
@@ -105,6 +111,7 @@ class _QuestionTabState extends State<QuestionTab> {
                               'uid': FirebaseAuth.instance.currentUser!.uid,
                               'question': _questionController.text,
                               'time': Timestamp.now(),
+                              'answer': '',
                             });
                           }).then((value) {
                             Fluttertoast.showToast(

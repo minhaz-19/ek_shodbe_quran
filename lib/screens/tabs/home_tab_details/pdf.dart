@@ -9,8 +9,9 @@ import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class PdfPage extends StatefulWidget {
   final String pdfHeading;
+  var filePath;
 
-  PdfPage({required this.pdfHeading});
+  PdfPage({required this.pdfHeading, required this.filePath});
 
   @override
   State<PdfPage> createState() => _PdfPageState();
@@ -33,7 +34,6 @@ class _PdfPageState extends State<PdfPage> {
   final GlobalKey _containerKey = GlobalKey();
 
   Future<void> _captureAndShare() async {
-    print('###############################');
     RenderRepaintBoundary boundary = _containerKey.currentContext!
         .findRenderObject() as RenderRepaintBoundary;
     ui.Image image = await boundary.toImage(pixelRatio: 3.0);
@@ -81,8 +81,8 @@ class _PdfPageState extends State<PdfPage> {
               Expanded(
                 child: RepaintBoundary(
                   key: _containerKey,
-                  child: SfPdfViewer.asset(
-                    'assets/images/1903141.pdf',
+                  child: SfPdfViewer.file(
+          File('${widget.filePath}'),
                     key: _pdfViewerKey,
                     controller: _pdfViewerController,
                     scrollDirection: PdfScrollDirection.horizontal,
