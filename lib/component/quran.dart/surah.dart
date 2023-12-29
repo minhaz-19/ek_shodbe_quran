@@ -71,7 +71,7 @@ class _SurahState extends State<Surah> {
     return File(filePath).existsSync();
   }
 
-  Future<void> downloadPdf(String fileName) async {
+  Future<void> downloadPdf(String fileName, String index) async {
     Directory appDocDir = await getApplicationDocumentsDirectory();
     String filePath = '${appDocDir.path}/$fileName';
 
@@ -85,6 +85,10 @@ class _SurahState extends State<Surah> {
                 'surah/$fileName') // Replace 'pdfs' with your Firebase Storage path
             .writeToFile(pdfFile);
         Fluttertoast.showToast(msg: 'সফলভাবে ডাউনলোড হয়েছে');
+        var sura_para_details =
+            Provider.of<SurahParaProvider>(context, listen: false);
+        sura_para_details.addDownloadedSurahIndex(index);
+        openPdfViewer(filePath, fileName);
       } on FirebaseException catch (e) {
         Fluttertoast.showToast(msg: '$e');
         openPdfViewer(filePath, fileName);
@@ -108,11 +112,11 @@ class _SurahState extends State<Surah> {
     );
   }
 
-  void checkAndDownloadPdf(String fileName) async {
+  void checkAndDownloadPdf(String fileName, String index) async {
     bool fileExists = await doesFileExist(fileName);
 
     if (!fileExists) {
-      await downloadPdf(fileName);
+      await downloadPdf(fileName, index);
     } else {
       Directory appDocDir = await getApplicationDocumentsDirectory();
       String filePath = '${appDocDir.path}/$fileName';
@@ -138,13 +142,7 @@ class _SurahState extends State<Surah> {
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: ListTile(
                       onTap: () {
-                        Fluttertoast.showToast(msg: '${sura_para_details.downloadedSurahIndex}');
-                        Fluttertoast.showToast(
-                            msg:
-                                '${sura_para_details.downloadedSurahIndex.contains('${sura_para_details.surahList['${index + 1}']}')}');
-                        Fluttertoast.showToast(
-                            msg: '${sura_para_details.surahList['${index + 1}']}.pdf');
-                        checkAndDownloadPdf('${sura_para_details.surahList['${index + 1}']}.pdf');
+                        checkAndDownloadPdf('${sura_para_details.surahList['${index + 1}']}.pdf', '${index + 1}');
                       },
                       title: Text(
                         '${sura_para_details.surahList['${index + 1}']}',
