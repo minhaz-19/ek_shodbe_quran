@@ -1,5 +1,6 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:ek_shodbe_quran/provider/cartProvider.dart';
+import 'package:ek_shodbe_quran/provider/surah_para_provider.dart';
 import 'package:ek_shodbe_quran/provider/userDetailsProvider.dart';
 import 'package:ek_shodbe_quran/screens/home.dart';
 import 'package:ek_shodbe_quran/screens/login.dart';
@@ -41,7 +42,8 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => UserDetailsProvider()),
-        ChangeNotifierProvider(create: (_) => CartProvider())
+        ChangeNotifierProvider(create: (_) => CartProvider()),
+        ChangeNotifierProvider(create: (_) => SurahParaProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

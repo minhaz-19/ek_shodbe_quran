@@ -25,6 +25,8 @@ class _PdfPageState extends State<PdfPage> {
   void initState() {
     _pdfViewerController = PdfViewerController();
     super.initState();
+    print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+    print(widget.filePath);
     setState(() {
       _currentPage = 1;
     });
@@ -82,7 +84,7 @@ class _PdfPageState extends State<PdfPage> {
                 child: RepaintBoundary(
                   key: _containerKey,
                   child: SfPdfViewer.file(
-          File('${widget.filePath}'),
+                    File('${widget.filePath}'),
                     key: _pdfViewerKey,
                     controller: _pdfViewerController,
                     scrollDirection: PdfScrollDirection.horizontal,
