@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
 
 class OrderDetailsFromFirebase extends StatefulWidget {
-  const OrderDetailsFromFirebase({super.key, required this.order_id});
+  const OrderDetailsFromFirebase(
+      {super.key,
+      required this.book_name,
+      required this.book_image,
+      required this.author_name,
+      required this.per_unit_price,
+      required this.quantity});
 
-  final String order_id;
+  final String book_name;
+  final String book_image;
+  final String author_name;
+  final int per_unit_price;
+  final int quantity;
+
   @override
   State<OrderDetailsFromFirebase> createState() =>
       _OrderDetailsFromFirebaseState();
 }
 
 class _OrderDetailsFromFirebaseState extends State<OrderDetailsFromFirebase> {
-  String name = 'Minhaz';
-  String mobile = '01714501019';
-  String address =
-      '185/5/C, Road 09, Basabo, Khilgaon, Dhaka , Khilgaon , Dhaka , Bangladesh';
-  String book_name = 'The Road to Recognition';
-  String book_image = 'toprectangle';
-  String author_name = 'minhaz';
-  var per_unit_price = 17;
-  int quantity = 14;
-
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -30,19 +31,19 @@ class _OrderDetailsFromFirebaseState extends State<OrderDetailsFromFirebase> {
             borderRadius: BorderRadius.circular(10),
             color: Colors.grey[300],
           ),
-          child: Image.asset('assets/images/$book_image.png')),
-      title: Text(book_name),
+          child: Image.asset('assets/images/${widget.book_image}.png')),
+      title: Text(widget.book_name),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(author_name),
+          Text(widget.author_name),
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 5, 0, 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  '$per_unit_price ৳',
+                  '${widget.per_unit_price} ৳',
                   style: TextStyle(color: Colors.grey),
                 ),
                 Container(
@@ -59,11 +60,11 @@ class _OrderDetailsFromFirebaseState extends State<OrderDetailsFromFirebase> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(3),
                         border: Border.all(color: Colors.grey)),
-                    child: Center(child: Text(quantity.toString()))),
+                    child: Center(child: Text('${widget.quantity}'))),
                 SizedBox(
                   width: 50,
                 ),
-                Text('$per_unit_price ৳')
+                Text('${widget.per_unit_price* widget.quantity} ৳')
               ],
             ),
           )

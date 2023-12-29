@@ -298,6 +298,8 @@ class _LoginState extends State<Login> {
                                   } else if (e.code == 'wrong-password') {
                                     Fluttertoast.showToast(
                                         msg: 'ভুল ইমেল বা পাসওয়ার্ড');
+                                  }else{
+                                    Fluttertoast.showToast(msg: '$e');
                                   }
                                   setState(() {
                                     _isLoading = false;

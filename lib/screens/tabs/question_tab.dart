@@ -31,7 +31,7 @@ class _QuestionTabState extends State<QuestionTab> {
                         .collection('questions')
                         .where('uid',
                             isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-                        .orderBy('time', descending: false)
+                        .orderBy('time', descending: true)
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -57,7 +57,7 @@ class _QuestionTabState extends State<QuestionTab> {
                                   ? null
                                   : Text(
                                       doc['answer'],
-                                      style: TextStyle(
+                                      style:const TextStyle(
                                           color: Color.fromRGBO(
                                               108, 104, 138, 1.0)),
                                     ),
@@ -84,7 +84,6 @@ class _QuestionTabState extends State<QuestionTab> {
                       maxLines: 2,
                       controller: _questionController,
                       autofocus: false,
-                      
                       decoration: const InputDecoration(
                         hintText: 'প্রশ্ন জিজ্ঞাসা করুন',
                         border: OutlineInputBorder(
@@ -97,14 +96,7 @@ class _QuestionTabState extends State<QuestionTab> {
                     onTap: () async {
                       if (_questionController.text.isNotEmpty) {
                         if (FirebaseAuth.instance.currentUser != null) {
-                          await FirebaseFirestore.instance
-                              .collection(
-                                  'users/${FirebaseAuth.instance.currentUser!.uid}/questions')
-                              .add({
-                            'question': _questionController.text,
-                            'time': Timestamp.now(),
-                            'answer': '',
-                          }).then((value) async {
+                          try {
                             await FirebaseFirestore.instance
                                 .collection('questions/')
                                 .add({
@@ -112,12 +104,18 @@ class _QuestionTabState extends State<QuestionTab> {
                               'question': _questionController.text,
                               'time': Timestamp.now(),
                               'answer': '',
+                            }).then((value) {
+                              Fluttertoast.showToast(
+                                  msg:
+                                      'আপনার প্রশ্ন সফলভাবে জমা দেওয়া হয়েছে');
                             });
-                          }).then((value) {
+                            _questionController.clear();
+                          } on FirebaseException catch (e) {
+                            Fluttertoast.showToast(msg: '$e');
+                          } catch (e) {
                             Fluttertoast.showToast(
-                                msg: 'আপনার প্রশ্ন সফলভাবে জমা দেওয়া হয়েছে');
-                          });
-                          _questionController.clear();
+                                msg: 'প্রশ্ন জমা দেওয়া হয়নি');
+                          }
                         } else {
                           Fluttertoast.showToast(
                               msg: 'প্রশ্ন জিজ্ঞাসা করতে লগইন করুন');

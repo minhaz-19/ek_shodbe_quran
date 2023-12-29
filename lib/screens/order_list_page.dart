@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ek_shodbe_quran/component/order.dart';
+import 'package:ek_shodbe_quran/component/progressbar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class OrderList extends StatefulWidget {
@@ -22,17 +25,50 @@ class _OrderListState extends State<OrderList> {
           title: const Text('অর্ডার'),
           centerTitle: true,
         ),
-        body: ListView.builder(
-          padding: const EdgeInsets.all(8),
-          itemBuilder: (context, index) {
-            return OrderElement(
-              date: DateTime.now().toString(),
-              order_id: 'asdfsasfsasdfasdfasdfasf',
-              status: 'Shipped',
-              price: 1000,
-            );
-          },
-          itemCount: 10,
+        body: Column(
+          children: [
+            (FirebaseAuth.instance.currentUser == null)
+                ? Expanded(
+                    child: Container(),
+                  )
+                : Expanded(
+                    child: StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('orders')
+                          .where('uid',
+                              isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                          .orderBy('time', descending: true)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(child: ProgressBar());
+                        } else if (snapshot.hasError) {
+                          return Center(
+                              child: Text('Error: ${snapshot.error}'));
+                        } else if (!snapshot.hasData ||
+                            snapshot.data!.docs.isEmpty) {
+                          return const Center();
+                        } else {
+                          // Iterate through documents and build the list
+                          List<Widget> listTiles =
+                              snapshot.data!.docs.map((doc) {
+                            return OrderElement(
+                              date: doc['time'].toDate().toString(),
+                              order_id: doc.id,
+                              status: doc['status'],
+                              price: doc['total'],
+                            );
+                          }).toList();
+
+                          return ListView(
+                            children: listTiles,
+                          );
+                        }
+                      },
+                    ),
+                  ),
+          ],
         ));
   }
 }

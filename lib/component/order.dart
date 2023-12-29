@@ -1,4 +1,4 @@
-import 'package:ek_shodbe_quran/component/cart_details_element.dart';
+import 'package:ek_shodbe_quran/component/order_details_element.dart';
 import 'package:ek_shodbe_quran/screens/order_details.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -33,7 +33,7 @@ class _OrderElementState extends State<OrderElement> {
     return InkWell(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => const OrderDetails(order_id: 'ansdfdf')));
+            builder: (context) => OrderDetails(order_id: widget.order_id)));
       },
       child: Card(
         elevation: 3,
@@ -58,6 +58,7 @@ class _OrderElementState extends State<OrderElement> {
                     text: widget.order_id,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],
