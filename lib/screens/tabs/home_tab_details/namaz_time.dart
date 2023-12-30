@@ -25,7 +25,7 @@ class _NamazTimeState extends State<NamazTime> {
 
   @override
   void initState() {
-    initializeNamazTime();
+    // initializeNamazTime();
     super.initState();
   }
 
@@ -161,7 +161,7 @@ class _NamazTimeState extends State<NamazTime> {
                                 ),
                                 Text(
                                   (locationData.subLocality != "")
-                                      ? "${locationData.subLocality}, ${locationData.locality}, ${locationData.country}}"
+                                      ? "${locationData.subLocality}, ${locationData.locality}, ${locationData.country}"
                                       : '${locationData.locality}, ${locationData.country}',
                                   style: const TextStyle(
                                       fontSize: 20,
