@@ -1,5 +1,7 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:ek_shodbe_quran/provider/cartProvider.dart';
+import 'package:ek_shodbe_quran/provider/location_provider.dart';
+import 'package:ek_shodbe_quran/provider/namazTimeProvider.dart';
 import 'package:ek_shodbe_quran/provider/surah_para_provider.dart';
 import 'package:ek_shodbe_quran/provider/userDetailsProvider.dart';
 import 'package:ek_shodbe_quran/screens/home.dart';
@@ -16,7 +18,9 @@ Future<void> main() async {
   await Firebase.initializeApp();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var email = prefs.getString('email');
-  runApp( MyApp( email: email,));
+  runApp(MyApp(
+    email: email,
+  ));
 }
 
 class MyApp extends StatefulWidget {
@@ -44,6 +48,8 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => UserDetailsProvider()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => SurahParaProvider()),
+        ChangeNotifierProvider(create: (_) => LocationProvider()),
+        ChangeNotifierProvider(create: (_) => NamazTimeProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

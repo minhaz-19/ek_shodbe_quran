@@ -5,6 +5,7 @@ import 'package:ek_shodbe_quran/component/video.dart';
 import 'package:ek_shodbe_quran/component/wide_button.dart';
 import 'package:ek_shodbe_quran/provider/cartProvider.dart';
 import 'package:ek_shodbe_quran/provider/userDetailsProvider.dart';
+import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/calendar.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/read_quran.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/courses.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/donate.dart';
@@ -36,11 +37,9 @@ class _HomeTabState extends State<HomeTab> {
       name = UserDetailsProvider().getName();
       email = UserDetailsProvider().getEmail();
     });
- 
+
     super.initState();
   }
-
-
 
   _launchURL(String url) async {
     if (await canLaunch(url)) {
@@ -210,7 +209,11 @@ class _HomeTabState extends State<HomeTab> {
                   child: FeatureIcon(
                       label: 'ক্যালেন্ডার',
                       iconPath: 'assets/icons/calendar.png',
-                      onPressed: () {})),
+                      onPressed: () {
+                        Navigator.of(context, rootNavigator: true).push(
+                            MaterialPageRoute(
+                                builder: (context) => CalendarTab()));
+                      })),
               FeatureIcon(
                   label: 'দুরুদ',
                   iconPath: 'assets/icons/durud.png',
