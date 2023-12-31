@@ -1,14 +1,12 @@
-import 'package:adhan/adhan.dart';
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:ek_shodbe_quran/component/namaz_time.dart';
 import 'package:ek_shodbe_quran/component/progressbar.dart';
-import 'package:ek_shodbe_quran/component/shared_preference.dart';
 import 'package:ek_shodbe_quran/component/sun_time.dart';
 import 'package:ek_shodbe_quran/provider/location_provider.dart';
 import 'package:ek_shodbe_quran/provider/namazTimeProvider.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/pick_location.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class NamazTime extends StatefulWidget {
@@ -29,69 +27,6 @@ class _NamazTimeState extends State<NamazTime> {
     super.initState();
   }
 
-  void initializeNamazTime() async {
-    setState(() {
-      _is_loading = true;
-    });
-    var locationData = Provider.of<LocationProvider>(context, listen: false);
-    var namazTimeData = Provider.of<NamazTimeProvider>(context, listen: false);
-
-    getDataFromDevice('current latitude').then((value) async {
-      if (value == null) {
-        setState(() {
-          locationData.locality = 'Jashore';
-          locationData.subLocality = 'Jashore Zilla School';
-          locationData.country = 'Bangladesh';
-        });
-      } else {
-        await getDataFromDevice('current longitude').then((longitude) async {
-          await getDataFromDevice('current latitude').then((latitude) {
-            locationData.setLocation(double.parse(latitude.toString()),
-                double.parse(longitude.toString()));
-          });
-
-          placemarks = await placemarkFromCoordinates(
-              locationData.latitude, locationData.longitude);
-        });
-
-        locationData.setAddress(
-            placemarks[0].subLocality.toString(),
-            placemarks[0].locality.toString(),
-            placemarks[0].country.toString());
-      }
-    });
-
-    final myCoordinates =
-        Coordinates(locationData.latitude, locationData.longitude);
-    final params = CalculationMethod.karachi.getParameters();
-    params.madhab = Madhab.hanafi;
-    final prayerTimes = PrayerTimes.today(myCoordinates, params);
-
-    var _faazar_time = DateFormat.jm().format(prayerTimes.fajr);
-    var _johor_time = DateFormat.jm().format(prayerTimes.dhuhr);
-    var _asor_time = DateFormat.jm().format(prayerTimes.asr);
-    var _magrib_time = DateFormat.jm().format(prayerTimes.maghrib);
-    var _esha_time = DateFormat.jm().format(prayerTimes.isha);
-    // _tahajjud_time = DateFormat.jm().format(prayerTimes.);
-    var _sunrise_time = DateFormat.jm().format(prayerTimes.sunrise);
-    final DateFormat format = DateFormat.jm();
-    DateTime responseDateTime = format.parse(_magrib_time);
-
-    // Subtract one minute
-    responseDateTime = responseDateTime.subtract(Duration(minutes: 1));
-
-    // Format the adjusted time for display
-    String adjustedTime = format.format(responseDateTime);
-    var _sunset_time = adjustedTime;
-
-    namazTimeData.setNamazTime(_faazar_time, _johor_time, _asor_time,
-        _magrib_time, _esha_time, _sunrise_time, _sunset_time);
-
-    setState(() {
-      _is_loading = false;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     var locationData = Provider.of<LocationProvider>(context);
@@ -104,7 +39,7 @@ class _NamazTimeState extends State<NamazTime> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    height: 320,
+                    height: 348,
                     decoration: BoxDecoration(
                       color: Theme.of(context).primaryColor,
                       image: const DecorationImage(

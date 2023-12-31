@@ -32,7 +32,7 @@
     <application
     android:label="ek_shodbe_quran"
     android:name="${applicationName}"
-    android:icon="@mipmap/ic_launcher">
+    android:icon="@mipmap/launcher_icon">
 
     <!-- Add the following service and receivers here -->
     <service

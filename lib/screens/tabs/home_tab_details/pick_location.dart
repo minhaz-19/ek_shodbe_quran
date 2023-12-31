@@ -46,9 +46,9 @@ class _PickLocationState extends State<PickLocation> {
           onPicked: (pickedData) async {
             var namazTimeData =
                 Provider.of<NamazTimeProvider>(context, listen: false);
-            saveDataToDevice(
+          await  saveDataToDevice(
                 'current latitude', '${pickedData.latLong.latitude}');
-            saveDataToDevice(
+          await  saveDataToDevice(
                 'current longitude', '${pickedData.latLong.longitude}');
             locationData.setLocation(
                 double.parse(pickedData.latLong.latitude.toString()),
@@ -84,6 +84,13 @@ class _PickLocationState extends State<PickLocation> {
 
             namazTimeData.setNamazTime(_faazar_time, _johor_time, _asor_time,
                 _magrib_time, _esha_time, _sunrise_time, _sunset_time);
+            namazTimeData.setNamazTimeDateTime(
+                prayerTimes.fajr,
+                prayerTimes.dhuhr,
+                prayerTimes.asr,
+                prayerTimes.maghrib,
+                prayerTimes.isha,
+                prayerTimes.sunrise);
             Navigator.pop(context);
           },
         ));

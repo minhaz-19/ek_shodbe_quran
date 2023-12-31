@@ -61,6 +61,7 @@ class _HomeTabState extends State<HomeTab> {
   @override
   Widget build(BuildContext context) {
     var namazTimeData = Provider.of<NamazTimeProvider>(context);
+    var locationData = Provider.of<LocationProvider>(context);
     return Scaffold(
         body: (_is_loading)
             ? const ProgressBar()
@@ -172,10 +173,6 @@ class _HomeTabState extends State<HomeTab> {
                                 label: 'নামাজের সময়',
                                 iconPath: 'assets/icons/namaz_time.png',
                                 onPressed: () async {
-                                  var locationData =
-                                      Provider.of<LocationProvider>(context,
-                                          listen: false);
-
                                   await getDataFromDevice('current latitude')
                                       .then((value) async {
                                     if (value == null) {
@@ -184,6 +181,10 @@ class _HomeTabState extends State<HomeTab> {
                                         locationData.subLocality =
                                             'Jashore Zilla School';
                                         locationData.country = 'Bangladesh';
+                                        locationData.setLocation(
+                                          23.160969261812728,
+                                          89.20574491067016,
+                                        );
                                       });
                                     } else {
                                       await getDataFromDevice(
@@ -254,6 +255,15 @@ class _HomeTabState extends State<HomeTab> {
                                       _esha_time,
                                       _sunrise_time,
                                       _sunset_time);
+
+                                  namazTimeData.setNamazTimeDateTime(
+                                      prayerTimes.fajr,
+                                      prayerTimes.dhuhr,
+                                      prayerTimes.asr,
+                                      prayerTimes.maghrib,
+                                      prayerTimes.isha,
+                                      prayerTimes.sunrise
+                                  );
 
                                   setState(() {
                                     _is_loading = false;
