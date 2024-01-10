@@ -1,10 +1,5 @@
-import 'dart:typed_data';
-import 'dart:ui' as ui;
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class PdfPage extends StatefulWidget {
@@ -25,8 +20,6 @@ class _PdfPageState extends State<PdfPage> {
   void initState() {
     _pdfViewerController = PdfViewerController();
     super.initState();
-    print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-    print(widget.filePath);
     setState(() {
       _currentPage = 1;
     });
@@ -35,33 +28,12 @@ class _PdfPageState extends State<PdfPage> {
   final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
   final GlobalKey _containerKey = GlobalKey();
 
-  Future<void> _captureAndShare() async {
-    RenderRepaintBoundary boundary = _containerKey.currentContext!
-        .findRenderObject() as RenderRepaintBoundary;
-    ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-    ByteData byteData =
-        await image.toByteData(format: ui.ImageByteFormat.png) as ByteData;
-    Uint8List uint8List = byteData.buffer.asUint8List();
-
-    final tempDir = await getTemporaryDirectory();
-    final file = await File('${tempDir.path}/page_image.png').create();
-    await file.writeAsBytes(uint8List);
-
-    // Now, you can use the 'file' to share the image
-    // Implement the code to share the image as needed
-    // Share the captured image using the share_plus package
-    await Share.shareFiles([file.path],
-        text: 'Check out this PDF page image!',
-        subject: 'PDF Page Image',
-        mimeTypes: ['image/png']);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.pdfHeading,
+          widget.pdfHeading.split('.').first,
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Theme.of(context).brightness == Brightness.dark
@@ -187,7 +159,7 @@ class _PdfPageState extends State<PdfPage> {
                 shape: BoxShape.circle,
               ),
               child: IconButton(
-                onPressed: _captureAndShare,
+                onPressed: () {},
                 icon: Icon(
                   Icons.share,
                   color: Theme.of(context).primaryColor,

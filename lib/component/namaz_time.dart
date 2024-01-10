@@ -98,55 +98,86 @@ class _NamazWaktoState extends State<NamazWakto> {
       ),
     );
 
-    DateTime _faazar_time = DateTime.now();
-    DateTime _johor_time = DateTime.now();
-    DateTime _asor_time = DateTime.now();
-    DateTime _magrib_time = DateTime.now();
-    DateTime _esha_time = DateTime.now();
+    // DateTime _faazar_time = DateTime.now();
+    // DateTime _johor_time = DateTime.now();
+    // DateTime _asor_time = DateTime.now();
+    // DateTime _magrib_time = DateTime.now();
+    // DateTime _esha_time = DateTime.now();
 
-    await getDataFromDevice('current longitude').then((longitude) async {
-      await getDataFromDevice('current latitude').then((latitude) async {
-        final myCoordinates = Coordinates(double.parse(latitude.toString()),
-            double.parse(longitude.toString()));
-        final params = CalculationMethod.karachi.getParameters();
-        params.madhab = Madhab.hanafi;
-        final prayerTimes = PrayerTimes.today(myCoordinates, params);
+    // await getDataFromDevice('current longitude').then((longitude) async {
+    //   await getDataFromDevice('current latitude').then((latitude) async {
+    //     final myCoordinates = Coordinates(double.parse(latitude.toString()),
+    //         double.parse(longitude.toString()));
+    //     final params = CalculationMethod.karachi.getParameters();
+    //     params.madhab = Madhab.hanafi;
+    //     final prayerTimes = PrayerTimes.today(myCoordinates, params);
 
-        _faazar_time = prayerTimes.fajr;
-        _johor_time = prayerTimes.dhuhr;
-        _asor_time = prayerTimes.asr;
-        _magrib_time = prayerTimes.maghrib;
-        _esha_time = prayerTimes.isha;
-      });
-    });
+    //     _faazar_time = prayerTimes.fajr;
+    //     _johor_time = prayerTimes.dhuhr;
+    //     _asor_time = prayerTimes.asr;
+    //     _magrib_time = prayerTimes.maghrib;
+    //     _esha_time = prayerTimes.isha;
+    //   });
+    // });
 
-    Duration duration = const Duration(hours: 23);
-    await AndroidAlarmManager.periodic(
-      duration,
-      alarmId,
-      _periodicTaskCallback, // Pass the function reference without calling it
-      wakeup: true,
-      rescheduleOnReboot: true,
-      exact: true,
-      allowWhileIdle: true,
-      startAt: (alarmId == 1)
-          ? _faazar_time
-          : (alarmId == 2)
-              ? _johor_time
-              : (alarmId == 3)
-                  ? _asor_time
-                  : (alarmId == 4)
-                      ? _magrib_time
-                      : (alarmId == 5)
-                          ? _esha_time
-                          : _faazar_time,
-    );
+    // print('printing inside new alarm set  to check-----------------');
+    // print(_faazar_time);
+    // print(_johor_time);
+    // print(_asor_time);
+    // print(_magrib_time);
+    // print(_esha_time);
+
+    // Duration duration = (alarmId == 1)
+    //     ? _faazar_time.difference(DateTime.now())
+    //     : (alarmId == 2)
+    //         ? _johor_time.difference(DateTime.now())
+    //         : (alarmId == 3)
+    //             ? _asor_time.difference(DateTime.now())
+    //             : (alarmId == 4)
+    //                 ? _magrib_time.difference(DateTime.now())
+    //                 : (alarmId == 5)
+    //                     ? _esha_time.difference(DateTime.now())
+    //                     : _faazar_time.difference(DateTime.now());
+
+    // print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+    // await AndroidAlarmManager.oneShot(
+    //   duration,
+    //   alarmId,
+    //   _periodicTaskCallback, // Pass the function reference without calling it
+    //   wakeup: true,
+    //   rescheduleOnReboot: true,
+    //   exact: true,
+    //   allowWhileIdle: true,
+    // );
+    // Fluttertoast.showToast(msg: 'duration: ${duration.inSeconds}');
+    // Fluttertoast.showToast(msg: 'alarmId: $alarmId');
+    // print('duration: ${duration.inSeconds}');
+    // print('alarmId: $alarmId');
   }
 
-  void _schedulePeriodicAlarm(int alarmId) async {
+  void _scheduleOneTImeAlarm(int alarmId) async {
     var namazTimeData = Provider.of<NamazTimeProvider>(context, listen: false);
-    Duration duration = const Duration(hours: 23);
-    await AndroidAlarmManager.periodic(
+    // set a alarm to a specific time
+    DateTime _faazar_time = namazTimeData.fajrTime ?? DateTime.now();
+    DateTime _johor_time = namazTimeData.dhuhrTime ?? DateTime.now();
+    DateTime _asor_time = namazTimeData.asrTime ?? DateTime.now();
+    DateTime _magrib_time = namazTimeData.maghribTime ?? DateTime.now();
+    DateTime _esha_time = namazTimeData.ishaTime ?? DateTime.now();
+
+
+    Duration duration = (alarmId == 1)
+        ? _faazar_time.difference(DateTime.now())
+        : (alarmId == 2)
+            ? _johor_time.difference(DateTime.now())
+            : (alarmId == 3)
+                ? _asor_time.difference(DateTime.now())
+                : (alarmId == 4)
+                    ? _magrib_time.difference(DateTime.now())
+                    : (alarmId == 5)
+                        ? _esha_time.difference(DateTime.now())
+                        : _faazar_time.difference(DateTime.now());
+
+    await AndroidAlarmManager.oneShot(
       duration,
       alarmId,
       _periodicTaskCallback, // Pass the function reference without calling it
@@ -154,18 +185,9 @@ class _NamazWaktoState extends State<NamazWakto> {
       rescheduleOnReboot: true,
       exact: true,
       allowWhileIdle: true,
-      startAt: (alarmId == 1)
-          ? namazTimeData.fajrTime
-          : (alarmId == 2)
-              ? namazTimeData.dhuhrTime
-              : (alarmId == 3)
-                  ? namazTimeData.asrTime
-                  : (alarmId == 4)
-                      ? namazTimeData.maghribTime
-                      : (alarmId == 5)
-                          ? namazTimeData.ishaTime
-                          : namazTimeData.sunriseTime,
     );
+    Fluttertoast.showToast(msg: 'duration: ${duration.inSeconds}');
+    Fluttertoast.showToast(msg: 'alarmId: $alarmId');
   }
 
   @override
@@ -209,7 +231,7 @@ class _NamazWaktoState extends State<NamazWakto> {
                                   msg: 'অ্যালার্ম বন্ধ করা হয়েছে'),
                             }
                           : {
-                              _schedulePeriodicAlarm(alarmId),
+                              _scheduleOneTImeAlarm(alarmId),
                               await saveDataToDevice('current latitude',
                                   '${locationData.latitude}'),
                               await saveDataToDevice('current longitude',

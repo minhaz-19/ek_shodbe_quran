@@ -1,5 +1,5 @@
-import 'package:ek_shodbe_quran/component/quran.dart/para.dart';
-import 'package:ek_shodbe_quran/component/quran.dart/surah.dart';
+import 'package:ek_shodbe_quran/component/quran/para.dart';
+import 'package:ek_shodbe_quran/component/quran/surah.dart';
 import 'package:flutter/material.dart';
 
 class ReadQuran extends StatefulWidget {

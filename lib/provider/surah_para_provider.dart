@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class SurahParaProvider with ChangeNotifier {
   List<String> downloadedSurahIndex = [];
+  List<String> downloadedParaIndex = [];
   Map<String, dynamic> surahList = {};
   Map<String, dynamic> paraList = {};
 
@@ -17,6 +18,11 @@ class SurahParaProvider with ChangeNotifier {
 
   void addDownloadedSurahIndex(String surahIndex) {
     downloadedSurahIndex.add(surahIndex);
+    notifyListeners();
+  }
+
+  void addDownloadedParaIndex(String paraIndex) {
+    downloadedParaIndex.add(paraIndex);
     notifyListeners();
   }
 }
