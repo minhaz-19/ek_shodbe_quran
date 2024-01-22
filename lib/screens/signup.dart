@@ -244,9 +244,11 @@ class _SignUpState extends State<SignUp> {
                                   .set({
                                 'name': _nameEditingController.text,
                                 'email': _emailController.text,
+                                'role': 'customer'
                               });
                               UserDetailsProvider().updateName(_nameEditingController.text);
                               UserDetailsProvider().updateEmail(_emailController.text);
+                              UserDetailsProvider().updateRole('customer');
                               Fluttertoast.showToast(
                                   msg: 'একাউন্ট সফলভাবে তৈরি হয়েছে');
                               Navigator.of(context).pushAndRemoveUntil(

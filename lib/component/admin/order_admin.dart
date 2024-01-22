@@ -1,9 +1,10 @@
+import 'package:ek_shodbe_quran/component/admin/order_details_admin.dart';
 import 'package:ek_shodbe_quran/screens/order_details.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class OrderElement extends StatefulWidget {
-  OrderElement(
+class AdminOrderElement extends StatefulWidget {
+  AdminOrderElement(
       {super.key,
       required this.order_id,
       required this.status,
@@ -15,10 +16,10 @@ class OrderElement extends StatefulWidget {
   var date;
 
   @override
-  State<OrderElement> createState() => _OrderElementState();
+  State<AdminOrderElement> createState() => _AdminOrderElementState();
 }
 
-class _OrderElementState extends State<OrderElement> {
+class _AdminOrderElementState extends State<AdminOrderElement> {
   var time;
   @override
   void initState() {
@@ -39,7 +40,7 @@ class _OrderElementState extends State<OrderElement> {
         child: ListTile(
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => OrderDetails(
+                builder: (context) => AdminOrderDetails(
                       order_id: widget.order_id,
                     )));
           },

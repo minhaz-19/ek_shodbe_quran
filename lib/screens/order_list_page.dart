@@ -69,6 +69,7 @@ class _OrderListState extends State<OrderList> {
                     ),
                   ),
           ],
-        ));
+        )
+        );
   }
 }

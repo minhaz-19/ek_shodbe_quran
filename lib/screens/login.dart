@@ -52,6 +52,7 @@ class _LoginState extends State<Login> {
               final data = event.data() as Map<String, dynamic>;
               UserDetailsProvider().updateName(data['name']);
               UserDetailsProvider().updateEmail(data['email']);
+              UserDetailsProvider().updateRole(data['role']);
               Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(builder: (context) => const Home()),
                 (Route<dynamic> route) => false,
@@ -277,6 +278,8 @@ class _LoginState extends State<Login> {
                                             .updateName(data['name']);
                                         UserDetailsProvider()
                                             .updateEmail(data['email']);
+                                        UserDetailsProvider()
+                                            .updateRole(data['role']);
                                       },
                                       onError: (error) =>
                                           Fluttertoast.showToast(
@@ -298,7 +301,7 @@ class _LoginState extends State<Login> {
                                   } else if (e.code == 'wrong-password') {
                                     Fluttertoast.showToast(
                                         msg: 'ভুল ইমেল বা পাসওয়ার্ড');
-                                  }else{
+                                  } else {
                                     Fluttertoast.showToast(msg: '$e');
                                   }
                                   setState(() {

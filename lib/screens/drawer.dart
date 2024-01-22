@@ -1,6 +1,7 @@
 import 'package:ek_shodbe_quran/component/shared_preference.dart';
 import 'package:ek_shodbe_quran/provider/cartProvider.dart';
 import 'package:ek_shodbe_quran/screens/aboutUs.dart';
+import 'package:ek_shodbe_quran/screens/admin_order.dart';
 import 'package:ek_shodbe_quran/screens/cart.dart';
 import 'package:ek_shodbe_quran/screens/change_password.dart';
 import 'package:ek_shodbe_quran/screens/edit_profile.dart';
@@ -95,11 +96,19 @@ class MyDrawer extends StatelessWidget {
                   color: Theme.of(context).primaryColor, fontSize: 20),
             ),
             onTap: () {
+              Fluttertoast.showToast(msg: UserDetailsProvider().getRole());
               Navigator.of(context).pop();
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const OrderList()),
-              );
+              UserDetailsProvider().getRole() == 'admin'
+                  ? Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AdminOrder()),
+                    )
+                  : Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const OrderList()),
+                    );
             },
           ),
           ListTile(
