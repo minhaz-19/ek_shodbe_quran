@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ek_shodbe_quran/component/order.dart';
 import 'package:ek_shodbe_quran/component/admin/order_admin.dart';
 import 'package:ek_shodbe_quran/component/progressbar.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AdminOrder extends StatelessWidget {
@@ -11,7 +9,7 @@ class AdminOrder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      initialIndex: 1,
+      initialIndex: 0,
       length: 3,
       child: Scaffold(
         appBar: AppBar(

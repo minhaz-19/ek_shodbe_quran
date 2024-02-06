@@ -1,7 +1,8 @@
+import 'package:ek_shodbe_quran/component/admin/admin.dart';
 import 'package:ek_shodbe_quran/component/shared_preference.dart';
 import 'package:ek_shodbe_quran/provider/cartProvider.dart';
 import 'package:ek_shodbe_quran/screens/aboutUs.dart';
-import 'package:ek_shodbe_quran/screens/admin_order.dart';
+import 'package:ek_shodbe_quran/component/admin/admin_order.dart';
 import 'package:ek_shodbe_quran/screens/cart.dart';
 import 'package:ek_shodbe_quran/screens/change_password.dart';
 import 'package:ek_shodbe_quran/screens/edit_profile.dart';
@@ -65,6 +66,29 @@ class MyDrawer extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
+          (UserDetailsProvider().getRole() == 'admin')
+              ? ListTile(
+                  leading: DrawerIcon(
+                    image_path: 'assets/icons/admin.png',
+                  ),
+                  title: Text(
+                    'অ্যাডমিন প্যানেল',
+                    style: TextStyle(
+                        color: Theme.of(context).primaryColor, fontSize: 20),
+                  ),
+                  onTap: () async {
+                    if (cartDetails.bookList.length == 0) {
+                      await cartDetails.initializeFromSharedPreferences();
+                    }
+
+                    Navigator.of(context).pop();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const admin()),
+                    );
+                  },
+                )
+              : const SizedBox(),
           ListTile(
             leading: DrawerIcon(
               image_path: 'assets/icons/cart.png',
@@ -96,19 +120,11 @@ class MyDrawer extends StatelessWidget {
                   color: Theme.of(context).primaryColor, fontSize: 20),
             ),
             onTap: () {
-              Fluttertoast.showToast(msg: UserDetailsProvider().getRole());
               Navigator.of(context).pop();
-              UserDetailsProvider().getRole() == 'admin'
-                  ? Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => AdminOrder()),
-                    )
-                  : Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const OrderList()),
-                    );
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const OrderList()),
+              );
             },
           ),
           ListTile(
