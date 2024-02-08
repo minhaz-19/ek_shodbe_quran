@@ -16,6 +16,7 @@ import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/donate.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/durud.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/kiblah.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/namaz_time.dart';
+import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/tilawat.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/todays_ayat.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -262,8 +263,7 @@ class _HomeTabState extends State<HomeTab> {
                                       prayerTimes.asr,
                                       prayerTimes.maghrib,
                                       prayerTimes.isha,
-                                      prayerTimes.sunrise
-                                  );
+                                      prayerTimes.sunrise);
 
                                   setState(() {
                                     _is_loading = false;
@@ -289,7 +289,12 @@ class _HomeTabState extends State<HomeTab> {
                             child: FeatureIcon(
                                 label: 'তিলাওয়াত',
                                 iconPath: 'assets/icons/durud.png',
-                                onPressed: () {})),
+                                onPressed: () {
+                                  Navigator.of(context, rootNavigator: true)
+                                      .push(MaterialPageRoute(
+                                          builder: (context) =>
+                                              const Tilawat()));
+                                })),
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.25,
                           child: FeatureIcon(

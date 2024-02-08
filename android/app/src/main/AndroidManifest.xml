@@ -32,6 +32,7 @@
     <application
     android:label="ek_shodbe_quran"
     android:name="${applicationName}"
+    android:usesCleartextTraffic="true"
     android:icon="@mipmap/launcher_icon">
 
     <!-- Add the following service and receivers here -->
