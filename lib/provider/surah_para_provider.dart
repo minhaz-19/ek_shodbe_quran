@@ -4,10 +4,22 @@ class SurahParaProvider with ChangeNotifier {
   List<String> downloadedSurahIndex = [];
   List<String> downloadedParaIndex = [];
   Map<String, dynamic> surahList = {};
+  Map<String, dynamic> surahBengaliList = {};
+  Map<String, dynamic> surahArabicList = {};
   Map<String, dynamic> paraList = {};
 
   void addSurahList(String surahName, String surahIndex) {
     surahList[surahIndex] = surahName;
+    notifyListeners();
+  }
+
+  void addSurahBengaliList(String surahName, String surahIndex) {
+    surahBengaliList[surahIndex] = surahName;
+    notifyListeners();
+  }
+
+  void addSurahArabicList(String surahName, String surahIndex) {
+    surahArabicList[surahIndex] = surahName;
     notifyListeners();
   }
 

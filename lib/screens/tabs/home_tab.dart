@@ -1,4 +1,5 @@
 import 'package:adhan/adhan.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ek_shodbe_quran/component/feature_icon.dart';
 import 'package:ek_shodbe_quran/component/progressbar.dart';
 import 'package:ek_shodbe_quran/component/read_book.dart';
@@ -318,6 +319,18 @@ class _HomeTabState extends State<HomeTab> {
                             label: 'কোর্স সমূহ',
                             iconPath: 'assets/icons/book.png',
                             onPressed: () {
+                              // create 100 collection with field name 'name' : "abcd"
+                              // for (var i = 1; i < 115; i++) {
+                              //   await FirebaseFirestore.instance
+                              //       .collection('surah')
+                              //       .doc('$i')
+                              //       .set({
+                              //     'name': "abcd",
+                              //     'bengali': "সূচনা",
+                              //     'arabic': 'الفاتحة'
+                              //   });
+                              // }
+
                               Navigator.of(context, rootNavigator: true).push(
                                   MaterialPageRoute(
                                       builder: (context) => const Courses()));

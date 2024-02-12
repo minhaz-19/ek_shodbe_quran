@@ -39,7 +39,8 @@ class _SurahState extends State<Surah> {
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
         sura_para_details.addSurahList(doc['name'], doc.id);
-        // surahList[doc.id] = doc['name'];
+        sura_para_details.addSurahArabicList(doc['arabic'], doc.id);
+        sura_para_details.addSurahBengaliList(doc['bengali'], doc.id);
       });
     }).then((value) {
       findDownloadedSurah();
@@ -156,8 +157,10 @@ class _SurahState extends State<Surah> {
                               color: Theme.of(context).primaryColor,
                               fontWeight: FontWeight.bold),
                         ),
-                        subtitle: const Text(
-                          'الفاتحة' + ' - ' + 'সূচনা',
+                        subtitle: Text(
+                          '${sura_para_details.surahArabicList['${index + 1}']}' +
+                              ' - ' +
+                              '${sura_para_details.surahBengaliList['${index + 1}']}',
                           style: TextStyle(color: Colors.black54),
                         ),
                         trailing: (sura_para_details.downloadedSurahIndex
