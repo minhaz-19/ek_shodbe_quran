@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ek_shodbe_quran/component/progressbar.dart';
 import 'package:ek_shodbe_quran/provider/surah_para_provider.dart';
+import 'package:ek_shodbe_quran/readable.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/pdf.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -152,15 +153,15 @@ class _SurahState extends State<Surah> {
                         //   checkAndDownloadPdf('${sura_para_details.surahList['${index + 1}']}.pdf', '${index + 1}');
                         // },
                         title: Text(
-                          '${sura_para_details.surahList['${index + 1}']}',
+                          'সূরা ${sura_para_details.surahList['${index + 1}']}',
                           style: TextStyle(
                               color: Theme.of(context).primaryColor,
                               fontWeight: FontWeight.bold),
                         ),
                         subtitle: Text(
-                          '${sura_para_details.surahArabicList['${index + 1}']}' +
+                          '${Readable.QuranData[index]['name']}' +
                               ' - ' +
-                              '${sura_para_details.surahBengaliList['${index + 1}']}',
+                              '${Readable.QuranData[index]['translation']}',
                           style: TextStyle(color: Colors.black54),
                         ),
                         trailing: (sura_para_details.downloadedSurahIndex

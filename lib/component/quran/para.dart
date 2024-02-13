@@ -153,10 +153,6 @@ class _ParaState extends State<Para> {
                               color: Theme.of(context).primaryColor,
                               fontWeight: FontWeight.bold),
                         ),
-                        subtitle: Text(
-                          'الفاتحة' + ' - ' + 'সূচনা',
-                          style: TextStyle(color: Colors.black54),
-                        ),
                         trailing: (sura_para_details.downloadedParaIndex
                                 .contains('${index + 1}'))
                             ? null

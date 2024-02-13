@@ -17,7 +17,7 @@ class _CalendarTabState extends State<CalendarTab> {
   DateTime dateSelected = DateTime.now();
 
   var url = '';
-  bool _is_it_loading = false;
+  bool _isItLoading = false;
   var titleEn = '';
   var titleBn = '';
   var descriptionEn = '';
@@ -30,22 +30,28 @@ class _CalendarTabState extends State<CalendarTab> {
   var negativeMark;
   var startTime;
   bool isDone = true;
+  int year = DateTime.now().year;
+  int month = DateTime.now().month;
+  List<Appointment> events = [];
 
   @override
   void initState() {
     super.initState();
-    _loadAppoinments();
+    _loadAppointments(
+        DateTime.now().year.toString(), DateTime.now().month.toString());
   }
 
-  void _loadAppoinments() async {
+  void _loadAppointments(String year, String month) async {
     setState(() {
-      _is_it_loading = true;
+      _isItLoading = true;
     });
     // call the API and get the holidays and add them to the _appointments list
-    List<Appointment> events = [];
-    await fetchIslamicCalendar().then((islamicCalendar) {
+
+    await fetchIslamicCalendar(year.toString(), month.toString())
+        .then((islamicCalendar) {
       if (islamicCalendar != null) {
-        // only add the  holidays to the appoinments list
+        // Fluttertoast.showToast(msg: 'here');
+        // only add the  holidays to the appointments list
         for (var i = 0; i < islamicCalendar.data!.length; i++) {
           // if it contains holiday then add all the holiday to the list
           if (islamicCalendar.data?[i].hijri?.holidays?.length != 0) {
@@ -54,10 +60,11 @@ class _CalendarTabState extends State<CalendarTab> {
                 j++) {
               String dateString =
                   islamicCalendar.data?[i].gregorian?.date ?? "21-07-1445";
+              // Fluttertoast.showToast(msg: '$dateString');
               DateTime dateTime = convertStringToDateTime(dateString);
               events.add(Appointment(
                 id: i.toString() + j.toString(),
-                startTime: dateTime,
+                startTime: dateTime.add(Duration(days: 1)),
                 isAllDay: true,
                 endTime: dateTime.add(Duration(hours: 23)),
                 subject: islamicCalendar.data?[i].hijri?.holidays?[j] ?? '',
@@ -68,9 +75,9 @@ class _CalendarTabState extends State<CalendarTab> {
         }
       }
     });
-    _appointments = events;
     setState(() {
-      _is_it_loading = false;
+      _appointments = events;
+      _isItLoading = false;
     });
   }
 
@@ -87,7 +94,7 @@ class _CalendarTabState extends State<CalendarTab> {
         title: const Text('ক্যালেন্ডার'),
         centerTitle: true,
       ),
-      body: _is_it_loading
+      body: _isItLoading
           ? ProgressBar()
           : Padding(
               padding: const EdgeInsets.all(8.0),
@@ -99,6 +106,12 @@ class _CalendarTabState extends State<CalendarTab> {
                       backgroundColor: Colors.white,
                       showNavigationArrow: true,
                       dataSource: AppointmentDataSource(_appointments),
+                      onViewChanged: (ViewChangedDetails details) {
+                        year = details.visibleDates[0].year;
+                        month = details.visibleDates[0].month + 1;
+
+                        _loadAppointments(year.toString(), month.toString());
+                      },
                       onTap: (CalendarTapDetails details) {
                         setState(() {
                           dateSelected = details.date!;
@@ -139,13 +152,10 @@ class AppointmentDataSource extends CalendarDataSource {
   }
 }
 
-Future<IslamicCalendar?> fetchIslamicCalendar() async {
+Future<IslamicCalendar?> fetchIslamicCalendar(String year, String month) async {
   try {
     // Initialize Dio
     final dio = Dio();
-
-    String month = DateTime.now().month.toString();
-    String year = DateTime.now().year.toString();
 
     // Define API endpoint
     String apiUrl = 'http://api.aladhan.com/v1/gToHCalendar/$month/$year';

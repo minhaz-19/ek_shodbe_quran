@@ -1,5 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class PdfPage extends StatefulWidget {
@@ -14,6 +17,7 @@ class PdfPage extends StatefulWidget {
 
 class _PdfPageState extends State<PdfPage> {
   late PdfViewerController _pdfViewerController;
+  final ScreenshotController screenshotController = ScreenshotController();
   var _currentPage;
 
   @override
@@ -22,6 +26,21 @@ class _PdfPageState extends State<PdfPage> {
     super.initState();
     setState(() {
       _currentPage = 1;
+    });
+  }
+
+  void _takeScreenshot() async {
+    await screenshotController
+        .capture(delay: const Duration(milliseconds: 10))
+        .then((image) async {
+      if (image != null) {
+        final directory = await getApplicationDocumentsDirectory();
+        final imagePath = await File('${directory.path}/image.png').create();
+        await imagePath.writeAsBytes(image);
+
+        /// Share Plugin
+        await Share.shareFiles([imagePath.path]);
+      }
     });
   }
 
@@ -55,14 +74,17 @@ class _PdfPageState extends State<PdfPage> {
               Expanded(
                 child: RepaintBoundary(
                   key: _containerKey,
-                  child: SfPdfViewer.file(
-                    File('${widget.filePath}'),
-                    key: _pdfViewerKey,
-                    controller: _pdfViewerController,
-                    scrollDirection: PdfScrollDirection.horizontal,
-                    pageLayoutMode: PdfPageLayoutMode.single,
-                    canShowScrollHead: false,
-                    enableDoubleTapZooming: true,
+                  child: Screenshot(
+                    controller: screenshotController,
+                    child: SfPdfViewer.file(
+                      File('${widget.filePath}'),
+                      key: _pdfViewerKey,
+                      controller: _pdfViewerController,
+                      scrollDirection: PdfScrollDirection.horizontal,
+                      pageLayoutMode: PdfPageLayoutMode.single,
+                      canShowScrollHead: false,
+                      enableDoubleTapZooming: true,
+                    ),
                   ),
                 ),
               ),
@@ -159,7 +181,9 @@ class _PdfPageState extends State<PdfPage> {
                 shape: BoxShape.circle,
               ),
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  _takeScreenshot();
+                },
                 icon: Icon(
                   Icons.share,
                   color: Theme.of(context).primaryColor,

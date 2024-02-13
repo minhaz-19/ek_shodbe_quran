@@ -8,6 +8,7 @@ import 'package:ek_shodbe_quran/provider/location_provider.dart';
 import 'package:ek_shodbe_quran/provider/namazTimeProvider.dart';
 import 'package:ek_shodbe_quran/provider/surah_para_provider.dart';
 import 'package:ek_shodbe_quran/provider/userDetailsProvider.dart';
+import 'package:ek_shodbe_quran/readable.dart';
 import 'package:ek_shodbe_quran/screens/home.dart';
 import 'package:ek_shodbe_quran/screens/login.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -80,7 +81,7 @@ Duration mainduration = now.difference(DateTime.now());
       allowWhileIdle: true,
     );
     }
-
+await Readable.readJson();
   runApp(MyApp(
     email: email,
   ));
