@@ -15,8 +15,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+bool result = false;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,8 +45,7 @@ Future<void> main() async {
 
   await AndroidAlarmManager.initialize();
 
-
-   DateTime now = DateTime.now();
+  DateTime now = DateTime.now();
 
   // Check if the current time is between 12:00 AM and 12:05 AM
   if (now.hour == 0 && now.minute >= 0 && now.minute <= 4) {
@@ -69,9 +71,9 @@ Future<void> main() async {
     );
   }
 
-Duration mainduration = now.difference(DateTime.now());
-    if(!mainduration.isNegative){
-      await AndroidAlarmManager.oneShot(
+  Duration mainduration = now.difference(DateTime.now());
+  if (!mainduration.isNegative) {
+    await AndroidAlarmManager.oneShot(
       mainduration,
       10,
       _periodicTaskCallback, // Pass the function reference without calling it
@@ -80,8 +82,16 @@ Duration mainduration = now.difference(DateTime.now());
       exact: true,
       allowWhileIdle: true,
     );
-    }
-await Readable.readJson();
+  }
+  await Readable.readJson();
+  result = await InternetConnectionChecker().hasConnection;
+  if (result == true) {
+    result = true;
+  } else {
+    result = false;
+  }
+// assign surah list to surah para provider
+
   runApp(MyApp(
     email: email,
   ));
@@ -152,7 +162,9 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
             ),
-            nextScreen: widget.email == null ? const Home() : const Login(),
+            nextScreen: (widget.email == null || result == false)
+                ? const Home()
+                : const Login(),
             splashIconSize: 550,
             splashTransition: SplashTransition.scaleTransition,
             // pageTransitionType:  Animation(),
@@ -162,121 +174,121 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
+dynamic _periodicTaskCallback(int alarmId) async {
+  // Show a notification
 
- dynamic _periodicTaskCallback(int alarmId) async {
-    // Show a notification
+  if (alarmId == 10) {
+    // write a logic so that it sets an alarm at 12:05 AM once
+    bool _fazarAlarmIsSet = await getDataFromDevice('1').then((value) {
+      return value == null ? false : true;
+    });
 
-    if(alarmId == 10){
-        // write a logic so that it sets an alarm at 12:05 AM once
-  bool _fazarAlarmIsSet = await getDataFromDevice('1').then((value) {
-    return value == null ? false : true;
-  });
+    bool _johorAlarmIsSet = await getDataFromDevice('2').then((value) {
+      return value == null ? false : true;
+    });
 
-  bool _johorAlarmIsSet = await getDataFromDevice('2').then((value) {
-    return value == null ? false : true;
-  });
+    bool _asorAlarmIsSet = await getDataFromDevice('3').then((value) {
+      return value == null ? false : true;
+    });
 
-  bool _asorAlarmIsSet = await getDataFromDevice('3').then((value) {
-    return value == null ? false : true;
-  });
+    bool _magribAlarmIsSet = await getDataFromDevice('4').then((value) {
+      return value == null ? false : true;
+    });
 
-  bool _magribAlarmIsSet = await getDataFromDevice('4').then((value) {
-    return value == null ? false : true;
-  });
+    bool _eshaAlarmIsSet = await getDataFromDevice('5').then((value) {
+      return value == null ? false : true;
+    });
 
-  bool _eshaAlarmIsSet = await getDataFromDevice('5').then((value) {
-    return value == null ? false : true;
-  });
+    double _latitude =
+        await getDataFromDevice('current latitude').then((value) {
+      return value == null ? 0.0 : double.parse(value);
+    });
 
-  double _latitude = await getDataFromDevice('current latitude').then((value) {
-    return value == null ? 0.0 : double.parse(value);
-  });
+    double _longitude =
+        await getDataFromDevice('current longitude').then((value) {
+      return value == null ? 0.0 : double.parse(value);
+    });
 
-  double _longitude =
-      await getDataFromDevice('current longitude').then((value) {
-    return value == null ? 0.0 : double.parse(value);
-  });
-
-  final _myCoordinates = Coordinates(_latitude, _longitude);
-  final params = CalculationMethod.karachi.getParameters();
-  final _prayerTimes = PrayerTimes.today(_myCoordinates, params);
+    final _myCoordinates = Coordinates(_latitude, _longitude);
+    final params = CalculationMethod.karachi.getParameters();
+    final _prayerTimes = PrayerTimes.today(_myCoordinates, params);
 
     if (_fazarAlarmIsSet) {
-    Duration duration = _prayerTimes.fajr.difference(DateTime.now());
-    if(!duration.isNegative){
-      await AndroidAlarmManager.oneShot(
-      duration,
-      1,
-      _periodicTaskCallback, // Pass the function reference without calling it
-      wakeup: true,
-      rescheduleOnReboot: true,
-      exact: true,
-      allowWhileIdle: true,
-    );
+      Duration duration = _prayerTimes.fajr.difference(DateTime.now());
+      if (!duration.isNegative) {
+        await AndroidAlarmManager.oneShot(
+          duration,
+          1,
+          _periodicTaskCallback, // Pass the function reference without calling it
+          wakeup: true,
+          rescheduleOnReboot: true,
+          exact: true,
+          allowWhileIdle: true,
+        );
+      }
     }
-  }
 
-  if (_johorAlarmIsSet) {
-    Duration duration = _prayerTimes.dhuhr.difference(DateTime.now());
-    if(!duration.isNegative){
-      await AndroidAlarmManager.oneShot(
-      duration,
-      2,
-      _periodicTaskCallback, // Pass the function reference without calling it
-      wakeup: true,
-      rescheduleOnReboot: true,
-      exact: true,
-      allowWhileIdle: true,
-    );
+    if (_johorAlarmIsSet) {
+      Duration duration = _prayerTimes.dhuhr.difference(DateTime.now());
+      if (!duration.isNegative) {
+        await AndroidAlarmManager.oneShot(
+          duration,
+          2,
+          _periodicTaskCallback, // Pass the function reference without calling it
+          wakeup: true,
+          rescheduleOnReboot: true,
+          exact: true,
+          allowWhileIdle: true,
+        );
+      }
     }
-  }
 
-  if (_asorAlarmIsSet) {
-    Duration duration = _prayerTimes.asr.difference(DateTime.now());
-    if(!duration.isNegative){
-      await AndroidAlarmManager.oneShot(
-      duration,
-      3,
-      _periodicTaskCallback, // Pass the function reference without calling it
-      wakeup: true,
-      rescheduleOnReboot: true,
-      exact: true,
-      allowWhileIdle: true,
-    );
+    if (_asorAlarmIsSet) {
+      Duration duration = _prayerTimes.asr.difference(DateTime.now());
+      if (!duration.isNegative) {
+        await AndroidAlarmManager.oneShot(
+          duration,
+          3,
+          _periodicTaskCallback, // Pass the function reference without calling it
+          wakeup: true,
+          rescheduleOnReboot: true,
+          exact: true,
+          allowWhileIdle: true,
+        );
+      }
     }
-  }
 
-  if (_magribAlarmIsSet) {
-    Duration duration = _prayerTimes.maghrib.difference(DateTime.now());
-    if(!duration.isNegative){
-      await AndroidAlarmManager.oneShot(
-      duration,
-      4,
-      _periodicTaskCallback, // Pass the function reference without calling it
-      wakeup: true,
-      rescheduleOnReboot: true,
-      exact: true,
-      allowWhileIdle: true,
-    );
+    if (_magribAlarmIsSet) {
+      Duration duration = _prayerTimes.maghrib.difference(DateTime.now());
+      if (!duration.isNegative) {
+        await AndroidAlarmManager.oneShot(
+          duration,
+          4,
+          _periodicTaskCallback, // Pass the function reference without calling it
+          wakeup: true,
+          rescheduleOnReboot: true,
+          exact: true,
+          allowWhileIdle: true,
+        );
+      }
     }
-  }
 
-  if (_eshaAlarmIsSet) {
-    Duration duration = _prayerTimes.isha.difference(DateTime.now());
-    if(!duration.isNegative){
-      await AndroidAlarmManager.oneShot(
-      duration,
-      5,
-      _periodicTaskCallback, // Pass the function reference without calling it
-      wakeup: true,
-      rescheduleOnReboot: true,
-      exact: true,
-      allowWhileIdle: true,
-    );
+    if (_eshaAlarmIsSet) {
+      Duration duration = _prayerTimes.isha.difference(DateTime.now());
+      if (!duration.isNegative) {
+        await AndroidAlarmManager.oneShot(
+          duration,
+          5,
+          _periodicTaskCallback, // Pass the function reference without calling it
+          wakeup: true,
+          rescheduleOnReboot: true,
+          exact: true,
+          allowWhileIdle: true,
+        );
+      }
     }
-  }
-    }else{
-      await NamazWakto.flutterLocalNotificationsPlugin.show(
+  } else {
+    await NamazWakto.flutterLocalNotificationsPlugin.show(
       alarmId,
       'নামাজের সময় হয়েছে',
       (alarmId == 1)
@@ -305,7 +317,5 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
     );
-    }
-    
-
   }
+}

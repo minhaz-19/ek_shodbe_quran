@@ -2,7 +2,6 @@ import 'package:ek_shodbe_quran/component/admin/admin.dart';
 import 'package:ek_shodbe_quran/component/shared_preference.dart';
 import 'package:ek_shodbe_quran/provider/cartProvider.dart';
 import 'package:ek_shodbe_quran/screens/aboutUs.dart';
-import 'package:ek_shodbe_quran/component/admin/admin_order.dart';
 import 'package:ek_shodbe_quran/screens/cart.dart';
 import 'package:ek_shodbe_quran/screens/change_password.dart';
 import 'package:ek_shodbe_quran/screens/edit_profile.dart';
@@ -180,7 +179,7 @@ class MyDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: DrawerIcon(
-              image_path: 'assets/icons/aboutus.png',
+              image_path: 'assets/icons/aboutUs.png',
             ),
             title: Text(
               'আমাদের সম্পর্কে',

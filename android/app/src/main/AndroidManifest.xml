@@ -30,7 +30,7 @@
     <!-- For apps with targetSDK=31 (Android 12) -->
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
     <application
-    android:label="ek_shodbe_quran"
+    android:label="Ek Shobde Qur'an"
     android:name="${applicationName}"
     android:icon="@mipmap/launcher_icon">
 

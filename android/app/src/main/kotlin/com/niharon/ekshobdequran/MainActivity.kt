@@ -1,4 +1,4 @@
-package cse.ruet.ek_shodbe_quran
+package com.niharon.ekshobdequran
 
 import io.flutter.embedding.android.FlutterActivity
 

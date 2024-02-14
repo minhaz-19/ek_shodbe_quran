@@ -318,22 +318,27 @@ class _HomeTabState extends State<HomeTab> {
                         FeatureIcon(
                             label: 'কোর্স সমূহ',
                             iconPath: 'assets/icons/book.png',
-                            onPressed: () {
+                            onPressed: () async {
                               // create 100 collection with field name 'name' : "abcd"
-                              // for (var i = 1; i < 115; i++) {
-                              //   await FirebaseFirestore.instance
-                              //       .collection('surah')
-                              //       .doc('$i')
-                              //       .set({
-                              //     'name': "abcd",
-                              //     'bengali': "সূচনা",
-                              //     'arabic': 'الفاتحة'
-                              //   });
-                              // }
+                              Map<String, dynamic> data = {};
+                              for (var i = 1; i < 115; i++) {
+                                await FirebaseFirestore.instance
+                                    .collection('surah')
+                                    .doc('$i')
+                                    .get()
+                                    .then((value) {
+                                  data['$i'] = value['name'];
+                                });
+                              }
+                              //wait for 3 seconds
+                              // await Future.delayed(Duration(seconds: 3));
+                              for (var i = 1; i < 115; i++) {
+                                print('"$i" : "${data['$i']}",');
+                              }
 
-                              Navigator.of(context, rootNavigator: true).push(
-                                  MaterialPageRoute(
-                                      builder: (context) => const Courses()));
+                              // Navigator.of(context, rootNavigator: true).push(
+                              //     MaterialPageRoute(
+                              //         builder: (context) => const Courses()));
                             }),
                         SizedBox(
                             width: MediaQuery.of(context).size.width * 0.33,

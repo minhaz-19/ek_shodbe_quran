@@ -36,26 +36,30 @@ class _TodaysAyatState extends State<TodaysAyat> {
     surahNumber = Random().nextInt(114) + 1;
     int totalAyat = Readable.QuranData[surahNumber - 1]["total_verses"];
     ayatNumber = Random().nextInt(totalAyat) + 1;
-    try {
-      var sura_para_details =
-          Provider.of<SurahParaProvider>(context, listen: false);
-      await FirebaseFirestore.instance
-          .collection('surah')
-          .get()
-          .then((QuerySnapshot querySnapshot) {
-        querySnapshot.docs.forEach((doc) {
-          sura_para_details.addSurahList(doc['name'], doc.id);
-        });
-        setState(() {
-          _isLoading = false;
-        });
-      });
-    } catch (e) {
-      setState(() {
-        _isLoading = false;
-        _loadfromlocal = true;
-      });
-    }
+    setState(() {
+      _isLoading = false;
+    });
+    // try {
+    //   var sura_para_details =
+    //       Provider.of<SurahParaProvider>(context, listen: false);
+    //   // await FirebaseFirestore.instance
+    //   //     .collection('surah')
+    //   //     .get()
+    //   //     .then((QuerySnapshot querySnapshot) {
+    //   //   querySnapshot.docs.forEach((doc) {
+    //   //     sura_para_details.addSurahList(doc['name'], doc.id);
+    //   //   });
+        
+    //   // });
+    //   setState(() {
+    //       _isLoading = false;
+    //     });
+    // } catch (e) {
+    //   setState(() {
+    //     _isLoading = false;
+    //     _loadfromlocal = true;
+    //   });
+    // }
   }
 
   @override

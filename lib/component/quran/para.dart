@@ -8,6 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -33,18 +34,18 @@ class _ParaState extends State<Para> {
     });
     var sura_para_details =
         Provider.of<SurahParaProvider>(context, listen: false);
-    await FirebaseFirestore.instance
-        .collection('para')
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        sura_para_details.addParaList(doc['name'], doc.id);
-        // surahList[doc.id] = doc['name'];
-      });
-    }).then((value) {
-      findDownloadedPara();
-    });
-
+    // await FirebaseFirestore.instance
+    //     .collection('para')
+    //     .get()
+    //     .then((QuerySnapshot querySnapshot) {
+    //   querySnapshot.docs.forEach((doc) {
+    //     sura_para_details.addParaList(doc['name'], doc.id);
+    //     // surahList[doc.id] = doc['name'];
+    //   });
+    // }).then((value) {
+    //   findDownloadedPara();
+    // });
+    findDownloadedPara();
     setState(() {
       _isLoading = false;
     });
@@ -78,17 +79,22 @@ class _ParaState extends State<Para> {
     File pdfFile = File(filePath);
     if (!pdfFile.existsSync()) {
       try {
-        Fluttertoast.showToast(msg: 'ডাউনলোড হচ্ছে...');
-        await FirebaseStorage.instance
-            .ref()
-            .child(
-                'para/$fileName') // Replace 'pdfs' with your Firebase Storage path
-            .writeToFile(pdfFile);
-        Fluttertoast.showToast(msg: 'সফলভাবে ডাউনলোড হয়েছে');
-        var sura_para_details =
-            Provider.of<SurahParaProvider>(context, listen: false);
-        sura_para_details.addDownloadedParaIndex(index);
-        openPdfViewer(filePath, fileName);
+        bool result = await InternetConnectionChecker().hasConnection;
+        if (result == true) {
+          Fluttertoast.showToast(msg: 'ডাউনলোড হচ্ছে...');
+          await FirebaseStorage.instance
+              .ref()
+              .child(
+                  'para/$fileName') // Replace 'pdfs' with your Firebase Storage path
+              .writeToFile(pdfFile);
+          Fluttertoast.showToast(msg: 'সফলভাবে ডাউনলোড হয়েছে');
+          var sura_para_details =
+              Provider.of<SurahParaProvider>(context, listen: false);
+          sura_para_details.addDownloadedParaIndex(index);
+          openPdfViewer(filePath, fileName);
+        } else {
+          Fluttertoast.showToast(msg: 'ইন্টারনেট সংযোগ নেই');
+        }
       } on FirebaseException catch (e) {
         Fluttertoast.showToast(msg: '$e');
         openPdfViewer(filePath, fileName);
