@@ -1,4 +1,3 @@
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:ek_shodbe_quran/component/namaz_time.dart';
 import 'package:ek_shodbe_quran/component/progressbar.dart';
 import 'package:ek_shodbe_quran/component/sun_time.dart';
@@ -153,18 +152,24 @@ class _NamazTimeState extends State<NamazTime> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            NamazWakto(
-                                imagePath: 'assets/images/fazar.png',
-                                waktoName: 'ফজর',
-                                waktoTime: namazTimeData.fajr ?? ''),
-                            NamazWakto(
-                                imagePath: 'assets/images/johor.png',
-                                waktoName: 'যোহর',
-                                waktoTime: namazTimeData.dhuhr ?? ''),
-                            NamazWakto(
-                                imagePath: 'assets/images/fazar.png',
-                                waktoName: 'আসর',
-                                waktoTime: namazTimeData.asr ?? ''),
+                            Expanded(
+                              child: NamazWakto(
+                                  imagePath: 'assets/images/fazar.png',
+                                  waktoName: 'ফজর',
+                                  waktoTime: namazTimeData.fajr ?? ''),
+                            ),
+                            Expanded(
+                              child: NamazWakto(
+                                  imagePath: 'assets/images/johor.png',
+                                  waktoName: 'যোহর',
+                                  waktoTime: namazTimeData.dhuhr ?? ''),
+                            ),
+                            Expanded(
+                              child: NamazWakto(
+                                  imagePath: 'assets/images/fazar.png',
+                                  waktoName: 'আসর',
+                                  waktoTime: namazTimeData.asr ?? ''),
+                            ),
                           ],
                         ),
                         const SizedBox(
@@ -173,19 +178,30 @@ class _NamazTimeState extends State<NamazTime> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            NamazWakto(
-                                imagePath: 'assets/images/magrib.png',
-                                waktoName: 'মাগরিব',
-                                waktoTime: namazTimeData.maghrib ?? ''),
-                            NamazWakto(
-                              imagePath: 'assets/images/esha.png',
-                              waktoName: 'এশা',
-                              waktoTime: namazTimeData.isha ?? '',
-                              color: Colors.white,
+                            Expanded(
+                              child: NamazWakto(
+                                  imagePath: 'assets/images/magrib.png',
+                                  waktoName: 'মাগরিব',
+                                  waktoTime: namazTimeData.maghrib ?? ''),
                             ),
-                            Container(
-                              height: 120,
-                              width: 120,
+                            Expanded(
+                              child: NamazWakto(
+                                imagePath: 'assets/images/esha.png',
+                                waktoName: 'এশা',
+                                waktoTime: namazTimeData.isha ?? '',
+                                color: Colors.white,
+                              ),
+                            ),
+                            Expanded(
+                              child: Visibility(
+                                visible: false, // Set visibility to false
+                                child: NamazWakto(
+                                  imagePath: 'assets/images/esha.png',
+                                  waktoName: 'তাহাজ্জুদ',
+                                  waktoTime: namazTimeData.fajr ?? '',
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -205,17 +221,25 @@ class _NamazTimeState extends State<NamazTime> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            SunTime(
+                            Expanded(
+                              child: SunTime(
                                 imagePath: 'assets/images/sunrise.png',
                                 waktoName: 'সূর্যোদয়',
-                                waktoTime: namazTimeData.sunrise ?? ''),
-                            SunTime(
-                              imagePath: 'assets/images/sunset.png',
-                              waktoName: 'সূর্যাস্ত',
-                              waktoTime: namazTimeData.sunset ?? '',
-                              color: Colors.white,
+                                waktoTime: namazTimeData.sunrise ?? '',
+                              ),
+                            ),
+                            Expanded(
+                              child: SunTime(
+                                imagePath: 'assets/images/sunset.png',
+                                waktoName: 'সূর্যাস্ত',
+                                waktoTime: namazTimeData.sunset ?? '',
+                                color: Colors.white,
+                              ),
                             ),
                           ],
+                        ),
+                        const SizedBox(
+                          height: 30,
                         ),
                       ],
                     ),

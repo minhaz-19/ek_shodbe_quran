@@ -81,10 +81,8 @@ class MyDrawer extends StatelessWidget {
                     }
 
                     Navigator.of(context).pop();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const admin()),
-                    );
+                    Navigator.of(context, rootNavigator: true)
+                        .push(MaterialPageRoute(builder: (context) => admin()));
                   },
                 )
               : const SizedBox(),

@@ -1,4 +1,3 @@
-import 'package:adhan/adhan.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:ek_shodbe_quran/component/shared_preference.dart';
 import 'package:ek_shodbe_quran/provider/location_provider.dart';
@@ -6,7 +5,6 @@ import 'package:ek_shodbe_quran/provider/namazTimeProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class NamazWakto extends StatefulWidget {
@@ -97,62 +95,6 @@ class _NamazWaktoState extends State<NamazWakto> {
         ),
       ),
     );
-
-    // DateTime _faazar_time = DateTime.now();
-    // DateTime _johor_time = DateTime.now();
-    // DateTime _asor_time = DateTime.now();
-    // DateTime _magrib_time = DateTime.now();
-    // DateTime _esha_time = DateTime.now();
-
-    // await getDataFromDevice('current longitude').then((longitude) async {
-    //   await getDataFromDevice('current latitude').then((latitude) async {
-    //     final myCoordinates = Coordinates(double.parse(latitude.toString()),
-    //         double.parse(longitude.toString()));
-    //     final params = CalculationMethod.karachi.getParameters();
-    //     params.madhab = Madhab.hanafi;
-    //     final prayerTimes = PrayerTimes.today(myCoordinates, params);
-
-    //     _faazar_time = prayerTimes.fajr;
-    //     _johor_time = prayerTimes.dhuhr;
-    //     _asor_time = prayerTimes.asr;
-    //     _magrib_time = prayerTimes.maghrib;
-    //     _esha_time = prayerTimes.isha;
-    //   });
-    // });
-
-    // print('printing inside new alarm set  to check-----------------');
-    // print(_faazar_time);
-    // print(_johor_time);
-    // print(_asor_time);
-    // print(_magrib_time);
-    // print(_esha_time);
-
-    // Duration duration = (alarmId == 1)
-    //     ? _faazar_time.difference(DateTime.now())
-    //     : (alarmId == 2)
-    //         ? _johor_time.difference(DateTime.now())
-    //         : (alarmId == 3)
-    //             ? _asor_time.difference(DateTime.now())
-    //             : (alarmId == 4)
-    //                 ? _magrib_time.difference(DateTime.now())
-    //                 : (alarmId == 5)
-    //                     ? _esha_time.difference(DateTime.now())
-    //                     : _faazar_time.difference(DateTime.now());
-
-    // print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-    // await AndroidAlarmManager.oneShot(
-    //   duration,
-    //   alarmId,
-    //   _periodicTaskCallback, // Pass the function reference without calling it
-    //   wakeup: true,
-    //   rescheduleOnReboot: true,
-    //   exact: true,
-    //   allowWhileIdle: true,
-    // );
-    // Fluttertoast.showToast(msg: 'duration: ${duration.inSeconds}');
-    // Fluttertoast.showToast(msg: 'alarmId: $alarmId');
-    // print('duration: ${duration.inSeconds}');
-    // print('alarmId: $alarmId');
   }
 
   void _scheduleOneTImeAlarm(int alarmId) async {
@@ -163,7 +105,6 @@ class _NamazWaktoState extends State<NamazWakto> {
     DateTime _asor_time = namazTimeData.asrTime ?? DateTime.now();
     DateTime _magrib_time = namazTimeData.maghribTime ?? DateTime.now();
     DateTime _esha_time = namazTimeData.ishaTime ?? DateTime.now();
-
 
     Duration duration = (alarmId == 1)
         ? _faazar_time.difference(DateTime.now())
@@ -193,81 +134,82 @@ class _NamazWaktoState extends State<NamazWakto> {
   @override
   Widget build(BuildContext context) {
     var locationData = Provider.of<LocationProvider>(context);
-    return Container(
-        height: 120,
-        width: 120,
-        decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(widget.imagePath),
-              fit: BoxFit.cover,
-            ),
-            borderRadius: BorderRadius.circular(20)),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(11),
-              child: Row(
-                children: [
-                  Text(
-                    widget.waktoName,
-                    style: TextStyle(
-                        color: widget.color,
-                        fontSize: (widget.waktoName == 'তাহাজ্জুদ') ? 15 : 20,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  Spacer(),
-                  InkWell(
-                    onTap: () async {
-                      (alarmIsSet)
-                          ? {
-                              await AndroidAlarmManager.cancel(alarmId),
-
-                              await removeDataFromDevice(alarmId.toString()),
-                              setState(() {
-                                alarmIsSet = false;
-                              }),
-                              // Fluttertoast.showToast(msg: alarmId.toString()),
-                              Fluttertoast.showToast(
-                                  msg: 'অ্যালার্ম বন্ধ করা হয়েছে'),
-                            }
-                          : {
-                              _scheduleOneTImeAlarm(alarmId),
-                              await saveDataToDevice('current latitude',
-                                  '${locationData.latitude}'),
-                              await saveDataToDevice('current longitude',
-                                  '${locationData.longitude}'),
-                              await saveDataToDevice(
-                                  alarmId.toString(), alarmId.toString()),
-                              setState(() {
-                                alarmIsSet = true;
-                              }),
-                              // Fluttertoast.showToast(msg: alarmId.toString()),
-                              Fluttertoast.showToast(
-                                  msg: 'অ্যালার্ম সেট করা হয়েছে')
-                            };
-                    },
-                    child: ImageIcon(
-                      AssetImage(
-                        'assets/icons/alarm.png',
-                      ),
-                      color: (alarmIsSet) ? Colors.pink : Colors.black,
-                    ),
-                  )
-                ],
+    return AspectRatio(
+      aspectRatio: 1.0,
+      child: Container(
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(widget.imagePath),
+                fit: BoxFit.cover,
               ),
-            ),
-            Spacer(),
-            Padding(
-              padding: const EdgeInsets.all(11),
-              child: Text(
-                widget.waktoTime,
-                style: TextStyle(
-                  color: widget.color,
-                  fontSize: 20,
+              borderRadius: BorderRadius.circular(20)),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(11),
+                child: Row(
+                  children: [
+                    Text(
+                      widget.waktoName,
+                      style: TextStyle(
+                          color: widget.color,
+                          fontSize: (widget.waktoName == 'তাহাজ্জুদ') ? 15 : 20,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Spacer(),
+                    InkWell(
+                      onTap: () async {
+                        (alarmIsSet)
+                            ? {
+                                await AndroidAlarmManager.cancel(alarmId),
+
+                                await removeDataFromDevice(alarmId.toString()),
+                                setState(() {
+                                  alarmIsSet = false;
+                                }),
+                                // Fluttertoast.showToast(msg: alarmId.toString()),
+                                Fluttertoast.showToast(
+                                    msg: 'অ্যালার্ম বন্ধ করা হয়েছে'),
+                              }
+                            : {
+                                _scheduleOneTImeAlarm(alarmId),
+                                await saveDataToDevice('current latitude',
+                                    '${locationData.latitude}'),
+                                await saveDataToDevice('current longitude',
+                                    '${locationData.longitude}'),
+                                await saveDataToDevice(
+                                    alarmId.toString(), alarmId.toString()),
+                                setState(() {
+                                  alarmIsSet = true;
+                                }),
+                                // Fluttertoast.showToast(msg: alarmId.toString()),
+                                Fluttertoast.showToast(
+                                    msg: 'অ্যালার্ম সেট করা হয়েছে')
+                              };
+                      },
+                      child: ImageIcon(
+                        AssetImage(
+                          'assets/icons/alarm.png',
+                        ),
+                        color: (alarmIsSet) ? Colors.pink : Colors.black,
+                      ),
+                    )
+                  ],
                 ),
               ),
-            ),
-          ],
-        ));
+              Spacer(),
+              Padding(
+                padding: const EdgeInsets.all(11),
+                child: Text(
+                  widget.waktoTime,
+                  style: TextStyle(
+                    color: widget.color,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+            ],
+          )),
+    );
   }
 }

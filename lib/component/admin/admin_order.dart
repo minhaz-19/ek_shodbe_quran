@@ -4,7 +4,7 @@ import 'package:ek_shodbe_quran/component/progressbar.dart';
 import 'package:flutter/material.dart';
 
 class AdminOrder extends StatelessWidget {
-  const AdminOrder({super.key});
+  const AdminOrder({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,104 +40,95 @@ class AdminOrder extends StatelessWidget {
         ),
         body: TabBarView(
           children: <Widget>[
-            Center(
-              child: Expanded(
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('orders')
-                      .where('status', isEqualTo: 'Pending')
-                      .orderBy('time', descending: true)
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: ProgressBar());
-                    } else if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
-                    } else if (!snapshot.hasData ||
-                        snapshot.data!.docs.isEmpty) {
-                      return const Center();
-                    } else {
-                      // Iterate through documents and build the list
-                      List<Widget> listTiles = snapshot.data!.docs.map((doc) {
-                        return AdminOrderElement(
-                          date: doc['time'].toDate().toString(),
-                          order_id: doc.id,
-                          status: doc['status'],
-                          price: doc['total'],
-                        );
-                      }).toList();
-
-                      return ListView(
-                        children: listTiles,
-                      );
-                    }
-                  },
-                ),
-              ),
-            ),
-            Expanded(
-              child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('orders')
-                    .where('status', isEqualTo: 'Shipped')
-                    .orderBy('time', descending: true)
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: ProgressBar());
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                    return const Center();
-                  } else {
-                    // Iterate through documents and build the list
-                    List<Widget> listTiles = snapshot.data!.docs.map((doc) {
-                      return AdminOrderElement(
-                        date: doc['time'].toDate().toString(),
-                        order_id: doc.id,
-                        status: doc['status'],
-                        price: doc['total'],
-                      );
-                    }).toList();
-
-                    return ListView(
-                      children: listTiles,
+            StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('orders')
+                  .where('status', isEqualTo: 'Pending')
+                  .orderBy('time', descending: true)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: ProgressBar());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  return const Center();
+                } else {
+                  // Iterate through documents and build the list
+                  List<Widget> listTiles = snapshot.data!.docs.map((doc) {
+                    return AdminOrderElement(
+                      date: doc['time'].toDate().toString(),
+                      order_id: doc.id,
+                      status: doc['status'],
+                      price: doc['total'],
                     );
-                  }
-                },
-              ),
-            ),
-            Expanded(
-              child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('orders')
-                    .where('status', isEqualTo: 'Delivered')
-                    .orderBy('time', descending: true)
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: ProgressBar());
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                    return const Center();
-                  } else {
-                    // Iterate through documents and build the list
-                    List<Widget> listTiles = snapshot.data!.docs.map((doc) {
-                      return AdminOrderElement(
-                        date: doc['time'].toDate().toString(),
-                        order_id: doc.id,
-                        status: doc['status'],
-                        price: doc['total'],
-                      );
-                    }).toList();
+                  }).toList();
 
-                    return ListView(
-                      children: listTiles,
+                  return ListView(
+                    children: listTiles,
+                  );
+                }
+              },
+            ),
+            StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('orders')
+                  .where('status', isEqualTo: 'Shipped')
+                  .orderBy('time', descending: true)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: ProgressBar());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  return const Center();
+                } else {
+                  // Iterate through documents and build the list
+                  List<Widget> listTiles = snapshot.data!.docs.map((doc) {
+                    return AdminOrderElement(
+                      date: doc['time'].toDate().toString(),
+                      order_id: doc.id,
+                      status: doc['status'],
+                      price: doc['total'],
                     );
-                  }
-                },
-              ),
+                  }).toList();
+
+                  return ListView(
+                    children: listTiles,
+                  );
+                }
+              },
+            ),
+            StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('orders')
+                  .where('status', isEqualTo: 'Delivered')
+                  .orderBy('time', descending: true)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: ProgressBar());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  return const Center();
+                } else {
+                  // Iterate through documents and build the list
+                  List<Widget> listTiles = snapshot.data!.docs.map((doc) {
+                    return AdminOrderElement(
+                      date: doc['time'].toDate().toString(),
+                      order_id: doc.id,
+                      status: doc['status'],
+                      price: doc['total'],
+                    );
+                  }).toList();
+
+                  return ListView(
+                    children: listTiles,
+                  );
+                }
+              },
             ),
           ],
         ),
