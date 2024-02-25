@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
@@ -44,6 +45,17 @@ class _PdfPageState extends State<PdfPage> {
     });
   }
 
+  Future<void> deleteFile(String filePath) async {
+    try {
+      // Delete the file
+      File file = File(filePath);
+      await file.delete();
+    } catch (e) {
+      // Handle error if deletion fails
+      print('Error deleting file: $e');
+    }
+  }
+
   final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
   final GlobalKey _containerKey = GlobalKey();
 
@@ -84,6 +96,12 @@ class _PdfPageState extends State<PdfPage> {
                       pageLayoutMode: PdfPageLayoutMode.single,
                       canShowScrollHead: false,
                       enableDoubleTapZooming: true,
+                      onDocumentLoadFailed:
+                          (PdfDocumentLoadFailedDetails details) async {
+                        await deleteFile(widget.filePath);
+                        Fluttertoast.showToast(
+                            msg: 'ফাইল ক্ষতিগ্রস্ত হয়েছে এবং মুছে ফেলা হয়েছে');
+                      },
                     ),
                   ),
                 ),
