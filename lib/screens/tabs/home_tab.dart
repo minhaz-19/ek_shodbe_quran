@@ -6,13 +6,11 @@ import 'package:ek_shodbe_quran/component/read_book.dart';
 import 'package:ek_shodbe_quran/component/shared_preference.dart';
 import 'package:ek_shodbe_quran/component/video.dart';
 import 'package:ek_shodbe_quran/component/wide_button.dart';
-import 'package:ek_shodbe_quran/provider/cartProvider.dart';
 import 'package:ek_shodbe_quran/provider/location_provider.dart';
 import 'package:ek_shodbe_quran/provider/namazTimeProvider.dart';
 import 'package:ek_shodbe_quran/provider/userDetailsProvider.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/calendar.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/read_quran.dart';
-import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/courses.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/donate.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/durud.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/kiblah.dart';
@@ -39,6 +37,8 @@ class _HomeTabState extends State<HomeTab> {
   String email = '';
   bool _is_loading = false;
   List<Placemark> placemarks = [];
+  var _currentWakto = '';
+  var _nextWakto = '';
 
   @override
   void initState() {
@@ -47,8 +47,105 @@ class _HomeTabState extends State<HomeTab> {
       name = UserDetailsProvider().getName();
       email = UserDetailsProvider().getEmail();
     });
-
+    _initializeHome();
     super.initState();
+  }
+
+  void _initializeHome() async {
+    setState(() {
+      _is_loading = true;
+    });
+    var namazTimeData = Provider.of<NamazTimeProvider>(context, listen: false);
+    var locationData = Provider.of<LocationProvider>(context, listen: false);
+    await getDataFromDevice('current latitude').then((value) async {
+      if (value == null) {
+        setState(() {
+          locationData.locality = 'Jashore';
+          locationData.subLocality = 'Jashore Zilla School';
+          locationData.country = 'Bangladesh';
+          locationData.setLocation(
+            23.160969261812728,
+            89.20574491067016,
+          );
+        });
+      } else {
+        await getDataFromDevice('current longitude').then((longitude) async {
+          await getDataFromDevice('current latitude').then((latitude) {
+            locationData.setLocation(double.parse(latitude.toString()),
+                double.parse(longitude.toString()));
+          });
+
+          placemarks = await placemarkFromCoordinates(
+              locationData.latitude, locationData.longitude);
+        });
+
+        locationData.setAddress(
+            placemarks[0].subLocality.toString(),
+            placemarks[0].locality.toString(),
+            placemarks[0].country.toString());
+      }
+    });
+
+    final myCoordinates =
+        Coordinates(locationData.latitude, locationData.longitude);
+    final params = CalculationMethod.karachi.getParameters();
+    params.madhab = Madhab.hanafi;
+    final prayerTimes = PrayerTimes.today(myCoordinates, params);
+
+    var _faazar_time = DateFormat.jm().format(prayerTimes.fajr);
+    var _johor_time = DateFormat.jm().format(prayerTimes.dhuhr);
+    var _asor_time = DateFormat.jm().format(prayerTimes.asr);
+    var _magrib_time = DateFormat.jm().format(prayerTimes.maghrib);
+    var _esha_time = DateFormat.jm().format(prayerTimes.isha);
+    // _tahajjud_time = DateFormat.jm().format(prayerTimes.);
+    var _sunrise_time = DateFormat.jm().format(prayerTimes.sunrise);
+    final DateFormat format = DateFormat.jm();
+    DateTime responseDateTime = format.parse(_magrib_time);
+
+    // Subtract one minute
+    responseDateTime = responseDateTime.subtract(Duration(minutes: 1));
+
+    // Format the adjusted time for display
+    String adjustedTime = format.format(responseDateTime);
+    var _sunset_time = adjustedTime;
+
+    namazTimeData.setNamazTime(_faazar_time, _johor_time, _asor_time,
+        _magrib_time, _esha_time, _sunrise_time, _sunset_time);
+
+    namazTimeData.setNamazTimeDateTime(
+        prayerTimes.fajr,
+        prayerTimes.dhuhr,
+        prayerTimes.asr,
+        prayerTimes.maghrib,
+        prayerTimes.isha,
+        prayerTimes.sunrise);
+    // find the current wakto
+    var now = DateTime.now();
+    var _currentWakto = '';
+    var _nextWakto = '';
+    if (now.isBefore(prayerTimes.fajr)) {
+      _currentWakto = 'tahaajjud';
+      _nextWakto = 'fajr';
+    } else if (now.isBefore(prayerTimes.dhuhr)) {
+      _currentWakto = 'ফজর';
+      _nextWakto = 'যোহর';
+    } else if (now.isBefore(prayerTimes.asr)) {
+      _currentWakto = 'যোহর';
+      _nextWakto = 'আসর';
+    } else if (now.isBefore(prayerTimes.maghrib)) {
+      _currentWakto = 'আসর';
+      _nextWakto = 'মাগরিব';
+    } else if (now.isBefore(prayerTimes.isha)) {
+      _currentWakto = 'মাগরিব';
+      _nextWakto = 'ঈশা';
+    } else {
+      _currentWakto = 'ঈশা';
+      _nextWakto = 'ফজর';
+    }
+
+    setState(() {
+      _is_loading = false;
+    });
   }
 
   _launchURL(String url) async {
@@ -63,7 +160,6 @@ class _HomeTabState extends State<HomeTab> {
   @override
   Widget build(BuildContext context) {
     var namazTimeData = Provider.of<NamazTimeProvider>(context);
-    var locationData = Provider.of<LocationProvider>(context);
     return Scaffold(
         body: (_is_loading)
             ? const ProgressBar()
@@ -89,7 +185,7 @@ class _HomeTabState extends State<HomeTab> {
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Padding(
+                                  Padding(
                                     padding: EdgeInsets.fromLTRB(15, 35, 10, 0),
                                     child: Column(
                                       crossAxisAlignment:
@@ -128,7 +224,7 @@ class _HomeTabState extends State<HomeTab> {
                                               color: Colors.white),
                                         ),
                                         Text(
-                                          'ওয়াক্ত শুরু 6:00 PM',
+                                          'ওয়াক্ত শুরু ${namazTimeData.fajr}',
                                           style: TextStyle(
                                               fontSize: 17,
                                               fontWeight: FontWeight.w500,
@@ -175,100 +271,6 @@ class _HomeTabState extends State<HomeTab> {
                                 label: 'নামাজের সময়',
                                 iconPath: 'assets/icons/namaz_time.png',
                                 onPressed: () async {
-                                  await getDataFromDevice('current latitude')
-                                      .then((value) async {
-                                    if (value == null) {
-                                      setState(() {
-                                        locationData.locality = 'Jashore';
-                                        locationData.subLocality =
-                                            'Jashore Zilla School';
-                                        locationData.country = 'Bangladesh';
-                                        locationData.setLocation(
-                                          23.160969261812728,
-                                          89.20574491067016,
-                                        );
-                                      });
-                                    } else {
-                                      await getDataFromDevice(
-                                              'current longitude')
-                                          .then((longitude) async {
-                                        await getDataFromDevice(
-                                                'current latitude')
-                                            .then((latitude) {
-                                          locationData.setLocation(
-                                              double.parse(latitude.toString()),
-                                              double.parse(
-                                                  longitude.toString()));
-                                        });
-
-                                        placemarks =
-                                            await placemarkFromCoordinates(
-                                                locationData.latitude,
-                                                locationData.longitude);
-                                      });
-
-                                      locationData.setAddress(
-                                          placemarks[0].subLocality.toString(),
-                                          placemarks[0].locality.toString(),
-                                          placemarks[0].country.toString());
-                                    }
-                                  });
-
-                                  final myCoordinates = Coordinates(
-                                      locationData.latitude,
-                                      locationData.longitude);
-                                  final params =
-                                      CalculationMethod.karachi.getParameters();
-                                  params.madhab = Madhab.hanafi;
-                                  final prayerTimes =
-                                      PrayerTimes.today(myCoordinates, params);
-
-                                  var _faazar_time =
-                                      DateFormat.jm().format(prayerTimes.fajr);
-                                  var _johor_time =
-                                      DateFormat.jm().format(prayerTimes.dhuhr);
-                                  var _asor_time =
-                                      DateFormat.jm().format(prayerTimes.asr);
-                                  var _magrib_time = DateFormat.jm()
-                                      .format(prayerTimes.maghrib);
-                                  var _esha_time =
-                                      DateFormat.jm().format(prayerTimes.isha);
-                                  // _tahajjud_time = DateFormat.jm().format(prayerTimes.);
-                                  var _sunrise_time = DateFormat.jm()
-                                      .format(prayerTimes.sunrise);
-                                  final DateFormat format = DateFormat.jm();
-                                  DateTime responseDateTime =
-                                      format.parse(_magrib_time);
-
-                                  // Subtract one minute
-                                  responseDateTime = responseDateTime
-                                      .subtract(Duration(minutes: 1));
-
-                                  // Format the adjusted time for display
-                                  String adjustedTime =
-                                      format.format(responseDateTime);
-                                  var _sunset_time = adjustedTime;
-
-                                  namazTimeData.setNamazTime(
-                                      _faazar_time,
-                                      _johor_time,
-                                      _asor_time,
-                                      _magrib_time,
-                                      _esha_time,
-                                      _sunrise_time,
-                                      _sunset_time);
-
-                                  namazTimeData.setNamazTimeDateTime(
-                                      prayerTimes.fajr,
-                                      prayerTimes.dhuhr,
-                                      prayerTimes.asr,
-                                      prayerTimes.maghrib,
-                                      prayerTimes.isha,
-                                      prayerTimes.sunrise);
-
-                                  setState(() {
-                                    _is_loading = false;
-                                  });
                                   Navigator.of(context, rootNavigator: true)
                                       .push(MaterialPageRoute(
                                           builder: (context) =>
