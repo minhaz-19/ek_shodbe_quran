@@ -79,105 +79,40 @@ class _PdfPageState extends State<PdfPage> {
             ? Colors.black45
             : Colors.white,
       ),
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              Expanded(
-                child: RepaintBoundary(
-                  key: _containerKey,
-                  child: Screenshot(
-                    controller: screenshotController,
-                    child: SfPdfViewer.file(
-                      File('${widget.filePath}'),
-                      key: _pdfViewerKey,
-                      controller: _pdfViewerController,
-                      scrollDirection: PdfScrollDirection.horizontal,
-                      pageLayoutMode: PdfPageLayoutMode.single,
-                      canShowScrollHead: false,
-                      enableDoubleTapZooming: true,
-                      onDocumentLoadFailed:
-                          (PdfDocumentLoadFailedDetails details) async {
-                        await deleteFile(widget.filePath);
-                        Fluttertoast.showToast(
-                            msg: 'ফাইল ক্ষতিগ্রস্ত হয়েছে এবং মুছে ফেলা হয়েছে');
-                      },
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(8, 2, 8, 0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Theme.of(context).primaryColor),
-                  ),
-                  padding: const EdgeInsets.all(4),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 40.0,
-                        height: 40.0,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Row(
-                          children: [
-                            const SizedBox(width: 1),
-                            IconButton(
-                              onPressed: () {
-                                _pdfViewerController.previousPage();
-                                if (_currentPage > 1) {
-                                  setState(() {
-                                    _currentPage--;
-                                  });
-                                }
-                              },
-                              icon: Icon(
-                                Icons.arrow_back_ios,
-                                color: Theme.of(context).primaryColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Container(
-                        width: 40.0,
-                        height: 40.0,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                        ),
-                        child: IconButton(
-                          onPressed: () {
-                            _pdfViewerController.nextPage();
-                            if (_currentPage < _pdfViewerController.pageCount) {
-                              setState(() {
-                                _currentPage++;
-                              });
-                            }
-                          },
-                          icon: Icon(
-                            Icons.arrow_forward_ios,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+      body: RepaintBoundary(
+        key: _containerKey,
+        child: Screenshot(
+          controller: screenshotController,
+          child: SfPdfViewer.file(
+            File('${widget.filePath}'),
+            key: _pdfViewerKey,
+            controller: _pdfViewerController,
+            scrollDirection: PdfScrollDirection.horizontal,
+            pageLayoutMode: PdfPageLayoutMode.single,
+            canShowScrollHead: false,
+            enableDoubleTapZooming: true,
+            onDocumentLoadFailed: (PdfDocumentLoadFailedDetails details) async {
+              await deleteFile(widget.filePath);
+              Fluttertoast.showToast(
+                  msg: 'ফাইল ক্ষতিগ্রস্ত হয়েছে এবং মুছে ফেলা হয়েছে');
+            },
           ),
-          Positioned(
-            bottom: 14.0,
-            left: 20.0,
-            child: SizedBox(
+        ),
+      ),
+      bottomSheet: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).primaryColor,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: Theme.of(context).primaryColor),
+        ),
+        padding: const EdgeInsets.all(4),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 10,
+            ),
+            SizedBox(
               child: Text(
                 'পৃষ্ঠা: $_currentPage',
                 style: TextStyle(
@@ -187,11 +122,59 @@ class _PdfPageState extends State<PdfPage> {
                 ),
               ),
             ),
-          ),
-          Positioned(
-            bottom: 5.0,
-            right: 20.0,
-            child: Container(
+            Spacer(),
+            Container(
+              width: 40.0,
+              height: 40.0,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+              ),
+              child: Row(
+                children: [
+                  const SizedBox(width: 1),
+                  IconButton(
+                    onPressed: () {
+                      _pdfViewerController.previousPage();
+                      if (_currentPage > 1) {
+                        setState(() {
+                          _currentPage--;
+                        });
+                      }
+                    },
+                    icon: Icon(
+                      Icons.arrow_back_ios,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 10),
+            Container(
+              width: 40.0,
+              height: 40.0,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                onPressed: () {
+                  _pdfViewerController.nextPage();
+                  if (_currentPage < _pdfViewerController.pageCount) {
+                    setState(() {
+                      _currentPage++;
+                    });
+                  }
+                },
+                icon: Icon(
+                  Icons.arrow_forward_ios,
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
+            ),
+            Spacer(),
+            Container(
               width: 40.0,
               height: 40.0,
               decoration: const BoxDecoration(
@@ -208,8 +191,11 @@ class _PdfPageState extends State<PdfPage> {
                 ),
               ),
             ),
-          ),
-        ],
+            SizedBox(
+              width: 10,
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:ek_shodbe_quran/component/progressbar.dart';
 import 'package:ek_shodbe_quran/model/calendarmodel.dart';
@@ -41,40 +43,82 @@ class _CalendarTabState extends State<CalendarTab> {
         DateTime.now().year.toString(), DateTime.now().month.toString());
   }
 
+  Map<int, List<int>> generateYearMonthMap() {
+    Map<int, List<int>> yearMonthMap = {};
+
+    // Get current year and month
+    int currentYear = DateTime.now().year;
+    int currentMonth = DateTime.now().month;
+
+    // Iterate from -2 to 6
+    for (int i = -1; i <= 3; i++) {
+      // Calculate the offset year and month
+      int yearOffset = currentYear;
+      int monthOffset = currentMonth + i;
+
+      // Adjust year and month if month offset goes out of bounds
+      if (monthOffset <= 0) {
+        monthOffset += 12;
+        yearOffset -= 1;
+      } else if (monthOffset > 12) {
+        monthOffset -= 12;
+        yearOffset += 1;
+      }
+
+      // Add the year and month to the map
+      yearMonthMap[i] = [yearOffset, monthOffset];
+    }
+
+    return yearMonthMap;
+  }
+
   void _loadAppointments(String year, String month) async {
     setState(() {
       _isItLoading = true;
+      events = [];
+      _appointments = [];
     });
     // call the API and get the holidays and add them to the _appointments list
 
-    await fetchIslamicCalendar(year.toString(), month.toString())
-        .then((islamicCalendar) {
-      if (islamicCalendar != null) {
-        // Fluttertoast.showToast(msg: 'here');
-        // only add the  holidays to the appointments list
-        for (var i = 0; i < islamicCalendar.data!.length; i++) {
-          // if it contains holiday then add all the holiday to the list
-          if (islamicCalendar.data?[i].hijri?.holidays?.length != 0) {
-            for (var j = 0;
-                j < islamicCalendar.data![i].hijri!.holidays!.length;
-                j++) {
-              String dateString =
-                  islamicCalendar.data?[i].gregorian?.date ?? "21-07-1445";
-              // Fluttertoast.showToast(msg: '$dateString');
-              DateTime dateTime = convertStringToDateTime(dateString);
-              events.add(Appointment(
-                id: i.toString() + j.toString(),
-                startTime: dateTime.add(Duration(days: 1)),
-                isAllDay: true,
-                endTime: dateTime.add(Duration(hours: 23)),
-                subject: islamicCalendar.data?[i].hijri?.holidays?[j] ?? '',
-                color: Theme.of(context).primaryColor,
-              ));
+    // start from two month back of current date time and upto next six month give a list of month number and year number in two lists
+
+    Map<int, List<int>> yearMonthMap = generateYearMonthMap();
+
+    for (int i = -1; i <= 3; i++) {
+      // Get the year and month from the map
+      int year = yearMonthMap[i]![0];
+      int month = yearMonthMap[i]![1];
+
+      await fetchIslamicCalendar(year.toString(), month.toString())
+          .then((islamicCalendar) {
+        if (islamicCalendar != null) {
+          // Fluttertoast.showToast(msg: 'here');
+          // only add the  holidays to the appointments list
+          for (var i = 0; i < islamicCalendar.data!.length; i++) {
+            // if it contains holiday then add all the holiday to the list
+            if (islamicCalendar.data?[i].hijri?.holidays?.length != 0) {
+              for (var j = 0;
+                  j < islamicCalendar.data![i].hijri!.holidays!.length;
+                  j++) {
+                String dateString =
+                    islamicCalendar.data?[i].gregorian?.date ?? "21-07-1445";
+                // Fluttertoast.showToast(msg: '$dateString');
+                DateTime dateTime = convertStringToDateTime(dateString);
+                events.add(Appointment(
+                  id: i.toString() + j.toString(),
+                  startTime: dateTime.add(Duration(days: 1)),
+                  isAllDay: true,
+                  endTime: dateTime.add(Duration(hours: 23)),
+                  subject: islamicCalendar.data?[i].hijri?.holidays?[j] ?? '',
+                  color: Theme.of(context).primaryColor,
+                ));
+              }
             }
           }
         }
-      }
-    });
+      });
+    }
+
     setState(() {
       _appointments = events;
       _isItLoading = false;
@@ -106,12 +150,12 @@ class _CalendarTabState extends State<CalendarTab> {
                       backgroundColor: Colors.white,
                       showNavigationArrow: true,
                       dataSource: AppointmentDataSource(_appointments),
-                      onViewChanged: (ViewChangedDetails details) {
-                        year = details.visibleDates[0].year;
-                        month = details.visibleDates[0].month + 1;
+                      // onViewChanged: (ViewChangedDetails details) {
+                      //   year = details.visibleDates[0].year;
+                      //   month = details.visibleDates[0].month + 1;
 
-                        _loadAppointments(year.toString(), month.toString());
-                      },
+                      //   _loadAppointments(year.toString(), month.toString());
+                      // },
                       onTap: (CalendarTapDetails details) {
                         setState(() {
                           dateSelected = details.date!;

@@ -24,6 +24,7 @@ class _ParaState extends State<Para> {
   bool _isLoading = false;
   int _currentDownloadingIndex = 0;
   String _percentage = '0%';
+  bool _currentDownloading = false;
 
   @override
   initState() {
@@ -84,31 +85,42 @@ class _ParaState extends State<Para> {
       try {
         bool result = await InternetConnectionChecker().hasConnection;
         if (result == true) {
-          Fluttertoast.showToast(msg: 'ডাউনলোড হচ্ছে...');
-          setState(() {
-            _currentDownloadingIndex = int.parse(index);
-          });
-          final downloadTask = FirebaseStorage.instance
-              .ref()
-              .child(
-                  'para/$fileName') // Replace 'pdfs' with your Firebase Storage path
-              .writeToFile(pdfFile);
-
-          downloadTask.snapshotEvents.listen((TaskSnapshot snapshot) {
-            final progress = snapshot.bytesTransferred / snapshot.totalBytes;
-            final percentage = (progress * 100).toStringAsFixed(2);
+          if (_currentDownloading) {
+            Fluttertoast.showToast(
+                msg: 'ডাউনলোড চলছে, অনুগ্রহ করে অপেক্ষা করুন');
+          } else {
+            Fluttertoast.showToast(msg: 'ডাউনলোড হচ্ছে...');
             setState(() {
-              _percentage = '$percentage%';
+              _currentDownloadingIndex = int.parse(index);
+              _currentDownloading = true;
             });
-            // Update UI with the percentage if needed
-          });
+            final downloadTask = FirebaseStorage.instance
+                .ref()
+                .child(
+                    'para/$fileName') // Replace 'pdfs' with your Firebase Storage path
+                .writeToFile(pdfFile);
 
-          await downloadTask;
-          Fluttertoast.showToast(msg: 'সফলভাবে ডাউনলোড হয়েছে');
-          var sura_para_details =
-              Provider.of<SurahParaProvider>(context, listen: false);
-          sura_para_details.addDownloadedParaIndex(index);
-          openPdfViewer(filePath, fileName);
+            downloadTask.snapshotEvents.listen((TaskSnapshot snapshot) {
+              final progress = snapshot.bytesTransferred / snapshot.totalBytes;
+              final percentage = (progress * 100).toStringAsFixed(2);
+              setState(() {
+                _percentage = '$percentage%';
+              });
+              // Update UI with the percentage if needed
+            });
+
+            await downloadTask;
+            Fluttertoast.showToast(msg: 'সফলভাবে ডাউনলোড হয়েছে');
+            setState(() {
+              _currentDownloadingIndex = 0;
+              _currentDownloading = false;
+              _percentage = '0%';
+            });
+            var sura_para_details =
+                Provider.of<SurahParaProvider>(context, listen: false);
+            sura_para_details.addDownloadedParaIndex(index);
+            openPdfViewer(filePath, fileName);
+          }
         } else {
           Fluttertoast.showToast(msg: 'ইন্টারনেট সংযোগ নেই');
         }
