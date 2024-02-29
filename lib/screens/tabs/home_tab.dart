@@ -91,7 +91,6 @@ class _HomeTabState extends State<HomeTab> {
     final params = CalculationMethod.karachi.getParameters();
     params.madhab = Madhab.hanafi;
     final prayerTimes = PrayerTimes.today(myCoordinates, params);
-
     var _faazar_time = DateFormat.jm().format(prayerTimes.fajr);
     var _johor_time = DateFormat.jm().format(prayerTimes.dhuhr);
     var _asor_time = DateFormat.jm().format(prayerTimes.asr);

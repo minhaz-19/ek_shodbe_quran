@@ -105,7 +105,7 @@ class _CalendarTabState extends State<CalendarTab> {
                 // Fluttertoast.showToast(msg: '$dateString');
                 DateTime dateTime = convertStringToDateTime(dateString);
                 events.add(Appointment(
-                  id: i.toString() + j.toString(),
+                  id: i.toString() + j.toString()+ month.toString() + year.toString(),
                   startTime: dateTime.add(Duration(days: 1)),
                   isAllDay: true,
                   endTime: dateTime.add(Duration(hours: 23)),

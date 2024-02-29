@@ -15,6 +15,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -43,46 +44,6 @@ Future<void> main() async {
     onDidReceiveNotificationResponse: (id) async {},
   );
 
-  await AndroidAlarmManager.initialize();
-
-  DateTime now = DateTime.now();
-
-  // Check if the current time is between 12:00 AM and 12:05 AM
-  if (now.hour == 0 && now.minute >= 0 && now.minute <= 4) {
-    // If yes, set the time to 12:05 AM on the same day
-    now = DateTime(
-      now.year,
-      now.month,
-      now.day,
-      0, // 0 represents midnight (12:00 AM)
-      5, // 5 represents minutes
-    );
-  } else {
-    // If no, calculate the next day
-    now = now.add(Duration(days: 1));
-
-    // Set the time to 12:05 AM
-    now = DateTime(
-      now.year,
-      now.month,
-      now.day,
-      0, // 0 represents midnight (12:00 AM)
-      5, // 5 represents minutes
-    );
-  }
-
-  Duration mainduration = now.difference(DateTime.now());
-  if (!mainduration.isNegative) {
-    await AndroidAlarmManager.oneShot(
-      mainduration,
-      10,
-      _periodicTaskCallback, // Pass the function reference without calling it
-      wakeup: true,
-      rescheduleOnReboot: true,
-      exact: true,
-      allowWhileIdle: true,
-    );
-  }
   await Readable.readJson();
   result = await InternetConnectionChecker().hasConnection;
   if (result == true) {

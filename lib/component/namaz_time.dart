@@ -1,3 +1,4 @@
+import 'package:adhan/adhan.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:ek_shodbe_quran/component/shared_preference.dart';
 import 'package:ek_shodbe_quran/provider/location_provider.dart';
@@ -87,6 +88,8 @@ class _NamazWaktoState extends State<NamazWakto> {
           importance: Importance.max,
           priority: Priority.high,
           playSound: true,
+          fullScreenIntent: true,
+          visibility: NotificationVisibility.public,
           // sound: RawResourceAndroidNotificationSound('al'),
           enableVibration: true,
           enableLights: true,
@@ -95,6 +98,96 @@ class _NamazWaktoState extends State<NamazWakto> {
         ),
       ),
     );
+    dynamic mylatitude;
+    dynamic mylongitude;
+    await getDataFromDevice('current latitude').then((value) async {
+      if (value == null) {
+        mylatitude = 23.160969261812728;
+        mylongitude = 89.20574491067016;
+        
+      } else {
+        await getDataFromDevice('current longitude').then((longitude) async {
+          await getDataFromDevice('current latitude').then((latitude) {
+            mylatitude = latitude;
+            mylongitude = longitude;
+          });
+        });
+      }
+    });
+
+    final myCoordinates =
+        Coordinates(mylatitude, mylongitude);
+    final params = CalculationMethod.karachi.getParameters();
+    params.madhab = Madhab.hanafi;
+    final prayerTimes = PrayerTimes.today(myCoordinates, params);
+    DateTime _faazar_time_auto = prayerTimes.fajr ?? DateTime.now();
+    DateTime _johor_time_auto = prayerTimes.dhuhr ?? DateTime.now();
+    DateTime _asor_time_auto = prayerTimes.asr ?? DateTime.now();
+    DateTime _magrib_time_auto = prayerTimes.maghrib ?? DateTime.now();
+    DateTime _esha_time_auto = prayerTimes.isha ?? DateTime.now();
+
+    if (alarmId == 1) {
+      await AndroidAlarmManager.oneShot(
+        _faazar_time_auto.difference(DateTime.now()),
+        1,
+        _periodicTaskCallback, // Pass the function reference without calling it
+        wakeup: true,
+        rescheduleOnReboot: true,
+        exact: true,
+        allowWhileIdle: true,
+      );
+      Fluttertoast.showToast(msg: 'duration: ${_faazar_time_auto.difference(DateTime.now()).inSeconds}');
+    Fluttertoast.showToast(msg: 'alarmId: $alarmId');
+    } else if (alarmId == 2) {
+      await AndroidAlarmManager.oneShot(
+        _johor_time_auto.difference(DateTime.now()),
+        2,
+        _periodicTaskCallback, // Pass the function reference without calling it
+        wakeup: true,
+        rescheduleOnReboot: true,
+        exact: true,
+        allowWhileIdle: true,
+      );
+      Fluttertoast.showToast(msg: 'duration: ${_johor_time_auto.difference(DateTime.now()).inSeconds}');
+    Fluttertoast.showToast(msg: 'alarmId: $alarmId');
+    } else if (alarmId == 3) {
+      await AndroidAlarmManager.oneShot(
+        _asor_time_auto.difference(DateTime.now()),
+        3,
+        _periodicTaskCallback, // Pass the function reference without calling it
+        wakeup: true,
+        rescheduleOnReboot: true,
+        exact: true,
+        allowWhileIdle: true,
+      );
+      Fluttertoast.showToast(msg: 'duration: ${_asor_time_auto.difference(DateTime.now()).inSeconds}');
+    Fluttertoast.showToast(msg: 'alarmId: $alarmId');
+    } else if (alarmId == 4) {
+      await AndroidAlarmManager.oneShot(
+        _magrib_time_auto.difference(DateTime.now()),
+        4,
+        _periodicTaskCallback, // Pass the function reference without calling it
+        wakeup: true,
+        rescheduleOnReboot: true,
+        exact: true,
+        allowWhileIdle: true,
+      );
+      Fluttertoast.showToast(msg: 'duration: ${_magrib_time_auto.difference(DateTime.now()).inSeconds}');
+    Fluttertoast.showToast(msg: 'alarmId: $alarmId');
+    } else if (alarmId == 5) {
+      await AndroidAlarmManager.oneShot(
+        _esha_time_auto.difference(DateTime.now()),
+        5,
+        _periodicTaskCallback, // Pass the function reference without calling it
+        wakeup: true,
+        rescheduleOnReboot: true,
+        exact: true,
+        allowWhileIdle: true,
+      );
+      Fluttertoast.showToast(msg: 'duration: ${_esha_time_auto.difference(DateTime.now()).inSeconds}');
+    Fluttertoast.showToast(msg: 'alarmId: $alarmId');
+    }
+
   }
 
   void _scheduleOneTImeAlarm(int alarmId) async {
