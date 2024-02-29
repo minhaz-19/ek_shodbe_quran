@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Donate extends StatefulWidget {
   const Donate({super.key});
@@ -63,17 +65,17 @@ class _DonateState extends State<Donate> {
                   textAlign: TextAlign.start,
                 ),
                 const Text(
-                  'ব্যাংক A/C: 25************5651',
+                  'ব্যাংক A/C: 20502070201564316',
                   style: TextStyle(fontSize: 15),
                   textAlign: TextAlign.start,
                 ),
                 const Text(
-                  'রুট নং : 2****54',
+                  'রুট নং : 125264639',
                   style: TextStyle(fontSize: 15),
                   textAlign: TextAlign.start,
                 ),
                 const Text(
-                  'শাখাঃ মিরপুর, ঢাকা',
+                  'শাখাঃ উত্তরা, ঢাকা',
                   style: TextStyle(fontSize: 15),
                   textAlign: TextAlign.start,
                 ),
@@ -91,46 +93,55 @@ class _DonateState extends State<Donate> {
                       textAlign: TextAlign.start,
                     ),
                     const Text(
-                      '017********',
+                      '01715125125',
                       style: TextStyle(fontSize: 15),
                       textAlign: TextAlign.start,
                     ),
+                    Spacer(),
+                    InkWell(
+                        onTap: () {
+                          // copy to clipboard
+                          Clipboard.setData(ClipboardData(text: '01715125125'));
+                          Fluttertoast.showToast(
+                              msg: "ক্লিপবোর্ডে কপি করা হয়েছে");
+                        },
+                        child: Icon(Icons.copy)),
                   ],
                 ),
-                Row(
-                  children: [
-                    Text(
-                      'নগদ: ',
-                      style: TextStyle(
-                          fontSize: 20,
-                          color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.start,
-                    ),
-                    const Text(
-                      '017********',
-                      style: TextStyle(fontSize: 15),
-                      textAlign: TextAlign.start,
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text(
-                      'রকেট: ',
-                      style: TextStyle(
-                          fontSize: 20,
-                          color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.start,
-                    ),
-                    const Text(
-                      '017********',
-                      style: TextStyle(fontSize: 15),
-                      textAlign: TextAlign.start,
-                    ),
-                  ],
-                )
+                // Row(
+                //   children: [
+                //     Text(
+                //       'নগদ: ',
+                //       style: TextStyle(
+                //           fontSize: 20,
+                //           color: Theme.of(context).primaryColor,
+                //           fontWeight: FontWeight.bold),
+                //       textAlign: TextAlign.start,
+                //     ),
+                //     const Text(
+                //       '017********',
+                //       style: TextStyle(fontSize: 15),
+                //       textAlign: TextAlign.start,
+                //     ),
+                //   ],
+                // ),
+                // Row(
+                //   children: [
+                //     Text(
+                //       'রকেট: ',
+                //       style: TextStyle(
+                //           fontSize: 20,
+                //           color: Theme.of(context).primaryColor,
+                //           fontWeight: FontWeight.bold),
+                //       textAlign: TextAlign.start,
+                //     ),
+                //     const Text(
+                //       '017********',
+                //       style: TextStyle(fontSize: 15),
+                //       textAlign: TextAlign.start,
+                //     ),
+                //   ],
+                // )
               ],
             ),
           ),
