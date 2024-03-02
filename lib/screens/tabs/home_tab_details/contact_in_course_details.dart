@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ContactInCourseDetails extends StatefulWidget {
   const ContactInCourseDetails({super.key});
@@ -46,10 +48,10 @@ class _ContactInCourseDetailsState extends State<ContactInCourseDetails> {
                             color: Colors.black),
                       ),
                       Text(
-                        '131, Aronno Talaimari',
+                        'একশব্দে কুরআন শিক্ষা ফাউন্ডেশন',
                       ),
                       Text(
-                        'Square, Rajshahi-6206',
+                        'উত্তরা, ঢাকা।',
                       ),
                     ],
                   )),
@@ -76,10 +78,25 @@ class _ContactInCourseDetailsState extends State<ContactInCourseDetails> {
                             color: Colors.black),
                       ),
                       Text(
-                        '02588867203',
+                        '01715125125',
+                      ),
+                      Text(
+                        '01976125125',
+                      ),
+                      Text(
+                        '01975125125',
                       ),
                     ],
                   )),
+              const Spacer(),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 30, 10, 0),
+                child: InkWell(
+                    onTap: () {
+                      launch('tel:01715125125');
+                    },
+                    child: const Icon(Icons.call)),
+              ),
             ]),
             Row(children: [
               Padding(
@@ -103,10 +120,19 @@ class _ContactInCourseDetailsState extends State<ContactInCourseDetails> {
                             color: Colors.black),
                       ),
                       Text(
-                        'eksobdequran.yt@gmail.com',
+                        'asqsfb@gmail.com',
                       ),
                     ],
                   )),
+              const Spacer(),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 30, 10, 0),
+                child: InkWell(
+                    onTap: () {
+                      launch('mailto:asqsfb@gmail.com');
+                    },
+                    child: const Icon(Icons.email)),
+              ),
             ]),
           ],
         )));

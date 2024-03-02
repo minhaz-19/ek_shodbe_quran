@@ -14,6 +14,7 @@ class NamazTimeProvider with ChangeNotifier {
   DateTime? sunriseTime;
   DateTime? dhuhrTime;
   DateTime? asrTime;
+  DateTime? sunsetTime;
   DateTime? maghribTime;
   DateTime? ishaTime;
 
@@ -29,12 +30,13 @@ class NamazTimeProvider with ChangeNotifier {
   }
 
   void setNamazTimeDateTime(DateTime fajr, DateTime dhuhr, DateTime asr, DateTime maghrib, DateTime isha, DateTime sunrise) {
-    this.fajrTime = fajr;
-    this.sunriseTime = sunrise;
-    this.dhuhrTime = dhuhr;
-    this.asrTime = asr;
-    this.maghribTime = maghrib;
-    this.ishaTime = isha;
+    fajrTime = fajr;
+    sunriseTime = sunrise;
+    dhuhrTime = dhuhr;
+    asrTime = asr;
+    sunsetTime = maghrib.subtract(const Duration(minutes: 10));
+    maghribTime = maghrib;
+    ishaTime = isha;
     notifyListeners();
   }
 
@@ -54,6 +56,7 @@ class NamazTimeProvider with ChangeNotifier {
     sunriseTime = null;
     dhuhrTime = null;
     asrTime = null;
+    sunsetTime = null;
     maghribTime = null;
     ishaTime = null;
     notifyListeners();

@@ -2,8 +2,17 @@ import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/course_details.dar
 import 'package:flutter/material.dart';
 
 class CoursesWidget extends StatefulWidget {
-  const CoursesWidget({super.key});
+  const CoursesWidget(
+      {super.key,
+      required this.courseImage,
+      required this.courseName,
+      required this.coursePrice,
+      required this.description});
   // final CourseContents coursecontent;
+  final String courseName;
+  final int coursePrice;
+  final String courseImage;
+  final String description;
   @override
   State<CoursesWidget> createState() => _CoursesWidgetState();
 }
@@ -12,12 +21,12 @@ class _CoursesWidgetState extends State<CoursesWidget> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
-        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CourseDetails()));
+      onTap: () {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => CourseDetails( courseName: widget.courseName, coursePrice: widget.coursePrice, courseImage: widget.courseImage, description: widget.description,)));
       },
       child: Container(
         margin: const EdgeInsets.fromLTRB(10, 0, 0, 10),
-        width: 250,
         child: Card(
           shape: RoundedRectangleBorder(
             borderRadius:
@@ -28,14 +37,14 @@ class _CoursesWidgetState extends State<CoursesWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Image(
-                image: AssetImage('assets/images/toprectangle.png'),
-                height: 150,
+                image: AssetImage('assets/images/${widget.courseImage}'),
+                height: 200,
                 width: MediaQuery.of(context).size.width,
                 fit: BoxFit.cover,
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                child: Text('আরবি ভাষা শিক্ষা',
+                child: Text('${widget.courseName}',
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.start,
@@ -47,7 +56,7 @@ class _CoursesWidgetState extends State<CoursesWidget> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(8, 2, 8, 8),
                 child: Text(
-                  'কোর্স ফি: 1850 টাকা',
+                  'কোর্স ফি: ${widget.coursePrice} টাকা',
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.start,

@@ -10,6 +10,7 @@ import 'package:ek_shodbe_quran/provider/location_provider.dart';
 import 'package:ek_shodbe_quran/provider/namazTimeProvider.dart';
 import 'package:ek_shodbe_quran/provider/userDetailsProvider.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/calendar.dart';
+import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/courses.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/read_quran.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/donate.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/durud.dart';
@@ -39,6 +40,8 @@ class _HomeTabState extends State<HomeTab> {
   List<Placemark> placemarks = [];
   var _currentWakto = '';
   var _nextWakto = '';
+  var _currentWaktoTime = '';
+  var _nextWaktoTime = '';
 
   @override
   void initState() {
@@ -120,26 +123,58 @@ class _HomeTabState extends State<HomeTab> {
         prayerTimes.sunrise);
     // find the current wakto
     var now = DateTime.now();
-    var _currentWakto = '';
-    var _nextWakto = '';
-    if (now.isBefore(prayerTimes.fajr)) {
-      _currentWakto = 'tahaajjud';
-      _nextWakto = 'fajr';
-    } else if (now.isBefore(prayerTimes.dhuhr)) {
+    if (now.isBefore(prayerTimes.fajr.subtract(const Duration(minutes: 5)))) {
+      _currentWakto = 'তাহাজ্জুদ';
+      _nextWakto = 'ফজর';
+      _currentWaktoTime = DateFormat.jm()
+          .format(prayerTimes.fajr.subtract(const Duration(minutes: 1)));
+      _nextWaktoTime = DateFormat.jm().format(prayerTimes.fajr);
+    } else if (now.isBefore(prayerTimes.fajr)) {
+      _currentWakto = '';
+      _nextWakto = 'ফজর';
+      _currentWaktoTime = DateFormat.jm().format(DateTime.now());
+      _nextWaktoTime = DateFormat.jm().format(prayerTimes.fajr);
+    } else if (now.isBefore(prayerTimes.sunrise)) {
       _currentWakto = 'ফজর';
       _nextWakto = 'যোহর';
+      _currentWaktoTime = DateFormat.jm()
+          .format(prayerTimes.sunrise.subtract(const Duration(minutes: 1)));
+      _nextWaktoTime = DateFormat.jm().format(prayerTimes.dhuhr);
+    } else if (now.isBefore(prayerTimes.dhuhr)) {
+      _currentWakto = '';
+      _nextWakto = 'যোহর';
+      _currentWaktoTime = DateFormat.jm().format(DateTime.now());
+      _nextWaktoTime = DateFormat.jm().format(prayerTimes.dhuhr);
     } else if (now.isBefore(prayerTimes.asr)) {
       _currentWakto = 'যোহর';
       _nextWakto = 'আসর';
+      _currentWaktoTime = DateFormat.jm()
+          .format(prayerTimes.asr.subtract(const Duration(minutes: 1)));
+      _nextWaktoTime = DateFormat.jm().format(prayerTimes.asr);
     } else if (now.isBefore(prayerTimes.maghrib)) {
       _currentWakto = 'আসর';
       _nextWakto = 'মাগরিব';
-    } else if (now.isBefore(prayerTimes.isha)) {
+      _currentWaktoTime = DateFormat.jm()
+          .format(prayerTimes.maghrib.subtract(const Duration(minutes: 1)));
+      _nextWaktoTime = DateFormat.jm().format(prayerTimes.maghrib);
+    } else if (now
+        .isBefore(prayerTimes.isha.subtract(const Duration(minutes: 5)))) {
       _currentWakto = 'মাগরিব';
       _nextWakto = 'ঈশা';
+      _currentWaktoTime = DateFormat.jm()
+          .format(prayerTimes.isha.subtract(const Duration(minutes: 5)));
+      _nextWaktoTime = DateFormat.jm().format(prayerTimes.isha);
+    } else if (now.isBefore(prayerTimes.isha)) {
+      _currentWakto = '';
+      _nextWakto = 'ঈশা';
+      _currentWaktoTime = DateFormat.jm().format(DateTime.now());
+      _nextWaktoTime = DateFormat.jm().format(prayerTimes.isha);
     } else {
       _currentWakto = 'ঈশা';
       _nextWakto = 'ফজর';
+      _currentWaktoTime = DateFormat.jm()
+          .format(prayerTimes.fajr.subtract(const Duration(minutes: 1)));
+      _nextWaktoTime = DateFormat.jm().format(prayerTimes.fajr);
     }
 
     setState(() {
@@ -158,7 +193,6 @@ class _HomeTabState extends State<HomeTab> {
 
   @override
   Widget build(BuildContext context) {
-    var namazTimeData = Provider.of<NamazTimeProvider>(context);
     return Scaffold(
         body: (_is_loading)
             ? const ProgressBar()
@@ -195,14 +229,14 @@ class _HomeTabState extends State<HomeTab> {
                                           style: TextStyle(color: Colors.white),
                                         ),
                                         Text(
-                                          'মাগরিব ',
+                                          '$_currentWakto',
                                           style: TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.bold,
                                               color: Colors.white),
                                         ),
                                         Text(
-                                          'ওয়াক্ত শেষ 6:00 PM',
+                                          'ওয়াক্ত শেষ $_currentWaktoTime',
                                           style: TextStyle(
                                               fontSize: 17,
                                               fontWeight: FontWeight.w500,
@@ -216,14 +250,14 @@ class _HomeTabState extends State<HomeTab> {
                                           style: TextStyle(color: Colors.white),
                                         ),
                                         Text(
-                                          'ঈশা ',
+                                          '$_nextWakto',
                                           style: TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.bold,
                                               color: Colors.white),
                                         ),
                                         Text(
-                                          'ওয়াক্ত শুরু ${namazTimeData.fajr}',
+                                          'ওয়াক্ত শুরু $_nextWaktoTime',
                                           style: TextStyle(
                                               fontSize: 17,
                                               fontWeight: FontWeight.w500,
@@ -320,26 +354,9 @@ class _HomeTabState extends State<HomeTab> {
                             label: 'কোর্স সমূহ',
                             iconPath: 'assets/icons/book.png',
                             onPressed: () async {
-                              // create 100 collection with field name 'name' : "abcd"
-                              Map<String, dynamic> data = {};
-                              for (var i = 1; i < 115; i++) {
-                                await FirebaseFirestore.instance
-                                    .collection('surah')
-                                    .doc('$i')
-                                    .get()
-                                    .then((value) {
-                                  data['$i'] = value['name'];
-                                });
-                              }
-                              //wait for 3 seconds
-                              // await Future.delayed(Duration(seconds: 3));
-                              for (var i = 1; i < 115; i++) {
-                                print('"$i" : "${data['$i']}",');
-                              }
-
-                              // Navigator.of(context, rootNavigator: true).push(
-                              //     MaterialPageRoute(
-                              //         builder: (context) => const Courses()));
+                              Navigator.of(context, rootNavigator: true).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => const Courses()));
                             }),
                         SizedBox(
                             width: MediaQuery.of(context).size.width * 0.33,

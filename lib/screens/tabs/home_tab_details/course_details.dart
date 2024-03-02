@@ -3,13 +3,24 @@ import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/contact_in_course_
 import 'package:flutter/material.dart';
 
 class CourseDetails extends StatefulWidget {
-  const CourseDetails({super.key});
+  const CourseDetails({
+    super.key,
+    required this.courseName,
+    required this.coursePrice,
+    required this.courseImage,
+    required this.description,
+  });
 
+  final String courseName;
+  final int coursePrice;
+  final String courseImage;
+  final String description;
   @override
   State<CourseDetails> createState() => _CourseDetailsState();
 }
 
 class _CourseDetailsState extends State<CourseDetails> {
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,12 +39,12 @@ class _CourseDetailsState extends State<CourseDetails> {
           padding: const EdgeInsets.all(10.0),
           child: Column(
             children: [
-              Image.asset('assets/images/toprectangle.png'),
+              Image.asset('assets/images/${widget.courseImage}'),
               const SizedBox(
                 height: 20,
               ),
               Text(
-                'মৌলিক আরবি ভাষা',
+                '${widget.courseName}',
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -42,28 +53,28 @@ class _CourseDetailsState extends State<CourseDetails> {
               const SizedBox(
                 height: 20,
               ),
-              const Text(
-                'আমাদের মেন্টরশিপ প্রোগ্রামের সাথে আপনার সম্ভাবনা আনলক করুন। মূল্যবান অন্তর্দৃষ্টি, ব্যক্তিগতকৃত নির্দেশিকা এবং শিল্প সংযোগ লাভ করুন। নতুন সুযোগ আনলক করুন, আপনার বৃদ্ধি ত্বরান্বিত করুন এবং আপনার লক্ষ্য অর্জন করুন। এখন আমাদের সাথে যোগ দিন এবং সাফল্যের দিকে আপনার যাত্রা শুরু করুন!',
+               Text(
+                '${widget.description}',
                 textAlign: TextAlign.center,
               ),
               const SizedBox(
                 height: 20,
               ),
-              const Text.rich(
+              Text.rich(
                 TextSpan(
                   text: 'কোর্স ফি: ',
-                  style: TextStyle(
+                  style: const TextStyle(
                     // fontSize: 16,
                     color: Colors.black, // Customize the color as needed
                   ),
                   children: [
                     TextSpan(
-                      text: '1850',
-                      style: TextStyle(
+                      text: '${widget.coursePrice}',
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    TextSpan(
+                    const TextSpan(
                       text: ' টাকা',
                       style: TextStyle(
                         // fontSize: 16,
