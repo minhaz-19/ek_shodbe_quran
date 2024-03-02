@@ -506,11 +506,16 @@ class _HomeTabState extends State<HomeTab> {
                         const SizedBox(
                           width: 20,
                         ),
-                        Image.asset(
-                          'assets/icons/email.png',
-                          height: 50,
-                          width: 50,
-                        ),
+                        InkWell(
+                          onTap: () {
+                            launch('mailto:asqsfb@gmail.com');
+                          },
+                          child: Image.asset(
+                            'assets/icons/email.png',
+                            height: 50,
+                            width: 50,
+                          ),
+                        )
                       ],
                     ),
                     const SizedBox(
