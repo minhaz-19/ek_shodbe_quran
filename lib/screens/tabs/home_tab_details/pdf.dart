@@ -1,10 +1,11 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class PdfPage extends StatefulWidget {
   final String pdfHeading;
@@ -17,22 +18,15 @@ class PdfPage extends StatefulWidget {
 }
 
 class _PdfPageState extends State<PdfPage> {
-  late PdfViewerController _pdfViewerController;
+  final Completer<PDFViewController> _controller =
+      Completer<PDFViewController>();
   final ScreenshotController screenshotController = ScreenshotController();
-  var _currentPage;
-
-  @override
-  void initState() {
-    _pdfViewerController = PdfViewerController();
-    super.initState();
-    setState(() {
-      _currentPage = 1;
-    });
-  }
+  var _currentPage = 0;
+  var _totalPages;
 
   void _takeScreenshot() async {
     await screenshotController
-        .capture(delay: const Duration(milliseconds: 10))
+        .capture(delay: const Duration(milliseconds: 0))
         .then((image) async {
       if (image != null) {
         final directory = await getApplicationDocumentsDirectory();
@@ -40,7 +34,8 @@ class _PdfPageState extends State<PdfPage> {
         await imagePath.writeAsBytes(image);
 
         /// Share Plugin
-        await Share.shareFiles([imagePath.path]);
+        // await Share.shareFiles([imagePath.path]);
+        Share.shareFiles([imagePath.path], text: 'আমার পড়া বইটি শেয়ার করছি');
       }
     });
   }
@@ -56,7 +51,6 @@ class _PdfPageState extends State<PdfPage> {
     }
   }
 
-  final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
   final GlobalKey _containerKey = GlobalKey();
 
   @override
@@ -83,18 +77,30 @@ class _PdfPageState extends State<PdfPage> {
         key: _containerKey,
         child: Screenshot(
           controller: screenshotController,
-          child: SfPdfViewer.file(
-            File('${widget.filePath}'),
-            key: _pdfViewerKey,
-            controller: _pdfViewerController,
-            scrollDirection: PdfScrollDirection.horizontal,
-            pageLayoutMode: PdfPageLayoutMode.single,
-            canShowScrollHead: false,
-            enableDoubleTapZooming: true,
-            onDocumentLoadFailed: (PdfDocumentLoadFailedDetails details) async {
+          child: PDFView(
+            filePath: widget.filePath,
+            autoSpacing: true,
+            enableSwipe: true,
+            pageSnap: true,
+            swipeHorizontal: true,
+            nightMode: false,
+            onError: (e) async {
               await deleteFile(widget.filePath);
               Fluttertoast.showToast(
                   msg: 'ফাইল ক্ষতিগ্রস্ত হয়েছে এবং মুছে ফেলা হয়েছে');
+            },
+            onRender: (pages) {
+              setState(() {
+                _totalPages = pages;
+              });
+            },
+            onPageChanged: (page, total) {
+              setState(() {
+                _currentPage = page ?? 1;
+              });
+            },
+            onViewCreated: (PDFViewController pdfViewController) {
+              _controller.complete(pdfViewController);
             },
           ),
         ),
@@ -114,7 +120,7 @@ class _PdfPageState extends State<PdfPage> {
             ),
             SizedBox(
               child: Text(
-                'পৃষ্ঠা: $_currentPage',
+                'পৃষ্ঠা: ${_currentPage + 1}',
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -135,10 +141,9 @@ class _PdfPageState extends State<PdfPage> {
                   const SizedBox(width: 1),
                   IconButton(
                     onPressed: () {
-                      _pdfViewerController.previousPage();
-                      if (_currentPage > 1) {
-                        setState(() {
-                          _currentPage--;
+                      if (_currentPage > 0) {
+                        _controller.future.then((value) {
+                          value.setPage(_currentPage - 1);
                         });
                       }
                     },
@@ -160,10 +165,9 @@ class _PdfPageState extends State<PdfPage> {
               ),
               child: IconButton(
                 onPressed: () {
-                  _pdfViewerController.nextPage();
-                  if (_currentPage < _pdfViewerController.pageCount) {
-                    setState(() {
-                      _currentPage++;
+                  if (_currentPage < _totalPages - 1) {
+                    _controller.future.then((value) {
+                      value.setPage(_currentPage + 1);
                     });
                   }
                 },

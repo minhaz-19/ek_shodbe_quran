@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:ek_shodbe_quran/component/progressbar.dart';
+import 'package:ek_shodbe_quran/component/surah_audio.dart';
 import 'package:flutter/material.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:quran/quran.dart';
+import 'package:http/http.dart' as http;
 
 class Tilawat extends StatefulWidget {
   const Tilawat({super.key});
@@ -13,7 +16,45 @@ class Tilawat extends StatefulWidget {
 class _TilawatState extends State<Tilawat> {
   bool _isLoading = false;
   int _currentSurah = 0;
-  final player = AudioPlayer();
+  List<String> urls = [];
+
+  Future<SurahAudio> fetchAlbum() async {
+    String surahNumber = _currentSurah.toString();
+    String url = 'https://api.alquran.cloud/v1/surah/$surahNumber/ar.alafasy';
+
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return SurahAudio.fromJson(jsonDecode(response.body));
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load album');
+    }
+  }
+
+  _getAudio() async {
+    await fetchAlbum().then((value) async {
+      try {
+        // make a playlist with 10 audio files
+
+        for (var i = 0; i < value.audiourls.length; i++) {
+          urls.add(value.audiourls[i]['audio']);
+        }
+      } catch (t) {
+        //mp3 unreachable
+      }
+    });
+  }
+
+  void playAudioInSequence() async {
+    for (String audioUrl in urls) {
+      // await player.play(UrlSource(audioUrl));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +103,6 @@ class _TilawatState extends State<Tilawat> {
                                       setState(() {
                                         _currentSurah = 0;
                                       });
-                                      player.pause();
                                     },
                                     child: Icon(
                                       Icons.pause_circle_filled,
@@ -74,10 +114,11 @@ class _TilawatState extends State<Tilawat> {
                                     onTap: () async {
                                       setState(() {
                                         _currentSurah = index + 1;
+                                        urls = [];
                                       });
-                                      var url = getAudioURLBySurah(index + 1);
-                                      await player.setAsset(url);
-                                      player.play();
+                                      await _getAudio();
+                                      print(urls);
+                                      playAudioInSequence();
                                     },
                                     child: Icon(
                                       Icons.play_arrow,
