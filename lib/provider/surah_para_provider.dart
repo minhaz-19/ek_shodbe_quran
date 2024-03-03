@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 class SurahParaProvider with ChangeNotifier {
   List<String> downloadedSurahIndex = [];
   List<String> downloadedParaIndex = [];
+  String ReciterName = 'ar.alafasy';
+
   Map<String, dynamic> surahList = {
     "1": "আল- ফাতিহা",
     "2": "আল-বাকারা",
@@ -186,6 +188,11 @@ class SurahParaProvider with ChangeNotifier {
 
   void addDownloadedParaIndex(String paraIndex) {
     downloadedParaIndex.add(paraIndex);
+    notifyListeners();
+  }
+
+  void changeReciterName(String reciterName) {
+    ReciterName = reciterName;
     notifyListeners();
   }
 }
