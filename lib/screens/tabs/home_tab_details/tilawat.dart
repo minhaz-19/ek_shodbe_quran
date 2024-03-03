@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:ek_shodbe_quran/component/progressbar.dart';
 import 'package:ek_shodbe_quran/component/surah_audio.dart';
+import 'package:ek_shodbe_quran/readable.dart';
 import 'package:flutter/material.dart';
 import 'package:quran/quran.dart';
 import 'package:http/http.dart' as http;
@@ -17,9 +19,45 @@ class _TilawatState extends State<Tilawat> {
   bool _isLoading = false;
   int _currentSurah = 0;
   List<String> urls = [];
+  late int _selectedSurah;
+
+  late int currentIndex;
+  late int maxIndex;
+  final surahAudioPlayer = AssetsAudioPlayer();
+  final ScrollController _scrollController = ScrollController();
+  bool isPlayingAudio = false;
+  bool isPlayable = false;
+  var surah;
+
+  dynamic _myInitState() async {
+    surah = Readable.QuranData[_selectedSurah];
+    maxIndex = surah['verses'].length - 1;
+    currentIndex = maxIndex > 10 ? 10 : maxIndex;
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        _getMoreData();
+        debugPrint('End Scroll');
+      }
+    });
+    _getAudio();
+    surahAudioPlayer.isPlaying.listen((isPlaying) {
+      if (mounted) {
+        setState(() {
+          isPlayingAudio = isPlaying;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    surahAudioPlayer.stop();
+    super.dispose();
+  }
 
   Future<SurahAudio> fetchAlbum() async {
-    String surahNumber = _currentSurah.toString();
+    String surahNumber = {_selectedSurah + 1}.toString();
     String url = 'https://api.alquran.cloud/v1/surah/$surahNumber/ar.alafasy';
 
     final response = await http.get(Uri.parse(url));
@@ -38,20 +76,57 @@ class _TilawatState extends State<Tilawat> {
   _getAudio() async {
     await fetchAlbum().then((value) async {
       try {
-        // make a playlist with 10 audio files
+        await surahAudioPlayer
+            .open(
+                Playlist(
+                    audios: value.audiourls
+                        .map((audio) => Audio.network(audio['audio']))
+                        .toList()),
+                autoStart: false)
+            .then((value) {
+          setState(() {
+            isPlayable = true;
+          });
+        });
 
-        for (var i = 0; i < value.audiourls.length; i++) {
-          urls.add(value.audiourls[i]['audio']);
-        }
+        // assetsAudioPlayer.play();
       } catch (t) {
         //mp3 unreachable
       }
     });
   }
 
-  void playAudioInSequence() async {
-    for (String audioUrl in urls) {
-      // await player.play(UrlSource(audioUrl));
+  _playorPauseAudio() async {
+    if (isPlayable) {
+      if (!isPlayingAudio) {
+        surahAudioPlayer.play();
+        setState(() {
+          isPlayingAudio = true;
+        });
+      } else {
+        // assetsAudioPlayer.stop();
+        surahAudioPlayer.pause();
+
+        setState(() {
+          isPlayingAudio = false;
+        });
+      }
+    }
+  }
+
+  _getMoreData() {
+    if (currentIndex < maxIndex) {
+      if (currentIndex + 10 < maxIndex) {
+        setState(() {
+          currentIndex += 10;
+        });
+      } else {
+        setState(() {
+          currentIndex = maxIndex;
+        });
+      }
+    } else {
+      debugPrint('No more data');
     }
   }
 
@@ -103,6 +178,7 @@ class _TilawatState extends State<Tilawat> {
                                       setState(() {
                                         _currentSurah = 0;
                                       });
+                                      _playorPauseAudio();
                                     },
                                     child: Icon(
                                       Icons.pause_circle_filled,
@@ -113,12 +189,11 @@ class _TilawatState extends State<Tilawat> {
                                 : InkWell(
                                     onTap: () async {
                                       setState(() {
+                                        _selectedSurah = index;
                                         _currentSurah = index + 1;
-                                        urls = [];
                                       });
-                                      await _getAudio();
-                                      print(urls);
-                                      playAudioInSequence();
+                                      await _myInitState();
+                                      _playorPauseAudio();
                                     },
                                     child: Icon(
                                       Icons.play_arrow,
