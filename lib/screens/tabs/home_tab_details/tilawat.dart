@@ -41,20 +41,7 @@ class _TilawatState extends State<Tilawat> {
                       content: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          ListTile(
-                            title: const Text('মোহাম্মাদ আসাদ'),
-                            onTap: () {
-                              sura_para_details.ReciterName = 'en.asad';
-                              Navigator.pop(context);
-                            },
-                          ),
-                          ListTile(
-                            title: const Text('মোহাম্মাদ মারমাডিউক পিকথাল'),
-                            onTap: () {
-                              sura_para_details.ReciterName = 'en.pickthall';
-                              Navigator.pop(context);
-                            },
-                          ),
+                         
                           ListTile(
                             title: const Text('মিশারী রাশিদ আলেফাসি'),
                             onTap: () {
