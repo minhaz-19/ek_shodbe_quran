@@ -52,7 +52,7 @@ class _CartState extends State<Cart> {
                   return CartElement(
                     book_name: cartDetails.bookList[index],
                     book_image:
-                        'assets/images/${cartDetails.getBookImagePath(cartDetails.bookList[index])}.png',
+                        'assets/images/${cartDetails.getBookImagePath(cartDetails.bookList[index])}',
                     book_price: cartDetails
                         .getBookPriceCart(cartDetails.bookList[index]),
                     author_name: cartDetails

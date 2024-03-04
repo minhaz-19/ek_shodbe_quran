@@ -11,12 +11,28 @@ class BookDetails extends StatefulWidget {
       required this.book_name,
       required this.book_image,
       required this.author_name,
-      required this.book_price});
+      required this.book_price,
+      required this.prokashok,
+      required this.subject,
+      required this.translator,
+      required this.coverType,
+      required this.totalPage,
+      required this.bookEdition,
+      required this.bookLanguage,
+      required this.bookDescription});
 
   String book_name;
   String book_image;
   int book_price;
   String author_name;
+  final String prokashok;
+  final String subject;
+  final String translator;
+  final String coverType;
+  final int totalPage;
+  final String bookEdition;
+  final String bookLanguage;
+  final String bookDescription;
   @override
   State<BookDetails> createState() => _BookDetailsState();
 }
@@ -49,7 +65,7 @@ class _BookDetailsState extends State<BookDetails> {
                   children: [
                     SizedBox(height: 50),
                     Image.asset(
-                      'assets/images/${widget.book_image}.png',
+                      'assets/images/${widget.book_image}',
                       width: MediaQuery.of(context).size.width * 0.6,
                     ),
                     SizedBox(height: 20),
@@ -83,7 +99,7 @@ class _BookDetailsState extends State<BookDetails> {
                         Container(
                           width: MediaQuery.of(context).size.width - 40,
                           child: Text(
-                            'প্রকাশনী : ফেরা প্রকাশন',
+                            'প্রকাশনী : ${widget.prokashok}',
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             style: TextStyle(fontSize: 16),
@@ -92,7 +108,7 @@ class _BookDetailsState extends State<BookDetails> {
                         Container(
                           width: MediaQuery.of(context).size.width - 40,
                           child: Text(
-                            'বিষয় : আত্মশুদ্ধি ও অনুপ্রেরণা',
+                            'বিষয় : ${widget.subject}',
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             style: TextStyle(fontSize: 16),
@@ -101,7 +117,7 @@ class _BookDetailsState extends State<BookDetails> {
                         Container(
                           width: MediaQuery.of(context).size.width - 40,
                           child: Text(
-                            'অনুবাদক : আরিফ আফ্ফান',
+                            'অনুবাদক : ${widget.translator}',
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             style: TextStyle(fontSize: 16),
@@ -110,7 +126,7 @@ class _BookDetailsState extends State<BookDetails> {
                         Container(
                           width: MediaQuery.of(context).size.width - 40,
                           child: Text(
-                            'পৃষ্ঠা : 72, কভার : পেপার ব্যাক, সংস্করণ : 1st Published, 2022',
+                            'পৃষ্ঠা : ${widget.totalPage}, কভার : ${widget.coverType}, সংস্করণ : ${widget.bookEdition}',
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             style: TextStyle(fontSize: 16),
@@ -119,7 +135,7 @@ class _BookDetailsState extends State<BookDetails> {
                         Container(
                           width: MediaQuery.of(context).size.width - 40,
                           child: Text(
-                            'ভাষা : বাংলা',
+                            'ভাষা : ${widget.bookLanguage}',
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             style: TextStyle(fontSize: 16),
@@ -134,7 +150,8 @@ class _BookDetailsState extends State<BookDetails> {
                               color: Theme.of(context).primaryColor),
                         ),
                         Text(
-                            'তোমাদের মধ্যে আল্লাহর নিকট সেই ব্যক্তি সর্বাপেক্ষা মর্যাদাসম্পন্ন, যে তোমাদের মধ্যে সর্বাপেক্ষা মুত্তাকি। নিশ্চয় আল্লাহ সবকিছু জানেন, সকল ব্যাপারে অবহিত।তাকওয়াই হলো শ্রেষ্ঠত্বের উৎস, উত্তম চরিত্রাবলির কেন্দ্রবিন্দু। যেমন দয়া, অঙ্গীকার পূর্ণ করা, সত্যবাদিতা, ন্যায়পরায়ণতা, আত্মসংযম, শরিয়ত নির্দেশিত কাজে ব্যয় করা, দানসদকা, হাদিয়া তথা এ প্রকারের যত উত্তম গুণাবলি রয়েছে, এগুলো তাকওয়া ও আল্লাহভীতিরই শাশ্বত ফলাফল। এই তাকওয়াই মানুষের নির্জনতার একমাত্র সঙ্গী ও ধ্বংস থেকে মুক্তিদানকারী।তোমাদের মধ্যে আল্লাহর নিকট সেই ব্যক্তি সর্বাপেক্ষা মর্যাদাসম্পন্ন, যে তোমাদের মধ্যে সর্বাপেক্ষা মুত্তাকি। নিশ্চয় আল্লাহ সবকিছু জানেন, সকল ব্যাপারে অবহিত।তাকওয়াই হলো শ্রেষ্ঠত্বের উৎস, উত্তম চরিত্রাবলির কেন্দ্রবিন্দু। যেমন দয়া, অঙ্গীকার পূর্ণ করা, সত্যবাদিতা, ন্যায়পরায়ণতা, আত্মসংযম, শরিয়ত নির্দেশিত কাজে ব্যয় করা, দানসদকা, হাদিয়া তথা এ প্রকারের যত উত্তম গুণাবলি রয়েছে, এগুলো তাকওয়া ও আল্লাহভীতিরই শাশ্বত ফলাফল। এই তাকওয়াই মানুষের নির্জনতার একমাত্র সঙ্গী ও ধ্বংস থেকে মুক্তিদানকারী।')
+                          widget.bookDescription,
+                        )
                       ],
                     ),
                     SizedBox(

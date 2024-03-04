@@ -1,5 +1,4 @@
 import 'package:adhan/adhan.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ek_shodbe_quran/component/feature_icon.dart';
 import 'package:ek_shodbe_quran/component/progressbar.dart';
 import 'package:ek_shodbe_quran/component/read_book.dart';
@@ -9,6 +8,7 @@ import 'package:ek_shodbe_quran/component/wide_button.dart';
 import 'package:ek_shodbe_quran/provider/location_provider.dart';
 import 'package:ek_shodbe_quran/provider/namazTimeProvider.dart';
 import 'package:ek_shodbe_quran/provider/userDetailsProvider.dart';
+import 'package:ek_shodbe_quran/screens/tabs/bookdetails_from_authors.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/calendar.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/courses.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/read_quran.dart';
@@ -33,6 +33,19 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
+  List<String> bookName = BookDetailsFromAuthors.bookName;
+  List<String> bookImage = BookDetailsFromAuthors.bookImage;
+  List<String> authorName = BookDetailsFromAuthors.authorName;
+  List<int> bookPrice = BookDetailsFromAuthors.bookPrice;
+  List<String> bookProkashoni = BookDetailsFromAuthors.bookProkashoni;
+  List<String> bookSubject = BookDetailsFromAuthors.bookSubject;
+  List<String> bookTranslator = BookDetailsFromAuthors.bookTranslator;
+  List<String> bookCover = BookDetailsFromAuthors.bookCover;
+  List<String> bookLanguage = BookDetailsFromAuthors.bookLanguage;
+  List<String> bookEdition = BookDetailsFromAuthors.bookEdition;
+  List<int> bookTotalPage = BookDetailsFromAuthors.bookTotalPage;
+  List<String> bookDescription = BookDetailsFromAuthors.booDescription;
+
   String uid = '';
   String name = '';
   String email = '';
@@ -53,8 +66,6 @@ class _HomeTabState extends State<HomeTab> {
     _initializeHome();
     super.initState();
   }
-
-  
 
   void _initializeHome() async {
     setState(() {
@@ -205,7 +216,7 @@ class _HomeTabState extends State<HomeTab> {
                 onRefresh: () async {
                   _initializeHome();
                 },
-              child: SingleChildScrollView(
+                child: SingleChildScrollView(
                   child: Column(
                     children: [
                       SizedBox(
@@ -228,14 +239,16 @@ class _HomeTabState extends State<HomeTab> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Padding(
-                                      padding: EdgeInsets.fromLTRB(15, 35, 10, 0),
+                                      padding:
+                                          EdgeInsets.fromLTRB(15, 35, 10, 0),
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             'সালাতুল',
-                                            style: TextStyle(color: Colors.white),
+                                            style:
+                                                TextStyle(color: Colors.white),
                                           ),
                                           Text(
                                             '$_currentWakto',
@@ -256,7 +269,8 @@ class _HomeTabState extends State<HomeTab> {
                                           ),
                                           Text(
                                             'সালাতুল',
-                                            style: TextStyle(color: Colors.white),
+                                            style:
+                                                TextStyle(color: Colors.white),
                                           ),
                                           Text(
                                             '$_nextWakto',
@@ -277,10 +291,10 @@ class _HomeTabState extends State<HomeTab> {
                                     ),
                                     Expanded(
                                         child: Padding(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(15, 0, 10, 0),
-                                      child:
-                                          Image.asset('assets/icons/applogo.png'),
+                                      padding: const EdgeInsets.fromLTRB(
+                                          15, 0, 10, 0),
+                                      child: Image.asset(
+                                          'assets/icons/applogo.png'),
                                     ))
                                   ],
                                 ),
@@ -295,13 +309,14 @@ class _HomeTabState extends State<HomeTab> {
                                 'আল-কুরআন পড়ুন',
                                 textColor: Colors.white,
                                 onPressed: () {
-                                  Navigator.of(context, rootNavigator: true).push(
-                                      MaterialPageRoute(
+                                  Navigator.of(context, rootNavigator: true)
+                                      .push(MaterialPageRoute(
                                           builder: (context) =>
                                               const ReadQuran()));
                                 },
                                 backgroundcolor: const Color(0xFF007C49),
-                                padding: MediaQuery.of(context).size.width * 0.25,
+                                padding:
+                                    MediaQuery.of(context).size.width * 0.25,
                               )),
                         ]),
                       ),
@@ -346,9 +361,10 @@ class _HomeTabState extends State<HomeTab> {
                                 label: 'কিবলা',
                                 iconPath: 'assets/icons/compass.png',
                                 onPressed: () {
-                                  Navigator.of(context, rootNavigator: true).push(
-                                      MaterialPageRoute(
-                                          builder: (context) => const Kiblah()));
+                                  Navigator.of(context, rootNavigator: true)
+                                      .push(MaterialPageRoute(
+                                          builder: (context) =>
+                                              const Kiblah()));
                                 }),
                           ),
                         ],
@@ -375,7 +391,8 @@ class _HomeTabState extends State<HomeTab> {
                                   onPressed: () {
                                     Navigator.of(context, rootNavigator: true)
                                         .push(MaterialPageRoute(
-                                            builder: (context) => CalendarTab()));
+                                            builder: (context) =>
+                                                CalendarTab()));
                                   })),
                           FeatureIcon(
                               label: 'দুরুদ',
@@ -405,12 +422,12 @@ class _HomeTabState extends State<HomeTab> {
                                   // // await getMap('bookprice').then((value) {
                                   // //   cartDetails.createMapFromSharedPreference(
                                   // //       value, 'bookprice');
-              
+
                                   // // });
                                   // await cartDetails.initializeFromSharedPreferences();
                                   // print(cartDetails.bookAuthorCart);
                                   // print(cartDetails.bookList);
-              
+
                                   // Navigator.of(context, rootNavigator: true)
                                   //     .push(MaterialPageRoute(
                                   //         builder: (context) =>
@@ -459,14 +476,27 @@ class _HomeTabState extends State<HomeTab> {
                         ),
                       ),
                       SizedBox(
-                          height: 250,
+                          height: 350,
                           child: ListView.builder(
                             //shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (context, index) {
-                              return ReadBook();
+                              return ReadBook(
+                                bookName: bookName[index],
+                                bookImage: bookImage[index],
+                                author: authorName[index],
+                                bookPrice: bookPrice[index],
+                                prokashok: bookProkashoni[index],
+                                subject: bookSubject[index],
+                                translator: bookTranslator[index],
+                                coverType: bookCover[index],
+                                totalPage: bookTotalPage[index],
+                                bookEdition: bookEdition[index],
+                                bookLanguage: bookLanguage[index],
+                                bookDescription: bookDescription[index],
+                              );
                             },
-                            itemCount: 10,
+                            itemCount: 4,
                           )),
                       const SizedBox(
                         height: 50,
@@ -594,6 +624,6 @@ class _HomeTabState extends State<HomeTab> {
                     ],
                   ),
                 ),
-            ));
+              ));
   }
 }
