@@ -8,6 +8,7 @@ import 'package:ek_shodbe_quran/component/wide_button.dart';
 import 'package:ek_shodbe_quran/provider/location_provider.dart';
 import 'package:ek_shodbe_quran/provider/namazTimeProvider.dart';
 import 'package:ek_shodbe_quran/provider/userDetailsProvider.dart';
+import 'package:ek_shodbe_quran/screens/repeat_book_and_video_page.dart';
 import 'package:ek_shodbe_quran/screens/tabs/bookdetails_from_authors.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/calendar.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/courses.dart';
@@ -18,6 +19,7 @@ import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/kiblah.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/namaz_time.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/tilawat.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/todays_ayat.dart';
+import 'package:ek_shodbe_quran/screens/tabs/video_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
@@ -45,6 +47,11 @@ class _HomeTabState extends State<HomeTab> {
   List<String> bookEdition = BookDetailsFromAuthors.bookEdition;
   List<int> bookTotalPage = BookDetailsFromAuthors.bookTotalPage;
   List<String> bookDescription = BookDetailsFromAuthors.booDescription;
+
+  List<String> videoTitle = VideoDetailsFromAuthor.videoTitle;
+  List<String> videoDescription = VideoDetailsFromAuthor.videoDescription;
+  List<String> videoImage = VideoDetailsFromAuthor.videoImage;
+  List<String> videoUrl = VideoDetailsFromAuthor.videoUrl;
 
   String uid = '';
   String name = '';
@@ -433,11 +440,20 @@ class _HomeTabState extends State<HomeTab> {
                                   //         builder: (context) =>
                                   //             CourseScreen(cat: null)));
                                 },
-                                child: Text("আরো দেখুন ->",
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500,
-                                        color: Theme.of(context).primaryColor)))
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.of(context, rootNavigator: true)
+                                        .push(MaterialPageRoute(
+                                            builder: (context) =>
+                                                const VideoTabRepeat()));
+                                  },
+                                  child: Text("আরো দেখুন ->",
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w500,
+                                          color:
+                                              Theme.of(context).primaryColor)),
+                                ))
                           ],
                         ),
                       ),
@@ -447,9 +463,14 @@ class _HomeTabState extends State<HomeTab> {
                             //shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (context, index) {
-                              return Video();
+                              return Video(
+                                videoDescription: videoDescription[index],
+                                videoImage: videoImage[index],
+                                videoTitle: videoTitle[index],
+                                videoUrl: videoUrl[index],
+                              );
                             },
-                            itemCount: 10,
+                            itemCount: 26,
                           )),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(13, 10, 0, 0),
@@ -467,16 +488,25 @@ class _HomeTabState extends State<HomeTab> {
                                   //         builder: (context) =>
                                   //             CourseScreen(cat: null)));
                                 },
-                                child: Text("আরো দেখুন ->",
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500,
-                                        color: Theme.of(context).primaryColor)))
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.of(context, rootNavigator: true)
+                                        .push(MaterialPageRoute(
+                                            builder: (context) =>
+                                                const BookTabRepeat()));
+                                  },
+                                  child: Text("আরো দেখুন ->",
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w500,
+                                          color:
+                                              Theme.of(context).primaryColor)),
+                                ))
                           ],
                         ),
                       ),
                       SizedBox(
-                          height: 350,
+                          height: 400,
                           child: ListView.builder(
                             //shrinkWrap: true,
                             scrollDirection: Axis.horizontal,

@@ -57,108 +57,103 @@ class _BookDetailsState extends State<BookDetails> {
         child: Stack(
           children: [
             SingleChildScrollView(
-              child: Positioned(
-                top: -MediaQuery.of(context).padding.top,
-                left: 0,
-                right: 0,
-                child: Column(
-                  children: [
-                    SizedBox(height: 50),
-                    Image.asset(
-                      'assets/images/${widget.book_image}',
-                      width: MediaQuery.of(context).size.width * 0.6,
-                    ),
-                    SizedBox(height: 20),
-                    Text(
-                      widget.book_name,
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black),
-                    ),
-                    Text(
-                      '${widget.book_price}',
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).primaryColor),
-                    ),
-                    SizedBox(height: 20),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width - 40,
-                          child: Text(
-                            widget.author_name,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: TextStyle(fontSize: 16),
-                          ),
+              child: Column(
+                children: [
+                  SizedBox(height: 50),
+                  Image.asset(
+                    'assets/images/${widget.book_image}',
+                    width: MediaQuery.of(context).size.width * 0.6,
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    widget.book_name,
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
+                  ),
+                  Text(
+                    '${widget.book_price}',
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).primaryColor),
+                  ),
+                  SizedBox(height: 20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width - 40,
+                        child: Text(
+                          widget.author_name,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: TextStyle(fontSize: 16),
                         ),
-                        Container(
-                          width: MediaQuery.of(context).size.width - 40,
-                          child: Text(
-                            'প্রকাশনী : ${widget.prokashok}',
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: TextStyle(fontSize: 16),
-                          ),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width - 40,
+                        child: Text(
+                          'প্রকাশনী : ${widget.prokashok}',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: TextStyle(fontSize: 16),
                         ),
-                        Container(
-                          width: MediaQuery.of(context).size.width - 40,
-                          child: Text(
-                            'বিষয় : ${widget.subject}',
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: TextStyle(fontSize: 16),
-                          ),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width - 40,
+                        child: Text(
+                          'বিষয় : ${widget.subject}',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: TextStyle(fontSize: 16),
                         ),
-                        Container(
-                          width: MediaQuery.of(context).size.width - 40,
-                          child: Text(
-                            'অনুবাদক : ${widget.translator}',
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: TextStyle(fontSize: 16),
-                          ),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width - 40,
+                        child: Text(
+                          'অনুবাদক : ${widget.translator}',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: TextStyle(fontSize: 16),
                         ),
-                        Container(
-                          width: MediaQuery.of(context).size.width - 40,
-                          child: Text(
-                            'পৃষ্ঠা : ${widget.totalPage}, কভার : ${widget.coverType}, সংস্করণ : ${widget.bookEdition}',
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: TextStyle(fontSize: 16),
-                          ),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width - 40,
+                        child: Text(
+                          'পৃষ্ঠা : ${widget.totalPage}, কভার : ${widget.coverType}, সংস্করণ : ${widget.bookEdition}',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: TextStyle(fontSize: 16),
                         ),
-                        Container(
-                          width: MediaQuery.of(context).size.width - 40,
-                          child: Text(
-                            'ভাষা : ${widget.bookLanguage}',
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: TextStyle(fontSize: 16),
-                          ),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width - 40,
+                        child: Text(
+                          'ভাষা : ${widget.bookLanguage}',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: TextStyle(fontSize: 16),
                         ),
-                        SizedBox(height: 20),
-                        Text(
-                          'বিস্তারিত',
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).primaryColor),
-                        ),
-                        Text(
-                          widget.bookDescription,
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    )
-                  ],
-                ),
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        'বিস্তারিত',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).primaryColor),
+                      ),
+                      Text(
+                        widget.bookDescription,
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  )
+                ],
               ),
             ),
             Positioned(

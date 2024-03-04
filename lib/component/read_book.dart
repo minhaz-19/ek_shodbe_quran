@@ -57,7 +57,7 @@ class _ReadBookState extends State<ReadBook> {
       child: Container(
         margin: const EdgeInsets.fromLTRB(10, 0, 0, 10),
         width: 250,
-        height: 350,
+        height: 400,
         child: Card(
           shape: RoundedRectangleBorder(
             borderRadius:
@@ -68,7 +68,7 @@ class _ReadBookState extends State<ReadBook> {
             children: [
               Image(
                 image: AssetImage('assets/images/${widget.bookImage}'),
-                height: 250,
+                height: 300,
                 width: MediaQuery.of(context).size.width,
                 fit: BoxFit.cover,
               ),
