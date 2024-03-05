@@ -298,19 +298,23 @@ class _BookDetailsState extends State<BookDetails> {
             ),
             _showProgress == true
                 ? Positioned(
-                    bottom: 10,
+                    bottom: 0,
                     left: 0,
                     right: 0,
-                    child: new CircularPercentIndicator(
-                      radius: 40.0,
-                      lineWidth: 5.0,
-                      percent:
-                          double.parse(_percentage.replaceAll('%', '')) / 100.0,
-                      center: new Text(
-                        _percentage,
-                        style: TextStyle(fontSize: 10),
+                    child: Container(
+                      color: Colors.white,
+                      height: 100,
+                      child: new CircularPercentIndicator(
+                        radius: 40.0,
+                        lineWidth: 5.0,
+                        percent: double.parse(_percentage.replaceAll('%', '')) /
+                            100.0,
+                        center: new Text(
+                          _percentage,
+                          style: TextStyle(fontSize: 10),
+                        ),
+                        progressColor: Theme.of(context).primaryColor,
                       ),
-                      progressColor: Theme.of(context).primaryColor,
                     ),
                   )
                 : Positioned(

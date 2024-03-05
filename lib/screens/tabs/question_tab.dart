@@ -57,7 +57,7 @@ class _QuestionTabState extends State<QuestionTab> {
                                   ? null
                                   : Text(
                                       doc['answer'],
-                                      style:const TextStyle(
+                                      style: const TextStyle(
                                           color: Color.fromRGBO(
                                               108, 104, 138, 1.0)),
                                     ),
@@ -72,14 +72,13 @@ class _QuestionTabState extends State<QuestionTab> {
                     },
                   ),
                 ),
-          Card(
-            color: Colors.green[100],
-            elevation: 3,
-            child: SizedBox(
-              height: 70,
-              child: Row(
-                children: [
-                  Expanded(
+          SizedBox(
+            height: 70,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Card(
+                    color: Color.fromARGB(255, 208, 249, 210),
                     child: TextField(
                       maxLines: 2,
                       controller: _questionController,
@@ -92,7 +91,10 @@ class _QuestionTabState extends State<QuestionTab> {
                       ),
                     ),
                   ),
-                  InkWell(
+                ),
+                Card(
+                  color: Color.fromARGB(255, 221, 251, 250),
+                  child: InkWell(
                     onTap: () async {
                       if (_questionController.text.isNotEmpty) {
                         if (FirebaseAuth.instance.currentUser != null) {
@@ -126,16 +128,19 @@ class _QuestionTabState extends State<QuestionTab> {
                         }
                       }
                     },
-                    child: const Image(
-                      image: AssetImage(
-                        'assets/icons/send.png',
+                    child: Padding(
+                      padding: const EdgeInsets.all(9.0),
+                      child: const Image(
+                        image: AssetImage(
+                          'assets/icons/send.png',
+                        ),
+                        height: 40,
                       ),
-                      height: 40,
                     ),
                   ),
-                  const SizedBox(width: 10),
-                ],
-              ),
+                ),
+                const SizedBox(width: 10),
+              ],
             ),
           ),
           // Add some space below the bottom sheet

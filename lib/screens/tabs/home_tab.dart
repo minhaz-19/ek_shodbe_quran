@@ -458,7 +458,7 @@ class _HomeTabState extends State<HomeTab> {
                         ),
                       ),
                       SizedBox(
-                          height: 250,
+                          height: 251,
                           child: ListView.builder(
                             //shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
@@ -470,7 +470,7 @@ class _HomeTabState extends State<HomeTab> {
                                 videoUrl: videoUrl[index],
                               );
                             },
-                            itemCount: 26,
+                            itemCount: 5,
                           )),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(13, 10, 0, 0),
@@ -544,7 +544,7 @@ class _HomeTabState extends State<HomeTab> {
                       const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 20),
                         child: Text(
-                          'ইসলামিক সঙ্গীতে স্বাগতম, ইসলামের পথে আপনার আধ্যাত্মিক যাত্রাকে সমর্থন করার জন্য প্রেম এবং ভক্তি দিয়ে তৈরি একটি উত্সর্গীকৃত প্ল্যাটফর্ম। আমাদের লক্ষ্য হল বিশ্বব্যাপী মুসলমানদের জন্য একটি ব্যাপক এবং অ্যাক্সেসযোগ্য সংস্থান প্রদান করা, তাদের বিশ্বাস, জ্ঞান এবং অনুশীলনকে শক্তিশালী করতে সক্ষম করে।',
+                          'কুরআন শিক্ষা ফাউন্ডেশন’ গণপ্রজাতন্ত্রী বাংলাদেশ সরকারের বিধি মোতাবেক নিবন্ধিত একটি শিক্ষামূলক, গবেষণাধর্মী, সেবামূলক ও অরাজনৈতিক প্রতিষ্ঠান।',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -559,18 +559,30 @@ class _HomeTabState extends State<HomeTab> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset(
-                            'assets/icons/youtube.png',
-                            height: 50,
-                            width: 50,
+                          InkWell(
+                            onTap: () {
+                              _launchURL(
+                                  'https://youtube.com/playlist?list=PLtd0vnenjYmTbeagqYgWlTwnYOIyONOoW&si=DnNEFL_InlHATpQU');
+                            },
+                            child: Image.asset(
+                              'assets/icons/youtube.png',
+                              height: 50,
+                              width: 50,
+                            ),
                           ),
                           const SizedBox(
                             width: 20,
                           ),
-                          Image.asset(
-                            'assets/icons/facebook.png',
-                            height: 50,
-                            width: 50,
+                          InkWell(
+                            onTap: () {
+                              _launchURL(
+                                  'https://www.facebook.com/QuranChannelBD?mibextid=ZbWKwL');
+                            },
+                            child: Image.asset(
+                              'assets/icons/facebook.png',
+                              height: 50,
+                              width: 50,
+                            ),
                           ),
                           const SizedBox(
                             width: 20,

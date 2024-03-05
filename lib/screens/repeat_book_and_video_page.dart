@@ -186,7 +186,7 @@ class _VideoTabRepeatState extends State<VideoTabRepeat> {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
             ),
             SizedBox(
-                height: 250,
+                height: 251,
                 child: ListView.builder(
                   //shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
@@ -198,7 +198,7 @@ class _VideoTabRepeatState extends State<VideoTabRepeat> {
                       videoUrl: videoUrl[index],
                     );
                   },
-                  itemCount: 26,
+                  itemCount: 17,
                 )),
             // const Padding(
             //   padding: EdgeInsets.fromLTRB(13, 10, 0, 0),

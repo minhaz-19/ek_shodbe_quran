@@ -110,7 +110,7 @@ class _MyAppState extends State<MyApp> {
                       const Padding(
                         padding: EdgeInsets.fromLTRB(0, 15, 8, 8),
                         child: Text(
-                          'এক শব্দে কুরআন',
+                          'একশব্দে কুরআন শিক্ষা',
                           style: TextStyle(
                               fontSize: 25,
                               color: Colors.black,

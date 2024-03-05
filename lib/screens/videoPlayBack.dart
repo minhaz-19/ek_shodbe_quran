@@ -2,7 +2,8 @@ import 'package:pod_player/pod_player.dart';
 import 'package:flutter/material.dart';
 
 class PlayVideoFromYoutube extends StatefulWidget {
-  const PlayVideoFromYoutube({Key? key,
+  const PlayVideoFromYoutube({
+    Key? key,
     required this.videoUrl,
     required this.videoTitle,
     required this.videoDescription,
@@ -43,7 +44,7 @@ class _PlayVideoFromYoutubeState extends State<PlayVideoFromYoutube> {
           fit: BoxFit.cover,
         ),
         foregroundColor: Colors.white,
-        title:  Text(widget.videoTitle),
+        title: Text(widget.videoTitle),
         centerTitle: true,
       ),
       body: Column(
@@ -53,9 +54,13 @@ class _PlayVideoFromYoutubeState extends State<PlayVideoFromYoutube> {
             controller: controller,
           ),
           SizedBox(height: 20),
-          Text(
-            widget.videoDescription,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: Text(
+              widget.videoDescription,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+            ),
           ),
         ],
       ),
