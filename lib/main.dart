@@ -1,8 +1,6 @@
-import 'package:adhan/adhan.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:ek_shodbe_quran/component/namaz_time.dart';
-import 'package:ek_shodbe_quran/component/shared_preference.dart';
 import 'package:ek_shodbe_quran/provider/cartProvider.dart';
 import 'package:ek_shodbe_quran/provider/location_provider.dart';
 import 'package:ek_shodbe_quran/provider/namazTimeProvider.dart';
@@ -18,8 +16,16 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:isolate';
+import 'dart:ui';
 
 bool result = false;
+
+/// The name associated with the UI isolate's [SendPort].
+const String isolateName = 'isolate';
+
+/// A port used to communicate from a background isolate to the UI isolate.
+ReceivePort port = ReceivePort();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -50,7 +56,17 @@ Future<void> main() async {
   } else {
     result = false;
   }
-// assign surah list to surah para provider
+
+// Be sure to add this line if initialize() call happens before runApp()
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await AndroidAlarmManager.initialize();
+    // Register the UI isolate's SendPort to allow for communication from the
+  // background isolate.
+  IsolateNameServer.registerPortWithName(
+    port.sendPort,
+    isolateName,
+  );
 
   runApp(MyApp(
     email: email,
@@ -134,148 +150,3 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-dynamic _periodicTaskCallback(int alarmId) async {
-  // Show a notification
-
-  if (alarmId == 10) {
-    // write a logic so that it sets an alarm at 12:05 AM once
-    bool _fazarAlarmIsSet = await getDataFromDevice('1').then((value) {
-      return value == null ? false : true;
-    });
-
-    bool _johorAlarmIsSet = await getDataFromDevice('2').then((value) {
-      return value == null ? false : true;
-    });
-
-    bool _asorAlarmIsSet = await getDataFromDevice('3').then((value) {
-      return value == null ? false : true;
-    });
-
-    bool _magribAlarmIsSet = await getDataFromDevice('4').then((value) {
-      return value == null ? false : true;
-    });
-
-    bool _eshaAlarmIsSet = await getDataFromDevice('5').then((value) {
-      return value == null ? false : true;
-    });
-
-    double _latitude =
-        await getDataFromDevice('current latitude').then((value) {
-      return value == null ? 0.0 : double.parse(value);
-    });
-
-    double _longitude =
-        await getDataFromDevice('current longitude').then((value) {
-      return value == null ? 0.0 : double.parse(value);
-    });
-
-    final _myCoordinates = Coordinates(_latitude, _longitude);
-    final params = CalculationMethod.karachi.getParameters();
-    final _prayerTimes = PrayerTimes.today(_myCoordinates, params);
-
-    if (_fazarAlarmIsSet) {
-      Duration duration = _prayerTimes.fajr.difference(DateTime.now());
-      if (!duration.isNegative) {
-        await AndroidAlarmManager.oneShot(
-          duration,
-          1,
-          _periodicTaskCallback, // Pass the function reference without calling it
-          wakeup: true,
-          rescheduleOnReboot: true,
-          exact: true,
-          allowWhileIdle: true,
-        );
-      }
-    }
-
-    if (_johorAlarmIsSet) {
-      Duration duration = _prayerTimes.dhuhr.difference(DateTime.now());
-      if (!duration.isNegative) {
-        await AndroidAlarmManager.oneShot(
-          duration,
-          2,
-          _periodicTaskCallback, // Pass the function reference without calling it
-          wakeup: true,
-          rescheduleOnReboot: true,
-          exact: true,
-          allowWhileIdle: true,
-        );
-      }
-    }
-
-    if (_asorAlarmIsSet) {
-      Duration duration = _prayerTimes.asr.difference(DateTime.now());
-      if (!duration.isNegative) {
-        await AndroidAlarmManager.oneShot(
-          duration,
-          3,
-          _periodicTaskCallback, // Pass the function reference without calling it
-          wakeup: true,
-          rescheduleOnReboot: true,
-          exact: true,
-          allowWhileIdle: true,
-        );
-      }
-    }
-
-    if (_magribAlarmIsSet) {
-      Duration duration = _prayerTimes.maghrib.difference(DateTime.now());
-      if (!duration.isNegative) {
-        await AndroidAlarmManager.oneShot(
-          duration,
-          4,
-          _periodicTaskCallback, // Pass the function reference without calling it
-          wakeup: true,
-          rescheduleOnReboot: true,
-          exact: true,
-          allowWhileIdle: true,
-        );
-      }
-    }
-
-    if (_eshaAlarmIsSet) {
-      Duration duration = _prayerTimes.isha.difference(DateTime.now());
-      if (!duration.isNegative) {
-        await AndroidAlarmManager.oneShot(
-          duration,
-          5,
-          _periodicTaskCallback, // Pass the function reference without calling it
-          wakeup: true,
-          rescheduleOnReboot: true,
-          exact: true,
-          allowWhileIdle: true,
-        );
-      }
-    }
-  } else {
-    await NamazWakto.flutterLocalNotificationsPlugin.show(
-      alarmId,
-      'নামাজের সময় হয়েছে',
-      (alarmId == 1)
-          ? 'ফজরের নামাজের সময় হয়েছে'
-          : (alarmId == 2)
-              ? 'যোহরের নামাজের সময় হয়েছে'
-              : (alarmId == 3)
-                  ? 'আসরের নামাজের সময় হয়েছে'
-                  : (alarmId == 4)
-                      ? 'মাগরিবের নামাজের সময় হয়েছে'
-                      : (alarmId == 5)
-                          ? 'এশার নামাজের সময় হয়েছে'
-                          : 'নামাজের সময় হয়েছে',
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-          'channel_id',
-          'channel_name',
-          importance: Importance.max,
-          priority: Priority.high,
-          playSound: true,
-          // sound: RawResourceAndroidNotificationSound('al'),
-          enableVibration: true,
-          enableLights: true,
-          icon: '@mipmap/launcher_icon',
-          largeIcon: DrawableResourceAndroidBitmap('@mipmap/launcher_icon'),
-        ),
-      ),
-    );
-  }
-}

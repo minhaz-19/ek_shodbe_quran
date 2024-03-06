@@ -2,11 +2,13 @@ import 'package:ek_shodbe_quran/screens/videoPlayBack.dart';
 import 'package:flutter/material.dart';
 
 class Video extends StatefulWidget {
-  const Video({super.key,
+  const Video({
+    super.key,
     required this.videoDescription,
     required this.videoUrl,
     required this.videoTitle,
-    required this.videoImage,});
+    required this.videoImage,
+  });
   // final CourseContents coursecontent;
   final String videoDescription;
   final String videoUrl;
@@ -23,7 +25,10 @@ class _VideoState extends State<Video> {
       onTap: () {
         Navigator.of(context, rootNavigator: true).push(
           MaterialPageRoute(
-            builder: (context) => PlayVideoFromYoutube(videoDescription:widget.videoDescription,videoTitle: widget.videoTitle,videoUrl: widget.videoUrl),
+            builder: (context) => PlayVideoFromYoutube(
+                videoDescription: widget.videoDescription,
+                videoTitle: widget.videoTitle,
+                videoUrl: widget.videoUrl),
           ),
         );
       },
@@ -46,7 +51,7 @@ class _VideoState extends State<Video> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(widget.videoDescription,
+                child: Text(widget.videoTitle,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.start,

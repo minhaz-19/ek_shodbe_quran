@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class NamazTimeProvider with ChangeNotifier {
-
   var fajr;
   var sunrise;
   var dhuhr;
@@ -18,7 +17,8 @@ class NamazTimeProvider with ChangeNotifier {
   DateTime? maghribTime;
   DateTime? ishaTime;
 
-  void setNamazTime(var fajr, var dhuhr, var asr, var maghrib, var isha, var sunrise, var sunset) {
+  void setNamazTime(var fajr, var dhuhr, var asr, var maghrib, var isha,
+      var sunrise, var sunset) {
     this.fajr = fajr;
     this.sunrise = sunrise;
     this.dhuhr = dhuhr;
@@ -29,7 +29,29 @@ class NamazTimeProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setNamazTimeDateTime(DateTime fajr, DateTime dhuhr, DateTime asr, DateTime maghrib, DateTime isha, DateTime sunrise) {
+  DateTime namazTimeBasedOnAlarmId(int alarmId) {
+    switch (alarmId) {
+      case 1:
+        return fajrTime ?? DateTime.now();
+      case 7:
+        return sunriseTime ?? DateTime.now();
+      case 2:
+        return dhuhrTime ?? DateTime.now();
+      case 3:
+        return asrTime ?? DateTime.now();
+      case 8:
+        return sunsetTime ?? DateTime.now();
+      case 4:
+        return maghribTime ?? DateTime.now();
+      case 5:
+        return ishaTime ?? DateTime.now();
+      default:
+        return DateTime.now();
+    }
+  }
+
+  void setNamazTimeDateTime(DateTime fajr, DateTime dhuhr, DateTime asr,
+      DateTime maghrib, DateTime isha, DateTime sunrise) {
     fajrTime = fajr;
     sunriseTime = sunrise;
     dhuhrTime = dhuhr;
