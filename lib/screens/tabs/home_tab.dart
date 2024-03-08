@@ -19,7 +19,6 @@ import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/kiblah.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/namaz_time.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/tilawat.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/todays_ayat.dart';
-import 'package:ek_shodbe_quran/screens/tabs/video_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
@@ -506,7 +505,7 @@ class _HomeTabState extends State<HomeTab> {
                         ),
                       ),
                       SizedBox(
-                          height: 400,
+                          height: 300,
                           child: ListView.builder(
                             //shrinkWrap: true,
                             scrollDirection: Axis.horizontal,

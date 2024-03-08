@@ -327,24 +327,21 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                                     _addressController.clear();
                                     _phoneController.clear();
                                     _nameController.clear();
-                                    cartDetails.bookList.forEach((element) {
-                                      setState(() async {
-                                        cartDetails.deleteBook(element);
-                                        cartDetails.calculateTotalPrice();
-                                        await saveList(
-                                            'bookname', cartDetails.bookList);
-                                        await saveMap('bookprice',
-                                            cartDetails.bookPriceCart);
-                                        await saveMap('bookauthor',
-                                            cartDetails.bookAuthorCart);
-                                        await saveMap('bookimage',
-                                            cartDetails.bookImagePath);
-                                        await saveMap('bookquantity',
-                                            cartDetails.bookQuantityCart);
-                                        await saveDataToDevice('totalprice',
-                                            cartDetails.totalPrice.toString());
-                                        _isLoading = false;
-                                      });
+                                    cartDetails.deleteAllBook();
+                                    await saveList(
+                                        'bookname', cartDetails.bookList);
+                                    await saveMap(
+                                        'bookprice', cartDetails.bookPriceCart);
+                                    await saveMap('bookauthor',
+                                        cartDetails.bookAuthorCart);
+                                    await saveMap(
+                                        'bookimage', cartDetails.bookImagePath);
+                                    await saveMap('bookquantity',
+                                        cartDetails.bookQuantityCart);
+                                    await saveDataToDevice('totalprice',
+                                        cartDetails.totalPrice.toString());
+                                    setState(() {
+                                      _isLoading = false;
                                     });
                                     Navigator.of(context).pop();
                                   } on FirebaseAuthException {

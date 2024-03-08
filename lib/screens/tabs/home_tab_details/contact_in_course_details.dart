@@ -28,7 +28,7 @@ class _ContactInCourseDetailsState extends State<ContactInCourseDetails> {
           children: [
             Row(children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(40, 30, 10, 0),
+                padding: const EdgeInsets.fromLTRB(20, 30, 10, 0),
                 child: ImageIcon(
                   const AssetImage('assets/icons/address.png'),
                   size: 30,
@@ -58,7 +58,7 @@ class _ContactInCourseDetailsState extends State<ContactInCourseDetails> {
             ]),
             Row(children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(40, 30, 10, 0),
+                padding: const EdgeInsets.fromLTRB(20, 30, 10, 0),
                 child: ImageIcon(
                   const AssetImage('assets/icons/phone.png'),
                   size: 30,
@@ -80,27 +80,20 @@ class _ContactInCourseDetailsState extends State<ContactInCourseDetails> {
                       Text(
                         '01715125125',
                       ),
-                      Text(
-                        '01976125125',
-                      ),
-                      Text(
-                        '01975125125',
-                      ),
                     ],
                   )),
               const Spacer(),
               Padding(
-                padding: const EdgeInsets.fromLTRB(10, 30, 10, 0),
-                child: InkWell(
-                    onTap: () {
-                      launch('tel:01715125125');
-                    },
-                    child: const Icon(Icons.call)),
-              ),
+                  padding: const EdgeInsets.fromLTRB(10, 30, 10, 0),
+                  child: TextButton(
+                      onPressed: () {
+                        launch('tel:01715125125');
+                      },
+                      child: Text("Call now"))),
             ]),
             Row(children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(40, 30, 10, 0),
+                padding: const EdgeInsets.fromLTRB(20, 30, 10, 0),
                 child: ImageIcon(
                   const AssetImage('assets/icons/email2.png'),
                   size: 30,
@@ -127,11 +120,11 @@ class _ContactInCourseDetailsState extends State<ContactInCourseDetails> {
               const Spacer(),
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 30, 10, 0),
-                child: InkWell(
-                    onTap: () {
+                child: TextButton(
+                    onPressed: () {
                       launch('mailto:asqsfb@gmail.com');
                     },
-                    child: const Icon(Icons.email)),
+                    child: Text("Email us")),
               ),
             ]),
           ],

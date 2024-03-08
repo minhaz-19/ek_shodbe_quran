@@ -291,6 +291,14 @@ class MyDrawer extends StatelessWidget {
                   },
                 ),
           Spacer(),
+          Text(
+            'This Application is Developed by',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).primaryColor,
+            ),
+          ),
           ListTile(
             title: SizedBox(
               height: 50,

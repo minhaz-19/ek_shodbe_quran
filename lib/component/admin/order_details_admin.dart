@@ -3,7 +3,9 @@ import 'package:ek_shodbe_quran/component/order_details_element.dart';
 import 'package:ek_shodbe_quran/component/progressbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AdminOrderDetails extends StatefulWidget {
   const AdminOrderDetails({super.key, required this.order_id});
@@ -263,15 +265,50 @@ class _AdminOrderDetailsState extends State<AdminOrderDetails> {
                     SizedBox(
                       height: 20,
                     ),
-                    Text('ডেলিভারি এড্রেস',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18)),
+                    Row(
+                      children: [
+                        Text('ডেলিভারি এড্রেস',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18)),
+                        Spacer(),
+                        TextButton(
+                            onPressed: () {
+                              Clipboard.setData(ClipboardData(
+                                  text:
+                                      "Name: $name\nMobile: $mobile\nAddress: $address"));
+                              Fluttertoast.showToast(msg: "কপি হয়েছে");
+                            },
+                            child: Text("কপি করুন",
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ))),
+                      ],
+                    ),
                     SizedBox(
                       height: 10,
                     ),
                     Text('$address'),
                     Text('নাম : $name'),
-                    Text('মোবাইল নম্বর : $mobile'),
+                    Row(
+                      children: [
+                        Text('মোবাইল নম্বর : $mobile'),
+                        Spacer(),
+                        InkWell(
+                            onTap: () {
+                              launch("tel://$mobile");
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 12),
+                              child: Text('কল করুন',
+                                  style: TextStyle(
+                                      color: Theme.of(context).primaryColor,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500)),
+                            )),
+                      ],
+                    ),
                     SizedBox(
                       height: 20,
                     ),

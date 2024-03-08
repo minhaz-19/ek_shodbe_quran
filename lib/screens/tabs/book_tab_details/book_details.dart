@@ -287,7 +287,8 @@ class _BookDetailsState extends State<BookDetails> {
                       ),
                       Text(
                         widget.bookDescription,
-                      )
+                      ),
+                      SizedBox(height: 100),
                     ],
                   ),
                   SizedBox(

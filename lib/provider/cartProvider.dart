@@ -41,6 +41,15 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void deleteAllBook() {
+    bookList.clear();
+    bookAuthorCart.clear();
+    bookQuantityCart.clear();
+    bookPriceCart.clear();
+    bookImagePath.clear();
+    notifyListeners();
+  }
+
   void addBookName(String bookName) {
     bookList.add(bookName);
     notifyListeners();

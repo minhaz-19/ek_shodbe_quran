@@ -73,6 +73,7 @@ dependencies:
   flutter_svg: ^2.0.10+1
   google_fonts: ^6.2.0
   pod_player: ^0.2.1
+  badges: ^3.1.2
   # flutter_qiblah: ^2.2.0
   # geolocator: ^9.0.2
   # flutter_svg: ^1.1.5

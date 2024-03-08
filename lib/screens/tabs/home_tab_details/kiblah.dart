@@ -1,10 +1,7 @@
 import 'package:ek_shodbe_quran/component/progressbar.dart';
 import 'package:ek_shodbe_quran/component/qiblah_compass.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_qiblah/flutter_qiblah.dart';
-import 'dart:math' as math;
-import 'package:permission_handler/permission_handler.dart';
 
 class Kiblah extends StatefulWidget {
   const Kiblah({super.key});

@@ -31,7 +31,7 @@ class _OrderDetailsFromFirebaseState extends State<OrderDetailsFromFirebase> {
             borderRadius: BorderRadius.circular(10),
             color: Colors.grey[300],
           ),
-          child: Image.asset('assets/images/${widget.book_image}.png')),
+          child: Image.asset('assets/images/${widget.book_image}')),
       title: Text(widget.book_name),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,7 +64,7 @@ class _OrderDetailsFromFirebaseState extends State<OrderDetailsFromFirebase> {
                 SizedBox(
                   width: 50,
                 ),
-                Text('${widget.per_unit_price* widget.quantity} ৳')
+                Text('${widget.per_unit_price * widget.quantity} ৳')
               ],
             ),
           )
