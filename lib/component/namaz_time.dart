@@ -1,7 +1,5 @@
 import 'dart:isolate';
 import 'dart:ui';
-
-import 'package:adhan/adhan.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:ek_shodbe_quran/component/shared_preference.dart';
 import 'package:ek_shodbe_quran/main.dart';
@@ -19,6 +17,7 @@ class NamazWakto extends StatefulWidget {
     required this.imagePath,
     required this.waktoName,
     required this.waktoTime,
+    required this.alarmTime,
     required this.alarmId,
     this.color = Colors.black,
   });
@@ -26,6 +25,7 @@ class NamazWakto extends StatefulWidget {
   final String imagePath;
   final String waktoName;
   final String waktoTime;
+  final DateTime alarmTime;
   final int alarmId;
   var color;
 
@@ -74,9 +74,42 @@ class _NamazWaktoState extends State<NamazWakto> {
 
   // The callback for our alarm
   @pragma('vm:entry-point')
-  static Future<void> callback() async {
-    developer.log('Alarm fired!');
+  static Future<void> callback(int alarmId) async {
+    developer.log('Alarm fired!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
     // Get the previous cached count and increment it.
+
+    // Show a notification
+    await NamazWakto.flutterLocalNotificationsPlugin.show(
+      alarmId,
+      'নামাজের সময় হয়েছে',
+      (alarmId == 1)
+          ? 'ফজরের নামাজের সময় হয়েছে'
+          : (alarmId == 2)
+              ? 'যোহরের নামাজের সময় হয়েছে'
+              : (alarmId == 3)
+                  ? 'আসরের নামাজের সময় হয়েছে'
+                  : (alarmId == 4)
+                      ? 'মাগরিবের নামাজের সময় হয়েছে'
+                      : (alarmId == 5)
+                          ? 'এশার নামাজের সময় হয়েছে'
+                          : 'নামাজের সময় হয়েছে',
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+          'channel_id',
+          'channel_name',
+          importance: Importance.max,
+          priority: Priority.high,
+          playSound: true,
+          fullScreenIntent: true,
+          visibility: NotificationVisibility.public,
+          // sound: RawResourceAndroidNotificationSound('al'),
+          enableVibration: true,
+          enableLights: true,
+          icon: '@mipmap/launcher_icon',
+          largeIcon: DrawableResourceAndroidBitmap('@mipmap/launcher_icon'),
+        ),
+      ),
+    );
 
     // This will be null if we're running in the background.
     uiSendPort ??= IsolateNameServer.lookupPortByName(isolateName);
@@ -135,6 +168,21 @@ class _NamazWaktoState extends State<NamazWakto> {
                                   alarmIsSet = true;
                                 }),
                                 // Fluttertoast.showToast(msg: alarmId.toString()),
+                                if (widget.alarmTime.isBefore(DateTime.now()))
+                                  {
+                                    await AndroidAlarmManager.oneShotAt(
+                                        widget.alarmTime.add(Duration(days: 1)),
+                                        widget.alarmId,
+                                        callback),
+                                  }
+                                else
+                                  {
+                                    await AndroidAlarmManager.oneShotAt(
+                                        widget.alarmTime,
+                                        widget.alarmId,
+                                        callback),
+                                  },
+
                                 Fluttertoast.showToast(
                                     msg: 'অ্যালার্ম সেট করা হয়েছে')
                               };
