@@ -23,7 +23,7 @@ class Surah extends StatefulWidget {
 
 class _SurahState extends State<Surah> {
   bool _isLoading = false;
-  int _currentDownloadingIndex = 0; d
+  int _currentDownloadingIndex = 0;
   bool _currentlyDownloading = false;
   String _percentage = '0%';
 

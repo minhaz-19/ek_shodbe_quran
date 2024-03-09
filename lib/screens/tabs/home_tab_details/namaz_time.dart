@@ -6,6 +6,7 @@ import 'package:ek_shodbe_quran/provider/namazTimeProvider.dart';
 import 'package:ek_shodbe_quran/screens/tabs/home_tab_details/pick_location.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class NamazTime extends StatefulWidget {
@@ -207,6 +208,44 @@ class _NamazTimeState extends State<NamazTime> {
                                   alarmId: 6,
                                   color: Colors.white,
                                 ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        Text(
+                          'সেহেরী ও ইফতারের সময়',
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).primaryColor),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Expanded(
+                              child: SunTime(
+                                imagePath: 'assets/images/seheri.png',
+                                waktoName: 'সেহেরী',
+                                waktoTime: DateFormat.jm().format(namazTimeData
+                                    .fajrTime!
+                                    .subtract(const Duration(minutes: 5))),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Expanded(
+                              child: SunTime(
+                                imagePath: 'assets/images/ifter.png',
+                                waktoName: 'ইফতার',
+                                waktoTime: namazTimeData.maghrib ?? '',
+                                color: Colors.white,
                               ),
                             ),
                           ],
