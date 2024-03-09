@@ -6,6 +6,7 @@ import 'package:ek_shodbe_quran/screens/home.dart';
 import 'package:ek_shodbe_quran/screens/recover_password.dart';
 import 'package:ek_shodbe_quran/screens/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:ek_shodbe_quran/component/wide_button.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -41,7 +42,7 @@ class _LoginState extends State<Login> {
           email: email,
           password: password,
         )
-            .then((value) {
+            .then((value) async {
           UserDetailsProvider().updateId(value.user!.uid);
           FirebaseFirestore.instance
               .collection('users')
@@ -260,6 +261,7 @@ class _LoginState extends State<Login> {
                                     password: _passwordController.text,
                                   )
                                       .then((value) async {
+                                    
                                     await saveDataToDevice(
                                         'email', _emailController.text);
                                     await saveDataToDevice(

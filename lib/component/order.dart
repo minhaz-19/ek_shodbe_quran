@@ -81,7 +81,9 @@ class _OrderElementState extends State<OrderElement> {
                         ? Colors.yellow[700]
                         : widget.status == 'Delivered'
                             ? Colors.green[700]
-                            : const Color.fromARGB(255, 98, 9, 187),
+                            : widget.status == 'Cancelled'
+                                ? Colors.red
+                                : const Color.fromARGB(255, 98, 9, 187),
                   ),
                   child: Text(widget.status,
                       style: const TextStyle(color: Colors.white)),

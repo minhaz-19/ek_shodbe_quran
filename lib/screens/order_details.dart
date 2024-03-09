@@ -103,7 +103,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                 ? Colors.yellow[700]
                                 : status == 'Delivered'
                                     ? Colors.green[700]
-                                    : const Color.fromARGB(255, 98, 9, 187),
+                                    : status == 'Cancelled'? Colors.red :  const Color.fromARGB(255, 98, 9, 187),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(

@@ -236,6 +236,48 @@ class _AdminOrderDetailsState extends State<AdminOrderDetails> {
                                           ),
                                         ),
                                       ),
+                                      SizedBox(height: 10),
+                                      InkWell(
+                                        onTap: () async {
+                                          // Set the status to 'Delivered'
+                                          try {
+                                            // update specific field value in firebase
+                                            await FirebaseFirestore.instance
+                                                .collection('orders')
+                                                .doc(widget.order_id)
+                                                .update({
+                                              'status': 'Cancelled',
+                                            });
+                                            setState(() {
+                                              status = 'Cancelled';
+                                            });
+                                          } on FirebaseException {
+                                            Fluttertoast.showToast(
+                                                msg: 'Error Occured');
+                                            setState(() {
+                                              _isLoading = false;
+                                            });
+                                          } finally {
+                                            setState(() {
+                                              _isLoading = false;
+                                            });
+                                          }
+
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: Colors.red,
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 15, vertical: 8),
+                                            child: Text('Cancelled'),
+                                          ),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 );
@@ -249,7 +291,10 @@ class _AdminOrderDetailsState extends State<AdminOrderDetails> {
                                   ? Colors.yellow[700]
                                   : status == 'Delivered'
                                       ? Colors.green[700]
-                                      : const Color.fromARGB(255, 98, 9, 187),
+                                      : status == 'Cancelled'
+                                          ? Colors.red
+                                          : const Color.fromARGB(
+                                              255, 98, 9, 187),
                             ),
                             child: Padding(
                               padding: const EdgeInsets.symmetric(

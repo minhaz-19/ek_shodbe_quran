@@ -23,7 +23,7 @@ class Surah extends StatefulWidget {
 
 class _SurahState extends State<Surah> {
   bool _isLoading = false;
-  int _currentDownloadingIndex = 0;
+  int _currentDownloadingIndex = 0; d
   bool _currentlyDownloading = false;
   String _percentage = '0%';
 
@@ -130,7 +130,7 @@ class _SurahState extends State<Surah> {
         Fluttertoast.showToast(msg: '$e');
         openPdfViewer(filePath, fileName);
       } catch (e) {
-        Fluttertoast.showToast(msg: 'ডাউনলোড ব্যর্থ হয়েছে');
+        print('Error: $e');
       }
     } else {
       Fluttertoast.showToast(msg: '$filePath');

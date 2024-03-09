@@ -10,7 +10,7 @@ class AdminOrder extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       initialIndex: 0,
-      length: 3,
+      length: 4,
       child: Scaffold(
         appBar: AppBar(
           flexibleSpace: const Image(
@@ -34,6 +34,9 @@ class AdminOrder extends StatelessWidget {
               ),
               Tab(
                 text: 'ডেলিভার্ড',
+              ),
+              Tab(
+                text: 'ক্যানসেলড',
               ),
             ],
           ),
@@ -104,6 +107,36 @@ class AdminOrder extends StatelessWidget {
               stream: FirebaseFirestore.instance
                   .collection('orders')
                   .where('status', isEqualTo: 'Delivered')
+                  .orderBy('time', descending: true)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: ProgressBar());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  return const Center();
+                } else {
+                  // Iterate through documents and build the list
+                  List<Widget> listTiles = snapshot.data!.docs.map((doc) {
+                    return AdminOrderElement(
+                      date: doc['time'].toDate().toString(),
+                      order_id: doc.id,
+                      status: doc['status'],
+                      price: doc['total'],
+                    );
+                  }).toList();
+
+                  return ListView(
+                    children: listTiles,
+                  );
+                }
+              },
+            ),
+            StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('orders')
+                  .where('status', isEqualTo: 'Cancelled')
                   .orderBy('time', descending: true)
                   .snapshots(),
               builder: (context, snapshot) {
