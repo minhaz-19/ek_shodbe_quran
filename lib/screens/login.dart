@@ -124,7 +124,8 @@ class _LoginState extends State<Login> {
                                 Padding(
                                   padding: EdgeInsets.fromLTRB(0, 15, 8, 8),
                                   child: Text(
-                                    'এক শব্দে কুরআন',
+                                    'একশব্দে\nকুরআন শিক্ষা',
+                                    textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontSize: 25,
                                         color: Colors.black,
@@ -261,7 +262,6 @@ class _LoginState extends State<Login> {
                                     password: _passwordController.text,
                                   )
                                       .then((value) async {
-                                    
                                     await saveDataToDevice(
                                         'email', _emailController.text);
                                     await saveDataToDevice(

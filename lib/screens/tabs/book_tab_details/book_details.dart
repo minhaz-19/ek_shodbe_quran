@@ -279,7 +279,7 @@ class _BookDetailsState extends State<BookDetails> {
                       ),
                       SizedBox(height: 20),
                       Text(
-                        'বিস্তারিত',
+                        'ভূমিকা',
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,

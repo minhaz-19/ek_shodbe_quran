@@ -67,7 +67,7 @@ class _NamazTimeState extends State<NamazTime> {
                               child: Align(
                                 alignment: Alignment.center,
                                 child: Text(
-                                  'নামাজের সময়',
+                                  'সালাতের সময়',
                                   style: TextStyle(
                                       fontSize: 23, color: Colors.white),
                                 ),
@@ -95,9 +95,11 @@ class _NamazTimeState extends State<NamazTime> {
                                   height: 10,
                                 ),
                                 Text(
-                                  (locationData.subLocality != "")
-                                      ? "${locationData.subLocality}, ${locationData.locality}, ${locationData.country}"
-                                      : '${locationData.locality}, ${locationData.country}',
+                                  (locationData.locality == "")
+                                      ? "${locationData.country}"
+                                      : (locationData.subLocality == "")
+                                          ? "${locationData.locality}, ${locationData.country}"
+                                          : "${locationData.subLocality}, ${locationData.locality}, ${locationData.country}",
                                   style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
@@ -141,7 +143,7 @@ class _NamazTimeState extends State<NamazTime> {
                           height: 20,
                         ),
                         Text(
-                          'নামাজের সময়',
+                          'সালাতের সময়',
                           style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -158,7 +160,8 @@ class _NamazTimeState extends State<NamazTime> {
                                   imagePath: 'assets/images/fazar.png',
                                   waktoName: 'ফজর',
                                   alarmId: 1,
-                                  alarmTime: namazTimeData.fajrTime ?? DateTime.now(),
+                                  alarmTime:
+                                      namazTimeData.fajrTime ?? DateTime.now(),
                                   waktoTime: namazTimeData.fajr ?? ''),
                             ),
                             Expanded(
@@ -166,7 +169,8 @@ class _NamazTimeState extends State<NamazTime> {
                                   imagePath: 'assets/images/johor.png',
                                   waktoName: 'যোহর',
                                   alarmId: 2,
-                                  alarmTime: namazTimeData.dhuhrTime ?? DateTime.now(),
+                                  alarmTime:
+                                      namazTimeData.dhuhrTime ?? DateTime.now(),
                                   waktoTime: namazTimeData.dhuhr ?? ''),
                             ),
                             Expanded(
@@ -174,7 +178,8 @@ class _NamazTimeState extends State<NamazTime> {
                                   imagePath: 'assets/images/fazar.png',
                                   waktoName: 'আসর',
                                   alarmId: 3,
-                                  alarmTime: namazTimeData.asrTime ?? DateTime.now(),
+                                  alarmTime:
+                                      namazTimeData.asrTime ?? DateTime.now(),
                                   waktoTime: namazTimeData.asr ?? ''),
                             ),
                           ],
@@ -190,7 +195,8 @@ class _NamazTimeState extends State<NamazTime> {
                                   imagePath: 'assets/images/magrib.png',
                                   waktoName: 'মাগরিব',
                                   alarmId: 4,
-                                  alarmTime: namazTimeData.maghribTime ?? DateTime.now(),
+                                  alarmTime: namazTimeData.maghribTime ??
+                                      DateTime.now(),
                                   waktoTime: namazTimeData.maghrib ?? ''),
                             ),
                             Expanded(
@@ -199,7 +205,8 @@ class _NamazTimeState extends State<NamazTime> {
                                 waktoName: 'এশা',
                                 waktoTime: namazTimeData.isha ?? '',
                                 alarmId: 5,
-                                alarmTime: namazTimeData.ishaTime ?? DateTime.now(),
+                                alarmTime:
+                                    namazTimeData.ishaTime ?? DateTime.now(),
                                 color: Colors.white,
                               ),
                             ),
@@ -211,7 +218,8 @@ class _NamazTimeState extends State<NamazTime> {
                                   waktoName: 'তাহাজ্জুদ',
                                   waktoTime: namazTimeData.fajr ?? '',
                                   alarmId: 6,
-                                  alarmTime: namazTimeData.fajrTime ?? DateTime.now(),
+                                  alarmTime:
+                                      namazTimeData.fajrTime ?? DateTime.now(),
                                   color: Colors.white,
                                 ),
                               ),

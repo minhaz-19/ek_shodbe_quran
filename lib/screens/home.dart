@@ -90,9 +90,15 @@ class _HomeState extends State<Home> {
             : null,
         foregroundColor: Colors.white,
         title: (_controller.index == 0)
-            ? const Text('একশব্দে কুরআন শিক্ষা')
+            ? const Text(
+                'একশব্দে\nকুরআন শিক্ষা',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              )
             : (_controller.index == 1)
-                ? const Text('বই পড়া')
+                ? const Text('বই')
                 : (_controller.index == 2)
                     ? const Text('ভিডিও')
                     : const Text('প্রশ্নোত্তর'),

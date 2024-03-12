@@ -1,11 +1,8 @@
 import 'dart:math';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ek_shodbe_quran/component/progressbar.dart';
 import 'package:ek_shodbe_quran/provider/surah_para_provider.dart';
 import 'package:ek_shodbe_quran/readable.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class TodaysAyat extends StatefulWidget {
@@ -49,7 +46,7 @@ class _TodaysAyatState extends State<TodaysAyat> {
     //   //   querySnapshot.docs.forEach((doc) {
     //   //     sura_para_details.addSurahList(doc['name'], doc.id);
     //   //   });
-        
+
     //   // });
     //   setState(() {
     //       _isLoading = false;
@@ -78,7 +75,7 @@ class _TodaysAyatState extends State<TodaysAyat> {
       ),
       body: _isLoading
           ? const ProgressBar()
-          : Center(
+          : SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Column(

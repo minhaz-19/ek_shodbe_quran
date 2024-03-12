@@ -41,7 +41,7 @@ class _DonateState extends State<Donate> {
                   height: 10,
                 ),
                 const Text(
-                  'সূরা দুই, তেত্রিশ নম্বর আয়াতে আল্লাহ বলেন: “আর নামাযে অবিচল থাক; নিয়মিত দাতব্য অনুশীলন; এবং যারা (ইবাদতে) অবনত তাদের সাথে মাথা নত কর”।',
+                  'সুরাহ আল বাকারাহ , ৩৩ নম্বর আয়াতে আল্লাহ বলেন: “আর নামাযে অবিচল থাক; নিয়মিত দাতব্য অনুশীলন; এবং যারা (ইবাদতে) অবনত তাদের সাথে মাথা নত কর”।',
                   style: TextStyle(fontSize: 15),
                   textAlign: TextAlign.start,
                 ),
@@ -60,7 +60,7 @@ class _DonateState extends State<Donate> {
                   height: 10,
                 ),
                 const Text(
-                  'ইসলামী ব্যাংক বিডি লিমিটেড',
+                  'ইসলামী ব্যাংক বাংলাদেশ পি এল সি',
                   style: TextStyle(fontSize: 15),
                   textAlign: TextAlign.start,
                 ),
@@ -70,12 +70,12 @@ class _DonateState extends State<Donate> {
                   textAlign: TextAlign.start,
                 ),
                 const Text(
-                  'রুট নং : 125264639',
+                  'রাউটিং নং : 125264639',
                   style: TextStyle(fontSize: 15),
                   textAlign: TextAlign.start,
                 ),
                 const Text(
-                  'শাখাঃ উত্তরা, ঢাকা',
+                  'শাখা : উত্তরা, ঢাকা',
                   style: TextStyle(fontSize: 15),
                   textAlign: TextAlign.start,
                 ),

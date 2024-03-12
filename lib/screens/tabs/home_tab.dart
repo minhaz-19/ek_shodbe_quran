@@ -1,10 +1,10 @@
+
 import 'package:adhan/adhan.dart';
 import 'package:ek_shodbe_quran/component/feature_icon.dart';
 import 'package:ek_shodbe_quran/component/progressbar.dart';
 import 'package:ek_shodbe_quran/component/read_book.dart';
 import 'package:ek_shodbe_quran/component/shared_preference.dart';
 import 'package:ek_shodbe_quran/component/video.dart';
-import 'package:ek_shodbe_quran/component/wide_button.dart';
 import 'package:ek_shodbe_quran/provider/location_provider.dart';
 import 'package:ek_shodbe_quran/provider/namazTimeProvider.dart';
 import 'package:ek_shodbe_quran/provider/userDetailsProvider.dart';
@@ -25,6 +25,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:location/location.dart' as loc;
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -61,6 +62,9 @@ class _HomeTabState extends State<HomeTab> {
   var _nextWakto = '';
   var _currentWaktoTime = '';
   var _nextWaktoTime = '';
+ loc.Location location = new loc.Location();
+
+bool _serviceEnabled = false;
 
   @override
   void initState() {
@@ -70,6 +74,7 @@ class _HomeTabState extends State<HomeTab> {
       email = UserDetailsProvider().getEmail();
     });
     _initializeHome();
+    
     super.initState();
   }
 
@@ -77,6 +82,13 @@ class _HomeTabState extends State<HomeTab> {
     setState(() {
       _is_loading = true;
     });
+    _serviceEnabled = await location.serviceEnabled();
+if (!_serviceEnabled) {
+  _serviceEnabled = await location.requestService();
+  if (!_serviceEnabled) {
+    debugPrint('Location Denied once');
+  }
+}
     var namazTimeData = Provider.of<NamazTimeProvider>(context, listen: false);
     var locationData = Provider.of<LocationProvider>(context, listen: false);
     await getDataFromDevice('current latitude').then((value) async {
@@ -226,12 +238,12 @@ class _HomeTabState extends State<HomeTab> {
                   child: Column(
                     children: [
                       SizedBox(
-                        height: 340,
+                        height: 560,
                         child: Stack(children: [
                           Column(
                             children: [
                               Container(
-                                height: 280,
+                                height: 360,
                                 decoration: BoxDecoration(
                                     color: Theme.of(context).primaryColor,
                                     image: const DecorationImage(
@@ -308,22 +320,66 @@ class _HomeTabState extends State<HomeTab> {
                             ],
                           ),
                           Positioned(
-                              top: 255,
-                              left: 0,
-                              right: 0,
-                              child: WideButton(
-                                'আল-কুরআন পড়ুন',
-                                textColor: Colors.white,
-                                onPressed: () {
-                                  Navigator.of(context, rootNavigator: true)
-                                      .push(MaterialPageRoute(
-                                          builder: (context) =>
-                                              const ReadQuran()));
-                                },
-                                backgroundcolor: const Color(0xFF007C49),
-                                padding:
-                                    MediaQuery.of(context).size.width * 0.25,
-                              )),
+                            top: 240,
+                            left: 0,
+                            right: 0,
+                            child: Column(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.of(context, rootNavigator: true)
+                                        .push(MaterialPageRoute(
+                                            builder: (context) =>
+                                                const ReadQuran()));
+                                  },
+                                  child: Image.asset(
+                                    'assets/images/readQuranLogo.png',
+                                    height: 234,
+                                    width: 176,
+                                  ),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.of(context,
+                                                rootNavigator: true)
+                                            .push(MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const ReadQuran()));
+                                      },
+                                      child: Text(
+                                        'আল-কুরআন পড়ুন',
+                                        style: TextStyle(
+                                            fontSize: 22,
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.of(context,
+                                                rootNavigator: true)
+                                            .push(MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const ReadQuran()));
+                                      },
+                                      child: Image.asset(
+                                        'assets/icons/rightArrow.png',
+                                        height: 25,
+                                        width: 25,
+                                      ),
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
                         ]),
                       ),
                       Row(
@@ -331,7 +387,7 @@ class _HomeTabState extends State<HomeTab> {
                           SizedBox(
                               width: MediaQuery.of(context).size.width * 0.25,
                               child: FeatureIcon(
-                                  label: 'নামাজের সময়',
+                                  label: 'সালাতের সময়',
                                   iconPath: 'assets/icons/namaz_time.png',
                                   onPressed: () async {
                                     Navigator.of(context, rootNavigator: true)
@@ -531,7 +587,7 @@ class _HomeTabState extends State<HomeTab> {
                         height: 50,
                       ),
                       Text(
-                        'এক শব্দে কুরআন ফাউন্ডেশন',
+                        'একশব্দে কুরআন ফাউন্ডেশন',
                         style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
@@ -613,51 +669,44 @@ class _HomeTabState extends State<HomeTab> {
                               height: 100,
                               width: 100,
                               margin: const EdgeInsets.only(bottom: 8),
-                              padding: const EdgeInsets.all(20),
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).primaryColor,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
                               child: Image.asset('assets/images/donate.png'),
                             ),
-                            Text(
-                              'ইসলামের খেদমতে দান করুন ->',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black54,
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: Text(
+                                "হে ঈমানদারগণ! আমার দেয়া জীবিকা থেকে খরচ কর সেদিন আসার পূর্বে যেদিন কোন বিক্রয়, বন্ধুত্ব এবং সুপারিশ কাজে আসবে না। বস্তুতঃ কাফিরগণই অত্যাচারী।",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black54,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'ইসলামের খেদমতে দান করুন ',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                  ),
+                                  Image.asset(
+                                    'assets/icons/rightArrow.png',
+                                    height: 15,
+                                    width: 15,
+                                  ),
+                                ],
                               ),
                             ),
                             const SizedBox(
                               height: 70,
-                            ),
-                          ],
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () async {
-                          await _launchURL('https://niharon.com/');
-                        },
-                        child: Column(
-                          children: [
-                            Text(
-                              'This Application is Developed by',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).primaryColor,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 50,
-                              // width: MediaQuery.of(context).size.width * 0.7,
-                              child: Image.asset(
-                                'assets/images/niharon.png',
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 30,
                             ),
                           ],
                         ),

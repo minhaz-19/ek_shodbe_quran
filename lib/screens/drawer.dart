@@ -292,7 +292,7 @@ class MyDrawer extends StatelessWidget {
                 ),
           Spacer(),
           Text(
-            'This Application is Developed by',
+            'এই অ্যাপটি ডেভেলপ করেছে',
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold,

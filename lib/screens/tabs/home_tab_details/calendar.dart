@@ -1,12 +1,6 @@
-import 'dart:io';
-
-import 'package:dio/dio.dart';
-import 'package:ek_shodbe_quran/component/progressbar.dart';
-import 'package:ek_shodbe_quran/model/calendarmodel.dart';
+import 'dart:collection';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:intl/intl.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class CalendarTab extends StatefulWidget {
   @override
@@ -14,115 +8,74 @@ class CalendarTab extends StatefulWidget {
 }
 
 class _CalendarTabState extends State<CalendarTab> {
-  late List<Appointment> _appointments = [];
-
-  DateTime dateSelected = DateTime.now();
-
-  var url = '';
-  bool _isItLoading = false;
-  var titleEn = '';
-  var titleBn = '';
-  var descriptionEn = '';
-  var descriptionBn = '';
-  var endTime = '';
-  var contentId = '';
-  var examDuration;
-  var totalQuestion;
-  var questionMark;
-  var negativeMark;
-  var startTime;
-  bool isDone = true;
-  int year = DateTime.now().year;
-  int month = DateTime.now().month;
-  List<Appointment> events = [];
+  late final ValueNotifier<List<Event>> _selectedEvents;
+  CalendarFormat _calendarFormat = CalendarFormat.month;
+  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode
+      .toggledOff; // Can be toggled on/off by longpressing a date
+  DateTime _focusedDay = DateTime.now();
+  DateTime? _selectedDay;
+  DateTime? _rangeStart;
+  DateTime? _rangeEnd;
 
   @override
   void initState() {
     super.initState();
-    _loadAppointments(
-        DateTime.now().year.toString(), DateTime.now().month.toString());
+
+    _selectedDay = _focusedDay;
+    _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
   }
 
-  Map<int, List<int>> generateYearMonthMap() {
-    Map<int, List<int>> yearMonthMap = {};
-
-    // Get current year and month
-    int currentYear = DateTime.now().year;
-    int currentMonth = DateTime.now().month;
-
-    // Iterate from -2 to 6
-    for (int i = -1; i <= 3; i++) {
-      // Calculate the offset year and month
-      int yearOffset = currentYear;
-      int monthOffset = currentMonth + i;
-
-      // Adjust year and month if month offset goes out of bounds
-      if (monthOffset <= 0) {
-        monthOffset += 12;
-        yearOffset -= 1;
-      } else if (monthOffset > 12) {
-        monthOffset -= 12;
-        yearOffset += 1;
-      }
-
-      // Add the year and month to the map
-      yearMonthMap[i] = [yearOffset, monthOffset];
-    }
-
-    return yearMonthMap;
+  @override
+  void dispose() {
+    _selectedEvents.dispose();
+    super.dispose();
   }
 
-  void _loadAppointments(String year, String month) async {
-    setState(() {
-      _isItLoading = true;
-      events = [];
-      _appointments = [];
-    });
-    // call the API and get the holidays and add them to the _appointments list
+  List<Event> _getEventsForDay(DateTime day) {
+    // Implementation example
+    return kEvents[day] ?? [];
+  }
 
-    // start from two month back of current date time and upto next six month give a list of month number and year number in two lists
+  List<Event> _getEventsForRange(DateTime start, DateTime end) {
+    // Implementation example
+    final days = daysInRange(start, end);
 
-    Map<int, List<int>> yearMonthMap = generateYearMonthMap();
+    return [
+      for (final d in days) ..._getEventsForDay(d),
+    ];
+  }
 
-    for (int i = -1; i <= 3; i++) {
-      // Get the year and month from the map
-      int year = yearMonthMap[i]![0];
-      int month = yearMonthMap[i]![1];
-
-      await fetchIslamicCalendar(year.toString(), month.toString())
-          .then((islamicCalendar) {
-        if (islamicCalendar != null) {
-          // Fluttertoast.showToast(msg: 'here');
-          // only add the  holidays to the appointments list
-          for (var i = 0; i < islamicCalendar.data!.length; i++) {
-            // if it contains holiday then add all the holiday to the list
-            if (islamicCalendar.data?[i].hijri?.holidays?.length != 0) {
-              for (var j = 0;
-                  j < islamicCalendar.data![i].hijri!.holidays!.length;
-                  j++) {
-                String dateString =
-                    islamicCalendar.data?[i].gregorian?.date ?? "21-07-1445";
-                // Fluttertoast.showToast(msg: '$dateString');
-                DateTime dateTime = convertStringToDateTime(dateString);
-                events.add(Appointment(
-                  id: i.toString() + j.toString()+ month.toString() + year.toString(),
-                  startTime: dateTime.add(Duration(days: 1)),
-                  isAllDay: true,
-                  endTime: dateTime.add(Duration(hours: 23)),
-                  subject: islamicCalendar.data?[i].hijri?.holidays?[j] ?? '',
-                  color: Theme.of(context).primaryColor,
-                ));
-              }
-            }
-          }
-        }
+  void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
+    if (!isSameDay(_selectedDay, selectedDay)) {
+      setState(() {
+        _selectedDay = selectedDay;
+        _focusedDay = focusedDay;
+        _rangeStart = null; // Important to clean those
+        _rangeEnd = null;
+        _rangeSelectionMode = RangeSelectionMode.toggledOff;
       });
-    }
 
+      _selectedEvents.value = _getEventsForDay(selectedDay);
+    }
+  }
+
+  void _onRangeSelected(DateTime? start, DateTime? end, DateTime focusedDay) {
     setState(() {
-      _appointments = events;
-      _isItLoading = false;
+      _selectedDay = null;
+      _focusedDay = focusedDay;
+      _rangeStart = start;
+      _rangeEnd = end;
+      _rangeSelectionMode = RangeSelectionMode.toggledOn;
     });
+
+    // `start` or `end` could be null
+    if (start != null && end != null) {
+      _selectedEvents.value = _getEventsForRange(start, end);
+    } else if (start != null) {
+      _selectedEvents.value = _getEventsForDay(start);
+    } else if (end != null) {
+      _selectedEvents.value = _getEventsForDay(end);
+    }
   }
 
   @override
@@ -138,63 +91,117 @@ class _CalendarTabState extends State<CalendarTab> {
         title: const Text('ক্যালেন্ডার'),
         centerTitle: true,
       ),
-      body: _isItLoading
-          ? ProgressBar()
-          : Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  SizedBox(
-                    child: SfCalendar(
-                      view: CalendarView.month,
-                      backgroundColor: Colors.white,
-                      showNavigationArrow: true,
-                      dataSource: AppointmentDataSource(_appointments),
-                      // onViewChanged: (ViewChangedDetails details) {
-                      //   year = details.visibleDates[0].year;
-                      //   month = details.visibleDates[0].month + 1;
-
-                      //   _loadAppointments(year.toString(), month.toString());
-                      // },
-                      onTap: (CalendarTapDetails details) {
-                        setState(() {
-                          dateSelected = details.date!;
-                        });
-                      },
-                    ),
-                  ),
-                  Column(
-                    children: _appointments
-                        .where((element) =>
-                            (element.startTime.day == dateSelected.day &&
-                                element.startTime.month == dateSelected.month &&
-                                element.startTime.year == dateSelected.year))
-                        .map((e) {
-                      return ListTile(
-                        title: Text(e.subject,
-                            style: TextStyle(
-                                color: Theme.of(context).primaryColor,
-                                fontWeight: FontWeight.bold)),
-                        subtitle:
-                            Text(DateFormat('dd/MM/yyyy').format(e.startTime),
-                                style: TextStyle(
-                                    // color: Theme.of(context).primaryColor,
-                                    fontWeight: FontWeight.w400)),
-                      );
-                    }).toList(),
-                  )
-                ],
-              ),
+      body: Column(
+        children: [
+          TableCalendar<Event>(
+            firstDay: kFirstDay,
+            lastDay: kLastDay,
+            focusedDay: _focusedDay,
+            selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+            rangeStartDay: _rangeStart,
+            rangeEndDay: _rangeEnd,
+            calendarFormat: _calendarFormat,
+            rangeSelectionMode: _rangeSelectionMode,
+            eventLoader: _getEventsForDay,
+            startingDayOfWeek: StartingDayOfWeek.monday,
+            calendarStyle: CalendarStyle(
+              // Use `CalendarStyle` to customize the UI
+              outsideDaysVisible: false,
             ),
+            onDaySelected: _onDaySelected,
+            onRangeSelected: _onRangeSelected,
+            onFormatChanged: (format) {
+              if (_calendarFormat != format) {
+                setState(() {
+                  _calendarFormat = format;
+                });
+              }
+            },
+            onPageChanged: (focusedDay) {
+              _focusedDay = focusedDay;
+            },
+          ),
+          const SizedBox(height: 8.0),
+          Expanded(
+            child: ValueListenableBuilder<List<Event>>(
+              valueListenable: _selectedEvents,
+              builder: (context, value, _) {
+                return ListView.builder(
+                  itemCount: value.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 12.0,
+                        vertical: 4.0,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(),
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      child: ListTile(
+                        onTap: () => print('${value[index]}'),
+                        title: Text('${value[index]}'),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
 
-class AppointmentDataSource extends CalendarDataSource {
-  AppointmentDataSource(List<Appointment> source) {
-    appointments = source;
-  }
+
+class Event {
+  final String title;
+
+  const Event(this.title);
+
+  @override
+  String toString() => title;
 }
+
+/// Example events.
+///
+/// Using a [LinkedHashMap] is highly recommended if you decide to use a map.
+final kEvents = LinkedHashMap<DateTime, List<Event>>(
+  equals: isSameDay,
+  hashCode: getHashCode,
+)..addAll(_kEventSource);
+
+final _kEventSource = Map.fromIterable(List.generate(50, (index) => index),
+    key: (item) => DateTime.utc(kFirstDay.year, kFirstDay.month, item * 5),
+    value: (item) => List.generate(
+        item % 4 + 1, (index) => Event('Event $item | ${index + 1}')))
+  ..addAll({
+    kToday: [
+      Event('Today\'s Event 1'),
+      Event('Today\'s Event 2'),
+    ],
+  });
+
+int getHashCode(DateTime key) {
+  return key.day * 1000000 + key.month * 10000 + key.year;
+}
+
+/// Returns a list of [DateTime] objects from [first] to [last], inclusive.
+List<DateTime> daysInRange(DateTime first, DateTime last) {
+  final dayCount = last.difference(first).inDays + 1;
+  return List.generate(
+    dayCount,
+    (index) => DateTime.utc(first.year, first.month, first.day + index),
+  );
+}
+
+final kToday = DateTime.now();
+final kFirstDay = DateTime(kToday.year, kToday.month - 3, kToday.day);
+final kLastDay = DateTime(kToday.year, kToday.month + 3, kToday.day);
+
+
+
 
 Future<IslamicCalendar?> fetchIslamicCalendar(String year, String month) async {
   try {
@@ -226,23 +233,4 @@ Future<IslamicCalendar?> fetchIslamicCalendar(String year, String month) async {
     print(e.toString());
     return null;
   }
-}
-
-DateTime convertStringToDateTime(String dateString) {
-  // Split the dateString into day, month, and year components
-  List<String> components = dateString.split('-');
-
-  // Extract day, month, and year
-  int day = int.parse(components[0]);
-  int month = int.parse(components[1]);
-  int year = int.parse(components[2]);
-
-  // Adjust year based on the Hijri year
-  // Note: This is a simplified approach and may not be accurate in all cases
-  // You might need a library or algorithm to accurately convert Hijri dates to Gregorian dates
-  // This is just a demonstration of the conversion process
-  // Adjust for Hijri to Gregorian year
-
-  // Create DateTime object
-  return DateTime(year, month, day);
 }

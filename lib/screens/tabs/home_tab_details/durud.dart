@@ -1,5 +1,6 @@
 import 'package:ek_shodbe_quran/component/shared_preference.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Durud extends StatefulWidget {
   const Durud({super.key});
@@ -9,7 +10,7 @@ class Durud extends StatefulWidget {
 }
 
 class _DurudState extends State<Durud> {
-  bool _on = true;
+  bool _on = false;
   @override
   void initState() {
     getDataFromDevice('durud').then((value) {
@@ -149,20 +150,22 @@ class _DurudState extends State<Durud> {
                       ),
                       InkWell(
                         onTap: () async {
-                          setState(() async {
-                            _on = !_on;
-                            if (_on) {
-                              await removeDataFromDevice('durud');
-                              setState(() {
-                                _on = true;
-                              });
-                            } else {
-                              await saveDataToDevice('durud', 'off');
-                              setState(() {
-                                _on = false;
-                              });
-                            }
-                          });
+                          // setState(() async {
+                          //   _on = !_on;
+                          //   if (_on) {
+                          //     await removeDataFromDevice('durud');
+                          //     setState(() {
+                          //       _on = true;
+                          //     });
+                          //   } else {
+                          //     await saveDataToDevice('durud', 'off');
+                          //     setState(() {
+                          //       _on = false;
+                          //     });
+                          //   }
+                          // });
+
+                          Fluttertoast.showToast(msg: 'এটি শীঘ্রই সংযুক্ত করা হবে');
                         },
                         child: Container(
                           width: 60,

@@ -81,18 +81,18 @@ class _NamazWaktoState extends State<NamazWakto> {
     // Show a notification
     await NamazWakto.flutterLocalNotificationsPlugin.show(
       alarmId,
-      'নামাজের সময় হয়েছে',
+      'সালাতের সময় হয়েছে',
       (alarmId == 1)
-          ? 'ফজরের নামাজের সময় হয়েছে'
+          ? 'ফজরের সালাতের সময় হয়েছে'
           : (alarmId == 2)
-              ? 'যোহরের নামাজের সময় হয়েছে'
+              ? 'যোহরের সালাতের সময় হয়েছে'
               : (alarmId == 3)
-                  ? 'আসরের নামাজের সময় হয়েছে'
+                  ? 'আসরের সালাতের সময় হয়েছে'
                   : (alarmId == 4)
-                      ? 'মাগরিবের নামাজের সময় হয়েছে'
+                      ? 'মাগরিবের সালাতের সময় হয়েছে'
                       : (alarmId == 5)
-                          ? 'এশার নামাজের সময় হয়েছে'
-                          : 'নামাজের সময় হয়েছে',
+                          ? 'এশার সালাতের সময় হয়েছে'
+                          : 'সালাতের সময় হয়েছে',
       NotificationDetails(
         android: AndroidNotificationDetails(
           'channel_id',
@@ -145,47 +145,54 @@ class _NamazWaktoState extends State<NamazWakto> {
                     Spacer(),
                     InkWell(
                       onTap: () async {
-                        (alarmIsSet)
-                            ? {
-                                await removeDataFromDevice(
-                                    widget.alarmId.toString()),
-                                setState(() {
-                                  alarmIsSet = false;
-                                }),
-                                // Fluttertoast.showToast(msg: alarmId.toString()),
-                                Fluttertoast.showToast(
-                                    msg: 'অ্যালার্ম বন্ধ করা হয়েছে'),
-                              }
-                            : {
-                                await saveDataToDevice('current latitude',
-                                    '${locationData.latitude}'),
-                                await saveDataToDevice('current longitude',
-                                    '${locationData.longitude}'),
-                                await saveDataToDevice(
-                                    widget.alarmId.toString(),
-                                    '${namazTimeData.namazTimeBasedOnAlarmId(widget.alarmId)}'),
-                                setState(() {
-                                  alarmIsSet = true;
-                                }),
-                                // Fluttertoast.showToast(msg: alarmId.toString()),
-                                if (widget.alarmTime.isBefore(DateTime.now()))
-                                  {
-                                    await AndroidAlarmManager.oneShotAt(
-                                        widget.alarmTime.add(Duration(days: 1)),
-                                        widget.alarmId,
-                                        callback),
-                                  }
-                                else
-                                  {
-                                    await AndroidAlarmManager.oneShotAt(
-                                        widget.alarmTime,
-                                        widget.alarmId,
-                                        callback),
-                                  },
+                        // (alarmIsSet)
+                        //     ? {
+                        //         await removeDataFromDevice(
+                        //             widget.alarmId.toString()),
+                        //         setState(() {
+                        //           alarmIsSet = false;
+                        //         }),
+                        //         // Fluttertoast.showToast(msg: alarmId.toString()),
+                        //         Fluttertoast.showToast(
+                        //             msg: 'অ্যালার্ম বন্ধ করা হয়েছে'),
+                        //       }
+                        //     : {
+                        //         await saveDataToDevice('current latitude',
+                        //             '${locationData.latitude}'),
+                        //         await saveDataToDevice('current longitude',
+                        //             '${locationData.longitude}'),
+                        //         await saveDataToDevice(
+                        //             widget.alarmId.toString(),
+                        //             '${namazTimeData.namazTimeBasedOnAlarmId(widget.alarmId)}'),
+                        //         setState(() {
+                        //           alarmIsSet = true;
+                        //         }),
+                        //         // Fluttertoast.showToast(msg: alarmId.toString()),
+                        //         if (widget.alarmTime.isBefore(DateTime.now()))
+                        //           {
+                        //             await AndroidAlarmManager.oneShotAt(
+                        //                 widget.alarmTime.add(Duration(days: 1)),
+                        //                 widget.alarmId,
+                        //                 callback),
+                        //           }
+                        //         else
+                        //           {
+                        //             await AndroidAlarmManager.oneShotAt(
+                        //                 widget.alarmTime,
+                        //                 widget.alarmId,
+                        //                 alarmClock: true,
+                        //                 allowWhileIdle: true,
+                        //                 exact: true,
+                        //                 wakeup: true,
+                        //                 rescheduleOnReboot: true,
+                        //                 callback),
+                        //           },
 
-                                Fluttertoast.showToast(
-                                    msg: 'অ্যালার্ম সেট করা হয়েছে')
-                              };
+                        //         Fluttertoast.showToast(
+                        //             msg: 'অ্যালার্ম সেট করা হয়েছে')
+                        //       };
+
+                        Fluttertoast.showToast(msg: 'এটি শীঘ্রই সংযুক্ত করা হবে');
                       },
                       child: ImageIcon(
                         AssetImage(
