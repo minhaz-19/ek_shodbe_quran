@@ -1,4 +1,3 @@
-
 import 'package:adhan/adhan.dart';
 import 'package:ek_shodbe_quran/component/feature_icon.dart';
 import 'package:ek_shodbe_quran/component/progressbar.dart';
@@ -62,9 +61,9 @@ class _HomeTabState extends State<HomeTab> {
   var _nextWakto = '';
   var _currentWaktoTime = '';
   var _nextWaktoTime = '';
- loc.Location location = new loc.Location();
+  loc.Location location = new loc.Location();
 
-bool _serviceEnabled = false;
+  bool _serviceEnabled = false;
 
   @override
   void initState() {
@@ -74,7 +73,7 @@ bool _serviceEnabled = false;
       email = UserDetailsProvider().getEmail();
     });
     _initializeHome();
-    
+
     super.initState();
   }
 
@@ -83,12 +82,12 @@ bool _serviceEnabled = false;
       _is_loading = true;
     });
     _serviceEnabled = await location.serviceEnabled();
-if (!_serviceEnabled) {
-  _serviceEnabled = await location.requestService();
-  if (!_serviceEnabled) {
-    debugPrint('Location Denied once');
-  }
-}
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        debugPrint('Location Denied once');
+      }
+    }
     var namazTimeData = Provider.of<NamazTimeProvider>(context, listen: false);
     var locationData = Provider.of<LocationProvider>(context, listen: false);
     await getDataFromDevice('current latitude').then((value) async {
@@ -238,7 +237,7 @@ if (!_serviceEnabled) {
                   child: Column(
                     children: [
                       SizedBox(
-                        height: 560,
+                        height: 580,
                         child: Stack(children: [
                           Column(
                             children: [
@@ -352,7 +351,7 @@ if (!_serviceEnabled) {
                                       child: Text(
                                         'আল-কুরআন পড়ুন',
                                         style: TextStyle(
-                                            fontSize: 22,
+                                            fontSize: 18,
                                             color:
                                                 Theme.of(context).primaryColor,
                                             fontWeight: FontWeight.bold),
@@ -371,8 +370,8 @@ if (!_serviceEnabled) {
                                       },
                                       child: Image.asset(
                                         'assets/icons/rightArrow.png',
-                                        height: 25,
-                                        width: 25,
+                                        height: 20,
+                                        width: 20,
                                       ),
                                     )
                                   ],
