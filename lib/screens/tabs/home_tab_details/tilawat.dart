@@ -41,7 +41,6 @@ class _TilawatState extends State<Tilawat> {
                       content: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                         
                           ListTile(
                             title: const Text('মিশারী রাশিদ আলেফাসি'),
                             onTap: () {
@@ -69,8 +68,11 @@ class _TilawatState extends State<Tilawat> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  SurahRecite(surahNumber: index + 1)));
+                              builder: (context) => SurahRecite(
+                                    surahNumber: index + 1,
+                                    surahName:
+                                        '${sura_para_details.surahList['${index + 1}']}',
+                                  )));
                     },
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),

@@ -178,7 +178,7 @@ class _DurudState extends State<Durud> {
                           child: Center(
                             child: Row(
                               children: [
-                                if (_on) const Spacer(),
+                                if (!_on) const Spacer(),
                                 Container(
                                   height: 20,
                                   width: 20,
