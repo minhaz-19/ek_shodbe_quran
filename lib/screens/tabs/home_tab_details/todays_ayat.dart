@@ -78,45 +78,48 @@ class _TodaysAyatState extends State<TodaysAyat> {
           : SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      '${Readable.QuranData[surahNumber - 1]['verses'][ayatNumber - 1]["text"]}',
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        '${Readable.QuranData[surahNumber - 1]['verses'][ayatNumber - 1]["text"]}',
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      '"${Readable.QuranData[surahNumber - 1]['verses'][ayatNumber - 1]["translation"]}"',
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                      SizedBox(
+                        height: 20,
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    Text(
-                      _loadfromlocal
-                          ? 'সূরা ${Readable.QuranData[surahNumber - 1]['transliteration']}, আয়াত - $ayatNumber'
-                          : 'সূরা ${sura_para_details.surahList['${surahNumber}']}, আয়াত - $ayatNumber',
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
+                      Text(
+                        '"${Readable.QuranData[surahNumber - 1]['verses'][ayatNumber - 1]["translation"]}"',
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
-                    )
-                  ],
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Text(
+                        _loadfromlocal
+                            ? 'সূরা ${Readable.QuranData[surahNumber - 1]['transliteration']}, আয়াত - $ayatNumber'
+                            : 'সূরা ${sura_para_details.surahList['${surahNumber}']}, আয়াত - $ayatNumber',
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
+                        textAlign: TextAlign.center,
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),

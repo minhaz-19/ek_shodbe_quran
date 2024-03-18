@@ -22,6 +22,7 @@ class _SunTime extends State<SunTime> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: (MediaQuery.of(context).size.width / 3) - 5,
       decoration: BoxDecoration(
         image: DecorationImage(
           image: AssetImage(widget.imagePath),

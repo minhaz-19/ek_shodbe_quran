@@ -59,7 +59,7 @@ class _BookTabState extends State<BookTab> {
               height: 20,
             ),
             Padding(
-              padding: const EdgeInsets.only(right: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: Row(
                 children: [
                   Expanded(
@@ -77,9 +77,9 @@ class _BookTabState extends State<BookTab> {
                     bookLanguage: bookLanguage[0],
                     bookDescription: bookDescription[0],
                   )),
-                  SizedBox(
-                    width: 10,
-                  ),
+                  // SizedBox(
+                  //   width: 5,
+                  // ),
                   Expanded(
                       child: ReadBook(
                     bookName: bookName[1],
@@ -99,10 +99,10 @@ class _BookTabState extends State<BookTab> {
               ),
             ),
             SizedBox(
-              height: 20,
+              height: 0,
             ),
             Padding(
-              padding: const EdgeInsets.only(right: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: Row(
                 children: [
                   Expanded(
@@ -120,9 +120,9 @@ class _BookTabState extends State<BookTab> {
                     bookLanguage: bookLanguage[2],
                     bookDescription: bookDescription[2],
                   )),
-                  SizedBox(
-                    width: 10,
-                  ),
+                  // SizedBox(
+                  //   width: 10,
+                  // ),
                   Expanded(
                       child: ReadBook(
                     bookName: bookName[3],

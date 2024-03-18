@@ -237,12 +237,12 @@ class _HomeTabState extends State<HomeTab> {
                   child: Column(
                     children: [
                       SizedBox(
-                        height: 580,
+                        height: 510,
                         child: Stack(children: [
                           Column(
                             children: [
                               Container(
-                                height: 360,
+                                height: 350,
                                 decoration: BoxDecoration(
                                     color: Theme.of(context).primaryColor,
                                     image: const DecorationImage(
@@ -333,8 +333,8 @@ class _HomeTabState extends State<HomeTab> {
                                   },
                                   child: Image.asset(
                                     'assets/images/readQuranLogo.png',
-                                    height: 234,
-                                    width: 176,
+                                    height: 220,
+                                    width: 165,
                                   ),
                                 ),
                                 Row(
@@ -349,7 +349,7 @@ class _HomeTabState extends State<HomeTab> {
                                                     const ReadQuran()));
                                       },
                                       child: Text(
-                                        'আল-কুরআন পড়ুন',
+                                        'পড়ুন',
                                         style: TextStyle(
                                             fontSize: 18,
                                             color:
@@ -465,9 +465,9 @@ class _HomeTabState extends State<HomeTab> {
                               }),
                         ],
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
+                      // const SizedBox(
+                      //   height: 20,
+                      // ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(13, 10, 0, 0),
                         child: Row(
@@ -517,11 +517,19 @@ class _HomeTabState extends State<HomeTab> {
                             //shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (context, index) {
-                              return Video(
-                                videoDescription: videoDescription[index],
-                                videoImage: videoImage[index],
-                                videoTitle: videoTitle[index],
-                                videoUrl: videoUrl[index],
+                              return Row(
+                                children: [
+                                  if (index == 0)
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                  Video(
+                                    videoDescription: videoDescription[index],
+                                    videoImage: videoImage[index],
+                                    videoTitle: videoTitle[index],
+                                    videoUrl: videoUrl[index],
+                                  ),
+                                ],
                               );
                             },
                             itemCount: 5,
@@ -565,25 +573,33 @@ class _HomeTabState extends State<HomeTab> {
                             //shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (context, index) {
-                              return ReadBook(
-                                bookName: bookName[index],
-                                bookImage: bookImage[index],
-                                author: authorName[index],
-                                bookPrice: bookPrice[index],
-                                prokashok: bookProkashoni[index],
-                                subject: bookSubject[index],
-                                translator: bookTranslator[index],
-                                coverType: bookCover[index],
-                                totalPage: bookTotalPage[index],
-                                bookEdition: bookEdition[index],
-                                bookLanguage: bookLanguage[index],
-                                bookDescription: bookDescription[index],
+                              return Row(
+                                children: [
+                                  if (index == 0)
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                  ReadBook(
+                                    bookName: bookName[index],
+                                    bookImage: bookImage[index],
+                                    author: authorName[index],
+                                    bookPrice: bookPrice[index],
+                                    prokashok: bookProkashoni[index],
+                                    subject: bookSubject[index],
+                                    translator: bookTranslator[index],
+                                    coverType: bookCover[index],
+                                    totalPage: bookTotalPage[index],
+                                    bookEdition: bookEdition[index],
+                                    bookLanguage: bookLanguage[index],
+                                    bookDescription: bookDescription[index],
+                                  ),
+                                ],
                               );
                             },
                             itemCount: 4,
                           )),
                       const SizedBox(
-                        height: 50,
+                        height: 10,
                       ),
                       Text(
                         'একশব্দে কুরআন ফাউন্ডেশন',
@@ -608,7 +624,7 @@ class _HomeTabState extends State<HomeTab> {
                         ),
                       ),
                       const SizedBox(
-                        height: 20,
+                        height: 10,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -654,7 +670,7 @@ class _HomeTabState extends State<HomeTab> {
                         ],
                       ),
                       const SizedBox(
-                        height: 30,
+                        height: 20,
                       ),
                       InkWell(
                         onTap: () {

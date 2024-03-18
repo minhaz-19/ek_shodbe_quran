@@ -33,7 +33,7 @@ class _VideoState extends State<Video> {
         );
       },
       child: Container(
-        margin: const EdgeInsets.fromLTRB(10, 0, 0, 10),
+        margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
         width: 250,
         child: Card(
           shape: RoundedRectangleBorder(
@@ -43,11 +43,16 @@ class _VideoState extends State<Video> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image(
-                image: NetworkImage(widget.videoImage),
-                height: 150,
-                width: MediaQuery.of(context).size.width,
-                fit: BoxFit.cover,
+              ClipRRect(
+                borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10)),
+                child: Image(
+                  image: NetworkImage(widget.videoImage),
+                  height: 150,
+                  width: MediaQuery.of(context).size.width,
+                  fit: BoxFit.cover,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),

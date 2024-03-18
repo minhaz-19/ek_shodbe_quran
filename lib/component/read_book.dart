@@ -55,8 +55,8 @@ class _ReadBookState extends State<ReadBook> {
                 )));
       },
       child: Container(
-        margin: const EdgeInsets.fromLTRB(10, 0, 0, 10),
-        width: 250,
+        margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+        width: 200,
         height: 290,
         child: Card(
           shape: RoundedRectangleBorder(

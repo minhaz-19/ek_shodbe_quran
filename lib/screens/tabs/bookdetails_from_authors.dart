@@ -13,13 +13,14 @@ class BookDetailsFromAuthors {
     "শাইখ আবুল হাসানাত মুহাম্মাদ ইমদাদুল্লাহ"
   ];
 
-  static List<int> bookPrice = [100, 150, 340, 100];
+  static List<int> bookPrice = [120, 150, 340, 50];
 
   static List<String> bookProkashoni = [
-    "আধুনিক প্রকাশনী",
-    "আধুনিক প্রকাশনী",
-    "আধুনিক প্রকাশনী",
-    "আধুনিক প্রকাশনী"
+    // "আধুনিক প্রকাশনী",
+    // "আধুনিক প্রকাশনী",
+    // "আধুনিক প্রকাশনী",
+    // "আধুনিক প্রকাশনী"
+    "", "", "", ""
   ];
 
   static List<String> bookSubject = ["", "", "", ""];

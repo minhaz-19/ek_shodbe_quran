@@ -57,7 +57,7 @@ class _PlayVideoFromYoutubeState extends State<PlayVideoFromYoutube> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: Text(
-              widget.videoDescription,
+              widget.videoTitle,
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
             ),

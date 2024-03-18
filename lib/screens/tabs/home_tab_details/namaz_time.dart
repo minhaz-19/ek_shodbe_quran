@@ -252,7 +252,7 @@ class _NamazTimeState extends State<NamazTime> {
                               ),
                             ),
                             SizedBox(
-                              width: 5,
+                              width: 7,
                             ),
                             Expanded(
                               child: SunTime(
@@ -265,7 +265,7 @@ class _NamazTimeState extends State<NamazTime> {
                           ],
                         ),
                         const SizedBox(
-                          height: 30,
+                          height: 20,
                         ),
                         Text(
                           'সূর্যোদয় এবং সূর্যাস্ত',
@@ -286,6 +286,9 @@ class _NamazTimeState extends State<NamazTime> {
                                 waktoName: 'সূর্যোদয়',
                                 waktoTime: namazTimeData.sunrise ?? '',
                               ),
+                            ),
+                            SizedBox(
+                              width: 5,
                             ),
                             Expanded(
                               child: SunTime(
