@@ -1,12 +1,15 @@
 import 'dart:isolate';
 import 'dart:ui';
+import 'package:adhan/adhan.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:ek_shodbe_quran/component/shared_preference.dart';
 import 'package:ek_shodbe_quran/main.dart';
+import 'package:ek_shodbe_quran/notification_controller.dart';
 import 'package:ek_shodbe_quran/provider/location_provider.dart';
 import 'package:ek_shodbe_quran/provider/namazTimeProvider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,23 +32,30 @@ class NamazWakto extends StatefulWidget {
   final int alarmId;
   var color;
 
-  static FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-
   @override
   State<NamazWakto> createState() => _NamazWaktoState();
 }
 
 class _NamazWaktoState extends State<NamazWakto> {
   bool alarmIsSet = false;
+  DateTime newTime = DateTime.now();
 
   static get developer => null;
 
   @override
   void initState() {
-    super.initState();
     AndroidAlarmManager.initialize();
     _initializeAlarm();
+    // Only after at least the action method is set, the notification events are delivered
+    AwesomeNotifications().setListeners(
+        onActionReceivedMethod: NotificationController.onActionReceivedMethod,
+        onNotificationCreatedMethod:
+            NotificationController.onNotificationCreatedMethod,
+        onNotificationDisplayedMethod:
+            NotificationController.onNotificationDisplayedMethod,
+        onDismissActionReceivedMethod:
+            NotificationController.onDismissActionReceivedMethod);
+    super.initState();
   }
 
   void _initializeAlarm() async {
@@ -56,6 +66,13 @@ class _NamazWaktoState extends State<NamazWakto> {
         alarmIsSet = false;
       });
     } else {
+      print('################################################');
+      print('Alarm Id: ${widget.alarmId}');
+      DateTime scheduledTime = DateTime.parse(isAlarmNull);
+      print(
+          'Scheduled Alarm Time: $scheduledTime'); // Print scheduled alarm time for debugging
+      print('Expected Alarm Time: ${widget.alarmTime}');
+      print('Time remaining: ${scheduledTime.difference(DateTime.now())}');
       if (DateTime.now().isBefore(DateTime.parse(isAlarmNull))) {
         setState(() {
           alarmIsSet = true;
@@ -75,14 +92,15 @@ class _NamazWaktoState extends State<NamazWakto> {
   // The callback for our alarm
   @pragma('vm:entry-point')
   static Future<void> callback(int alarmId) async {
-    developer.log('Alarm fired!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-    // Get the previous cached count and increment it.
-
+    FlutterRingtonePlayer().play(fromFile: "assets/images/adhan.mp3");
     // Show a notification
-    await NamazWakto.flutterLocalNotificationsPlugin.show(
-      alarmId,
-      'সালাতের সময় হয়েছে',
-      (alarmId == 1)
+    AwesomeNotifications().createNotification(
+        content: NotificationContent(
+      id: alarmId,
+      channelKey: 'custom_sound',
+      actionType: ActionType.Default,
+      title: 'সালাতের সময় হয়েছে',
+      body: (alarmId == 1)
           ? 'ফজরের সালাতের সময় হয়েছে'
           : (alarmId == 2)
               ? 'যোহরের সালাতের সময় হয়েছে'
@@ -93,23 +111,49 @@ class _NamazWaktoState extends State<NamazWakto> {
                       : (alarmId == 5)
                           ? 'এশার সালাতের সময় হয়েছে'
                           : 'সালাতের সময় হয়েছে',
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-          'channel_id',
-          'channel_name',
-          importance: Importance.max,
-          priority: Priority.high,
-          playSound: true,
-          fullScreenIntent: true,
-          visibility: NotificationVisibility.public,
-          // sound: RawResourceAndroidNotificationSound('al'),
-          enableVibration: true,
-          enableLights: true,
-          icon: '@mipmap/launcher_icon',
-          largeIcon: DrawableResourceAndroidBitmap('@mipmap/launcher_icon'),
-        ),
-      ),
-    );
+      color: Colors.white,
+      wakeUpScreen: true,
+      fullScreenIntent: true,
+      // customSound: 'resource://raw/adhan',
+    ));
+
+    var alarmLatitude, alarmLongitude;
+    await getDataFromDevice('current longitude').then((longitude) async {
+      await getDataFromDevice('current latitude').then((latitude) {
+        alarmLatitude = double.parse(latitude!);
+        alarmLongitude = double.parse(longitude!);
+      });
+    });
+
+    final myCoordinates = Coordinates(alarmLatitude, alarmLongitude);
+    final params = CalculationMethod.karachi.getParameters();
+    params.madhab = Madhab.hanafi;
+    final prayerTimes = PrayerTimes.today(myCoordinates, params);
+
+    DateTime alarmTime = (alarmId == 1)
+        ? prayerTimes.fajr.add(const Duration(days: 1))
+        : (alarmId == 2)
+            ? prayerTimes.dhuhr.add(const Duration(days: 1))
+            : (alarmId == 3)
+                ? prayerTimes.asr.add(const Duration(days: 1))
+                : (alarmId == 4)
+                    ? prayerTimes.maghrib.add(const Duration(days: 1))
+                    : (alarmId == 5)
+                        ? prayerTimes.isha.add(const Duration(days: 1))
+                        : prayerTimes.fajr.add(const Duration(days: 1));
+
+    await AndroidAlarmManager.oneShotAt(
+        alarmTime,
+        alarmId,
+        alarmClock: true,
+        allowWhileIdle: true,
+        exact: true,
+        wakeup: true,
+        rescheduleOnReboot: true,
+        callback);
+
+    await saveDataToDevice(
+        alarmId.toString(), '$alarmTime'); // Save the new alarm time
 
     // This will be null if we're running in the background.
     uiSendPort ??= IsolateNameServer.lookupPortByName(isolateName);
@@ -145,57 +189,80 @@ class _NamazWaktoState extends State<NamazWakto> {
                     Spacer(),
                     InkWell(
                       onTap: () async {
-                        // (alarmIsSet)
-                        //     ? {
-                        //         await removeDataFromDevice(
-                        //             widget.alarmId.toString()),
-                        //         setState(() {
-                        //           alarmIsSet = false;
-                        //         }),
-                        //         // Fluttertoast.showToast(msg: alarmId.toString()),
-                        //         Fluttertoast.showToast(
-                        //             msg: 'অ্যালার্ম বন্ধ করা হয়েছে'),
-                        //       }
-                        //     : {
-                        //         await saveDataToDevice('current latitude',
-                        //             '${locationData.latitude}'),
-                        //         await saveDataToDevice('current longitude',
-                        //             '${locationData.longitude}'),
-                        //         await saveDataToDevice(
-                        //             widget.alarmId.toString(),
-                        //             '${namazTimeData.namazTimeBasedOnAlarmId(widget.alarmId)}'),
-                        //         setState(() {
-                        //           alarmIsSet = true;
-                        //         }),
-                        //         // Fluttertoast.showToast(msg: alarmId.toString()),
-                        //         if (widget.alarmTime.isBefore(DateTime.now()))
-                        //           {
-                        //             await AndroidAlarmManager.oneShotAt(
-                        //                 widget.alarmTime.add(Duration(days: 1)),
-                        //                 widget.alarmId,
-                        //                 callback),
-                        //           }
-                        //         else
-                        //           {
-                        //             await AndroidAlarmManager.oneShotAt(
-                        //                 widget.alarmTime,
-                        //                 widget.alarmId,
-                        //                 alarmClock: true,
-                        //                 allowWhileIdle: true,
-                        //                 exact: true,
-                        //                 wakeup: true,
-                        //                 rescheduleOnReboot: true,
-                        //                 callback),
-                        //           },
+                        (alarmIsSet)
+                            ? {
+                                AndroidAlarmManager.cancel(widget.alarmId),
+                                await removeDataFromDevice(
+                                    widget.alarmId.toString()),
+                                setState(() {
+                                  alarmIsSet = false;
+                                }),
+                                // Fluttertoast.showToast(msg: alarmId.toString()),
+                                Fluttertoast.showToast(
+                                    msg: 'অ্যালার্ম বন্ধ করা হয়েছে'),
+                              }
+                            : {
+                                await saveDataToDevice('current latitude',
+                                    '${locationData.latitude}'),
+                                await saveDataToDevice('current longitude',
+                                    '${locationData.longitude}'),
 
-                        //         Fluttertoast.showToast(
-                        //             msg: 'অ্যালার্ম সেট করা হয়েছে')
-                        //       };
+                                setState(() {
+                                  alarmIsSet = true;
+                                }),
+                                // Fluttertoast.showToast(msg: alarmId.toString()),
 
-                        Fluttertoast.showToast(msg: 'এটি শীঘ্রই সংযুক্ত করা হবে');
+                                if (widget.alarmTime.isBefore(DateTime.now()))
+                                  {
+                                    // If alarm time has already passed, set the alarm for the next day
+                                    setState(() {
+                                      newTime = widget.alarmTime
+                                          .add(const Duration(days: 1));
+                                    }),
+                                    await saveDataToDevice(
+                                        widget.alarmId.toString(),
+                                        '${newTime}'),
+                                    print('Alarm Time: ${newTime}'),
+                                    print('Current Time: ${DateTime.now()}'),
+                                    await AndroidAlarmManager.oneShotAt(
+                                      newTime,
+                                      widget.alarmId,
+                                      callback,
+                                    )
+                                  }
+                                else
+                                  {
+                                    // If alarm time is in the future, set the alarm normally
+                                    await AndroidAlarmManager.oneShotAt(
+                                      widget.alarmTime,
+                                      widget.alarmId,
+                                      alarmClock: true,
+                                      allowWhileIdle: true,
+                                      exact: true,
+                                      wakeup: true,
+                                      rescheduleOnReboot: true,
+                                      callback,
+                                    )
+                                  },
+
+                                Fluttertoast.showToast(
+                                    msg: 'অ্যালার্ম সেট করা হয়েছে'),
+
+                                // await AwesomeNotifications().createNotification(
+                                //     content: NotificationContent(
+                                //   id: 10,
+                                //   channelKey: "custom_sound2",
+                                //   title: 'It\'s time to morph!',
+                                //   body: 'It\'s time to go save the world!',
+                                //   notificationLayout:
+                                //       NotificationLayout.BigPicture,
+                                //   // bigPicture: 'asset://assets/images/fireman-hero.jpg',
+                                //   color: Colors.yellow,
+                                // ))
+                              };
                       },
                       child: ImageIcon(
-                        AssetImage(
+                        const AssetImage(
                           'assets/icons/alarm.png',
                         ),
                         color: (alarmIsSet) ? Colors.pink : Colors.black,

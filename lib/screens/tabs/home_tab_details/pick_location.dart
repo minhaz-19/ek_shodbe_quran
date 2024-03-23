@@ -68,7 +68,7 @@ class _PickLocationState extends State<PickLocation> {
             var _faazar_time = DateFormat.jm().format(prayerTimes.fajr);
             var _johor_time = DateFormat.jm().format(prayerTimes.dhuhr);
             var _asor_time = DateFormat.jm().format(prayerTimes.asr);
-            var _magrib_time = DateFormat.jm().format(prayerTimes.maghrib);
+            var _magrib_time = DateFormat.jm().format(prayerTimes.maghrib.add(const Duration(minutes: 3)));
             var _esha_time = DateFormat.jm().format(prayerTimes.isha);
             // _tahajjud_time = DateFormat.jm().format(prayerTimes.);
             var _sunrise_time = DateFormat.jm().format(prayerTimes.sunrise);
@@ -88,7 +88,7 @@ class _PickLocationState extends State<PickLocation> {
                 prayerTimes.fajr,
                 prayerTimes.dhuhr,
                 prayerTimes.asr,
-                prayerTimes.maghrib,
+                prayerTimes.maghrib.add(const Duration(minutes: 3)),
                 prayerTimes.isha,
                 prayerTimes.sunrise);
             Navigator.pop(context);

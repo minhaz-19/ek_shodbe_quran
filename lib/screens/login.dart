@@ -289,7 +289,8 @@ class _LoginState extends State<Login> {
                                     );
                                     Fluttertoast.showToast(
                                         msg: 'লগ ইন সফল হয়েছে');
-                                    Navigator.of(context).pushAndRemoveUntil(
+                                    Navigator.of(context, rootNavigator: true)
+                                        .pushAndRemoveUntil(
                                       MaterialPageRoute(
                                           builder: (context) => const Home()),
                                       (Route<dynamic> route) => false,

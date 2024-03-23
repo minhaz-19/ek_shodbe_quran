@@ -46,9 +46,6 @@ class _SunTime extends State<SunTime> {
                   ),
                 ),
                 Spacer(),
-                ImageIcon(
-                  AssetImage('assets/icons/alarm.png'),
-                ),
               ],
             ),
           ),

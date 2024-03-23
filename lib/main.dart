@@ -1,6 +1,6 @@
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:ek_shodbe_quran/component/namaz_time.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:ek_shodbe_quran/provider/cartProvider.dart';
 import 'package:ek_shodbe_quran/provider/location_provider.dart';
 import 'package:ek_shodbe_quran/provider/namazTimeProvider.dart';
@@ -10,10 +10,8 @@ import 'package:ek_shodbe_quran/readable.dart';
 import 'package:ek_shodbe_quran/screens/home.dart';
 import 'package:ek_shodbe_quran/screens/login.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,21 +33,6 @@ Future<void> main() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var email = prefs.getString('email');
 
-  NamazWakto.flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-
-  const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
-
-  final InitializationSettings initializationSettings = InitializationSettings(
-    android: initializationSettingsAndroid,
-  );
-
-  await NamazWakto.flutterLocalNotificationsPlugin.initialize(
-    initializationSettings,
-    onDidReceiveNotificationResponse: (id) async {},
-  );
-
   await Readable.readJson();
   result = await InternetConnectionChecker().hasConnection;
   if (result == true) {
@@ -62,14 +45,52 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await AndroidAlarmManager.initialize();
-    // Register the UI isolate's SendPort to allow for communication from the
+  // Register the UI isolate's SendPort to allow for communication from the
   // background isolate.
   IsolateNameServer.registerPortWithName(
     port.sendPort,
     isolateName,
   );
 
-
+  AwesomeNotifications().initialize(
+    // set the icon to null if you want to use the default app icon
+    'resource://drawable/applogo',
+    [
+      NotificationChannel(
+          // channelGroupKey: 'basic_channel_group',
+          channelKey: 'custom_sound',
+          channelName: 'Salat notifications',
+          channelDescription: 'Salat alarm',
+          defaultColor: Colors.white,
+          playSound: true,
+          importance: NotificationImportance.High,
+          enableVibration: true,
+          soundSource: 'resource://raw/adhan',
+          ledColor: Colors.white),
+          NotificationChannel(
+          // channelGroupKey: 'basic_channel_group',
+          channelKey: 'durud_sound',
+          channelName: 'Durud notifications',
+          channelDescription: 'Durud alarm',
+          defaultColor: Colors.white,
+          playSound: true,
+          importance: NotificationImportance.High,
+          enableVibration: true,
+          soundSource: 'resource://raw/durud',
+          ledColor: Colors.white)
+    ],
+    // Channel groups are only visual and are not required
+    // channelGroups: [
+    //   NotificationChannelGroup(
+    //       channelGroupKey: 'basic_channel_group',
+    //       channelGroupName: 'Basic group')
+    // ],
+  );
+  bool isAlowedToSendNotification =
+      await AwesomeNotifications().isNotificationAllowed();
+  if (!isAlowedToSendNotification) {
+    await AwesomeNotifications().requestPermissionToSendNotifications();
+  }
 
   runApp(MyApp(
     email: email,
@@ -153,4 +174,3 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-

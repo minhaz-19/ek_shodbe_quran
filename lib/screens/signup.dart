@@ -260,7 +260,8 @@ class _SignUpState extends State<SignUp> {
                                           .updateRole('customer');
                                       Fluttertoast.showToast(
                                           msg: 'একাউন্ট সফলভাবে তৈরি হয়েছে');
-                                      Navigator.of(context).pushAndRemoveUntil(
+                                      Navigator.of(context, rootNavigator: true)
+                                          .pushAndRemoveUntil(
                                         MaterialPageRoute(
                                             builder: (context) => const Home()),
                                         (Route<dynamic> route) => false,

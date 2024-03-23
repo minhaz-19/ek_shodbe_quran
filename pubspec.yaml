@@ -58,7 +58,6 @@ dependencies:
   # syncfusion_flutter_calendar: ^24.1.43
   open_street_map_search_and_pick: ^0.1.1
   android_alarm_manager_plus: ^3.0.4
-  flutter_local_notifications: ^16.3.0
   android_intent_plus: ^4.0.3
   flutter_launcher_icons: ^0.13.1
   dio: ^5.4.0
@@ -78,6 +77,8 @@ dependencies:
   firebase_analytics: ^10.8.9
   table_calendar: ^3.1.0
   location: ^5.0.3
+  awesome_notifications: ^0.9.3+1
+  flutter_ringtone_player: ^4.0.0+2
   # flutter_qiblah: ^2.2.0
   # geolocator: ^9.0.2
   # flutter_svg: ^1.1.5

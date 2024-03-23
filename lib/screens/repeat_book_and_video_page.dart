@@ -185,21 +185,20 @@ class _VideoTabRepeatState extends State<VideoTabRepeat> {
                   textAlign: TextAlign.start,
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
             ),
-            SizedBox(
-                height: 251,
-                child: ListView.builder(
-                  //shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return Video(
-                      videoDescription: videoDescription[index],
-                      videoImage: videoImage[index],
-                      videoTitle: videoTitle[index],
-                      videoUrl: videoUrl[index],
-                    );
-                  },
-                  itemCount: 17,
-                )),
+            ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              // scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return Video(
+                  videoDescription: videoDescription[index],
+                  videoImage: videoImage[index],
+                  videoTitle: videoTitle[index],
+                  videoUrl: videoUrl[index],
+                );
+              },
+              itemCount: 17,
+            ),
             // const Padding(
             //   padding: EdgeInsets.fromLTRB(13, 10, 0, 0),
             //   child: Text("কুরআন শিখুন",

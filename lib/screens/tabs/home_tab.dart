@@ -127,7 +127,7 @@ class _HomeTabState extends State<HomeTab> {
     var _faazar_time = DateFormat.jm().format(prayerTimes.fajr);
     var _johor_time = DateFormat.jm().format(prayerTimes.dhuhr);
     var _asor_time = DateFormat.jm().format(prayerTimes.asr);
-    var _magrib_time = DateFormat.jm().format(prayerTimes.maghrib);
+    var _magrib_time = DateFormat.jm().format(prayerTimes.maghrib.add(const Duration(minutes: 3)));
     var _esha_time = DateFormat.jm().format(prayerTimes.isha);
     // _tahajjud_time = DateFormat.jm().format(prayerTimes.);
     var _sunrise_time = DateFormat.jm().format(prayerTimes.sunrise);
@@ -148,7 +148,7 @@ class _HomeTabState extends State<HomeTab> {
         prayerTimes.fajr,
         prayerTimes.dhuhr,
         prayerTimes.asr,
-        prayerTimes.maghrib,
+        prayerTimes.maghrib.add(const Duration(minutes: 3)),
         prayerTimes.isha,
         prayerTimes.sunrise);
     // find the current wakto
@@ -183,12 +183,12 @@ class _HomeTabState extends State<HomeTab> {
       _currentWaktoTime = DateFormat.jm()
           .format(prayerTimes.asr.subtract(const Duration(minutes: 1)));
       _nextWaktoTime = DateFormat.jm().format(prayerTimes.asr);
-    } else if (now.isBefore(prayerTimes.maghrib)) {
+    } else if (now.isBefore(prayerTimes.maghrib.add(const Duration(minutes: 3)))) {
       _currentWakto = 'আসর';
       _nextWakto = 'মাগরিব';
       _currentWaktoTime = DateFormat.jm()
           .format(prayerTimes.maghrib.subtract(const Duration(minutes: 1)));
-      _nextWaktoTime = DateFormat.jm().format(prayerTimes.maghrib);
+      _nextWaktoTime = DateFormat.jm().format(prayerTimes.maghrib.add(const Duration(minutes: 3)));
     } else if (now
         .isBefore(prayerTimes.isha.subtract(const Duration(minutes: 5)))) {
       _currentWakto = 'মাগরিব';
@@ -512,7 +512,7 @@ class _HomeTabState extends State<HomeTab> {
                         ),
                       ),
                       SizedBox(
-                          height: 251,
+                          height: 228,
                           child: ListView.builder(
                             //shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
@@ -523,7 +523,7 @@ class _HomeTabState extends State<HomeTab> {
                                     const SizedBox(
                                       width: 10,
                                     ),
-                                  Video(
+                                  VideoForHome(
                                     videoDescription: videoDescription[index],
                                     videoImage: videoImage[index],
                                     videoTitle: videoTitle[index],
