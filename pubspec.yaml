@@ -78,7 +78,6 @@ dependencies:
   table_calendar: ^3.1.0
   location: ^5.0.3
   awesome_notifications: ^0.9.3+1
-  flutter_ringtone_player: ^4.0.0+2
   # flutter_qiblah: ^2.2.0
   # geolocator: ^9.0.2
   # flutter_svg: ^1.1.5

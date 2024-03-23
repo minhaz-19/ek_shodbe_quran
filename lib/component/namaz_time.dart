@@ -9,7 +9,6 @@ import 'package:ek_shodbe_quran/notification_controller.dart';
 import 'package:ek_shodbe_quran/provider/location_provider.dart';
 import 'package:ek_shodbe_quran/provider/namazTimeProvider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -73,16 +72,11 @@ class _NamazWaktoState extends State<NamazWakto> {
           'Scheduled Alarm Time: $scheduledTime'); // Print scheduled alarm time for debugging
       print('Expected Alarm Time: ${widget.alarmTime}');
       print('Time remaining: ${scheduledTime.difference(DateTime.now())}');
-      if (DateTime.now().isBefore(DateTime.parse(isAlarmNull))) {
+      
         setState(() {
           alarmIsSet = true;
         });
-      } else {
-        await removeDataFromDevice(widget.alarmId.toString());
-        setState(() {
-          alarmIsSet = false;
-        });
-      }
+     
     }
   }
 
@@ -92,7 +86,6 @@ class _NamazWaktoState extends State<NamazWakto> {
   // The callback for our alarm
   @pragma('vm:entry-point')
   static Future<void> callback(int alarmId) async {
-    FlutterRingtonePlayer().play(fromFile: "assets/images/adhan.mp3");
     // Show a notification
     AwesomeNotifications().createNotification(
         content: NotificationContent(
@@ -117,43 +110,12 @@ class _NamazWaktoState extends State<NamazWakto> {
       // customSound: 'resource://raw/adhan',
     ));
 
-    var alarmLatitude, alarmLongitude;
-    await getDataFromDevice('current longitude').then((longitude) async {
-      await getDataFromDevice('current latitude').then((latitude) {
-        alarmLatitude = double.parse(latitude!);
-        alarmLongitude = double.parse(longitude!);
-      });
-    });
+   
 
-    final myCoordinates = Coordinates(alarmLatitude, alarmLongitude);
-    final params = CalculationMethod.karachi.getParameters();
-    params.madhab = Madhab.hanafi;
-    final prayerTimes = PrayerTimes.today(myCoordinates, params);
-
-    DateTime alarmTime = (alarmId == 1)
-        ? prayerTimes.fajr.add(const Duration(days: 1))
-        : (alarmId == 2)
-            ? prayerTimes.dhuhr.add(const Duration(days: 1))
-            : (alarmId == 3)
-                ? prayerTimes.asr.add(const Duration(days: 1))
-                : (alarmId == 4)
-                    ? prayerTimes.maghrib.add(const Duration(days: 1))
-                    : (alarmId == 5)
-                        ? prayerTimes.isha.add(const Duration(days: 1))
-                        : prayerTimes.fajr.add(const Duration(days: 1));
-
-    await AndroidAlarmManager.oneShotAt(
-        alarmTime,
-        alarmId,
-        alarmClock: true,
-        allowWhileIdle: true,
-        exact: true,
-        wakeup: true,
-        rescheduleOnReboot: true,
-        callback);
+    
 
     await saveDataToDevice(
-        alarmId.toString(), '$alarmTime'); // Save the new alarm time
+        alarmId.toString(), '$alarmId'); // Save the new alarm time
 
     // This will be null if we're running in the background.
     uiSendPort ??= IsolateNameServer.lookupPortByName(isolateName);
