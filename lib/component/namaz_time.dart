@@ -6,7 +6,6 @@ import 'package:ek_shodbe_quran/component/shared_preference.dart';
 import 'package:ek_shodbe_quran/main.dart';
 import 'package:ek_shodbe_quran/notification_controller.dart';
 import 'package:ek_shodbe_quran/provider/location_provider.dart';
-import 'package:ek_shodbe_quran/provider/namazTimeProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
@@ -42,6 +41,7 @@ class _NamazWaktoState extends State<NamazWakto> {
 
   @override
   void initState() {
+    // print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
     AndroidAlarmManager.initialize();
     _initializeAlarm();
     // Only after at least the action method is set, the notification events are delivered
@@ -59,7 +59,9 @@ class _NamazWaktoState extends State<NamazWakto> {
   void _initializeAlarm() async {
     final prefs = await SharedPreferences.getInstance();
     final String isAlarmNull = prefs.getString('${widget.alarmId}') ?? '0';
+    // print('Reaching here %%%%%%%%%%%%%%%%%%%%%%% id: ${widget.alarmId}');
     if (isAlarmNull == '0') {
+      // print('Now here %%%%%%%%%%%%%%%%%%%%%%% id: ${widget.alarmId}');
       setState(() {
         alarmIsSet = false;
       });
@@ -119,7 +121,6 @@ class _NamazWaktoState extends State<NamazWakto> {
   @override
   Widget build(BuildContext context) {
     var locationData = Provider.of<LocationProvider>(context);
-    var namazTimeData = Provider.of<NamazTimeProvider>(context);
     return AspectRatio(
       aspectRatio: 1.0,
       child: Container(
@@ -166,6 +167,7 @@ class _NamazWaktoState extends State<NamazWakto> {
                                 setState(() {
                                   alarmIsSet = true;
                                 }),
+
                                 // Fluttertoast.showToast(msg: alarmId.toString()),
 
                                 if (widget.alarmTime.isBefore(DateTime.now()))
@@ -176,8 +178,7 @@ class _NamazWaktoState extends State<NamazWakto> {
                                           .add(const Duration(days: 1));
                                     }),
                                     await saveDataToDevice(
-                                        widget.alarmId.toString(),
-                                        '${newTime}'),
+                                        widget.alarmId.toString(), '$newTime'),
                                     await AndroidAlarmManager.oneShotAt(
                                       newTime,
                                       widget.alarmId,
@@ -186,6 +187,9 @@ class _NamazWaktoState extends State<NamazWakto> {
                                   }
                                 else
                                   {
+                                    await saveDataToDevice(
+                                        widget.alarmId.toString(),
+                                        '${widget.alarmTime}'),
                                     // If alarm time is in the future, set the alarm normally
                                     await AndroidAlarmManager.oneShotAt(
                                       widget.alarmTime,
@@ -201,8 +205,6 @@ class _NamazWaktoState extends State<NamazWakto> {
 
                                 Fluttertoast.showToast(
                                     msg: 'অ্যালার্ম সেট করা হয়েছে'),
-
-                              
                               };
                       },
                       child: ImageIcon(

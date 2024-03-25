@@ -391,7 +391,7 @@ class _HomeTabState extends State<HomeTab> {
         exact: true,
         wakeup: true,
         rescheduleOnReboot: true,
-        callback,
+        durudCallback,
       );
 
       await AndroidAlarmManager.oneShotAt(
@@ -404,7 +404,7 @@ class _HomeTabState extends State<HomeTab> {
         exact: true,
         wakeup: true,
         rescheduleOnReboot: true,
-        callback,
+        durudCallback,
       );
 
       await AndroidAlarmManager.oneShotAt(
@@ -417,7 +417,7 @@ class _HomeTabState extends State<HomeTab> {
         exact: true,
         wakeup: true,
         rescheduleOnReboot: true,
-        callback,
+        durudCallback,
       );
 
       await AndroidAlarmManager.oneShotAt(
@@ -430,7 +430,7 @@ class _HomeTabState extends State<HomeTab> {
         exact: true,
         wakeup: true,
         rescheduleOnReboot: true,
-        callback,
+        durudCallback,
       );
 
       await AndroidAlarmManager.oneShotAt(
@@ -443,7 +443,7 @@ class _HomeTabState extends State<HomeTab> {
         exact: true,
         wakeup: true,
         rescheduleOnReboot: true,
-        callback,
+        durudCallback,
       );
     }
   }

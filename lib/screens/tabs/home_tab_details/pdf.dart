@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:widgets_to_image/widgets_to_image.dart';
 
 class PdfPage extends StatefulWidget {
   final String pdfHeading;
@@ -20,24 +22,23 @@ class PdfPage extends StatefulWidget {
 class _PdfPageState extends State<PdfPage> {
   final Completer<PDFViewController> _controller =
       Completer<PDFViewController>();
-  final ScreenshotController screenshotController = ScreenshotController();
+  // WidgetsToImageController to access widget
+  WidgetsToImageController imageController = WidgetsToImageController();
+  // to save image bytes of widget
+  Uint8List? bytes;
+
   var _currentPage = 0;
   var _totalPages;
 
   void _takeScreenshot() async {
-    await screenshotController
-        .capture(delay: const Duration(milliseconds: 0))
-        .then((image) async {
-      if (image != null) {
-        final directory = await getApplicationDocumentsDirectory();
-        final imagePath = await File('${directory.path}/image.png').create();
-        await imagePath.writeAsBytes(image);
-
-        /// Share Plugin
-        // await Share.shareFiles([imagePath.path]);
-        Share.shareFiles([imagePath.path], text: 'আমার পড়া বইটি শেয়ার করছি');
-      }
+    final bytes = await imageController.capture();
+    setState(() {
+      this.bytes = bytes;
     });
+    final directory = (await getExternalStorageDirectory())!.path;
+    final image = File('$directory/screenshot.png');
+    image.writeAsBytesSync(bytes!);
+    Share.shareFiles(['$directory/screenshot.png']);
   }
 
   Future<void> deleteFile(String filePath) async {
@@ -73,36 +74,33 @@ class _PdfPageState extends State<PdfPage> {
             ? Colors.black45
             : Colors.white,
       ),
-      body: RepaintBoundary(
-        key: _containerKey,
-        child: Screenshot(
-          controller: screenshotController,
-          child: PDFView(
-            filePath: widget.filePath,
-            autoSpacing: true,
-            enableSwipe: true,
-            pageSnap: true,
-            swipeHorizontal: true,
-            nightMode: false,
-            onError: (e) async {
-              await deleteFile(widget.filePath);
-              Fluttertoast.showToast(
-                  msg: 'ফাইল ক্ষতিগ্রস্ত হয়েছে এবং মুছে ফেলা হয়েছে');
-            },
-            onRender: (pages) {
-              setState(() {
-                _totalPages = pages;
-              });
-            },
-            onPageChanged: (page, total) {
-              setState(() {
-                _currentPage = page ?? 1;
-              });
-            },
-            onViewCreated: (PDFViewController pdfViewController) {
-              _controller.complete(pdfViewController);
-            },
-          ),
+      body: WidgetsToImage(
+        controller: imageController,
+        child: PDFView(
+          filePath: widget.filePath,
+          autoSpacing: true,
+          enableSwipe: true,
+          pageSnap: true,
+          swipeHorizontal: true,
+          nightMode: false,
+          onError: (e) async {
+            await deleteFile(widget.filePath);
+            Fluttertoast.showToast(
+                msg: 'ফাইল ক্ষতিগ্রস্ত হয়েছে এবং মুছে ফেলা হয়েছে');
+          },
+          onRender: (pages) {
+            setState(() {
+              _totalPages = pages;
+            });
+          },
+          onPageChanged: (page, total) {
+            setState(() {
+              _currentPage = page ?? 1;
+            });
+          },
+          onViewCreated: (PDFViewController pdfViewController) {
+            _controller.complete(pdfViewController);
+          },
         ),
       ),
       bottomSheet: Container(

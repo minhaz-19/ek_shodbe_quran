@@ -251,7 +251,7 @@ class _NamazTimeState extends State<NamazTime> {
                                     .subtract(const Duration(minutes: 5))),
                               ),
                             ),
-                            SizedBox(
+                           const SizedBox(
                               width: 7,
                             ),
                             Expanded(
