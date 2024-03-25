@@ -1,6 +1,5 @@
 import 'dart:isolate';
 import 'dart:ui';
-import 'package:adhan/adhan.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:ek_shodbe_quran/component/shared_preference.dart';
@@ -65,18 +64,17 @@ class _NamazWaktoState extends State<NamazWakto> {
         alarmIsSet = false;
       });
     } else {
-      print('################################################');
-      print('Alarm Id: ${widget.alarmId}');
-      DateTime scheduledTime = DateTime.parse(isAlarmNull);
-      print(
-          'Scheduled Alarm Time: $scheduledTime'); // Print scheduled alarm time for debugging
-      print('Expected Alarm Time: ${widget.alarmTime}');
-      print('Time remaining: ${scheduledTime.difference(DateTime.now())}');
-      
-        setState(() {
-          alarmIsSet = true;
-        });
-     
+      // print('################################################');
+      // print('Alarm Id: ${widget.alarmId}');
+      // DateTime scheduledTime = DateTime.parse(isAlarmNull);
+      // print(
+      //     'Scheduled Alarm Time: $scheduledTime'); // Print scheduled alarm time for debugging
+      // print('Expected Alarm Time: ${widget.alarmTime}');
+      // print('Time remaining: ${scheduledTime.difference(DateTime.now())}');
+
+      setState(() {
+        alarmIsSet = true;
+      });
     }
   }
 
@@ -109,10 +107,6 @@ class _NamazWaktoState extends State<NamazWakto> {
       fullScreenIntent: true,
       // customSound: 'resource://raw/adhan',
     ));
-
-   
-
-    
 
     await saveDataToDevice(
         alarmId.toString(), '$alarmId'); // Save the new alarm time
@@ -184,8 +178,6 @@ class _NamazWaktoState extends State<NamazWakto> {
                                     await saveDataToDevice(
                                         widget.alarmId.toString(),
                                         '${newTime}'),
-                                    print('Alarm Time: ${newTime}'),
-                                    print('Current Time: ${DateTime.now()}'),
                                     await AndroidAlarmManager.oneShotAt(
                                       newTime,
                                       widget.alarmId,
@@ -210,17 +202,7 @@ class _NamazWaktoState extends State<NamazWakto> {
                                 Fluttertoast.showToast(
                                     msg: 'অ্যালার্ম সেট করা হয়েছে'),
 
-                                // await AwesomeNotifications().createNotification(
-                                //     content: NotificationContent(
-                                //   id: 10,
-                                //   channelKey: "custom_sound2",
-                                //   title: 'It\'s time to morph!',
-                                //   body: 'It\'s time to go save the world!',
-                                //   notificationLayout:
-                                //       NotificationLayout.BigPicture,
-                                //   // bigPicture: 'asset://assets/images/fireman-hero.jpg',
-                                //   color: Colors.yellow,
-                                // ))
+                              
                               };
                       },
                       child: ImageIcon(

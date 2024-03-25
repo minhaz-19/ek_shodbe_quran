@@ -91,9 +91,9 @@ class _HomeTabState extends State<HomeTab> {
       _is_loading = true;
     });
     await getDataFromDevice('periodic alarm').then((value) {
-      if (value == null) {
-        Fluttertoast.showToast(msg: 'Periodic Alarm is not set');
-      }
+      // if (value == null) {
+      //   Fluttertoast.showToast(msg: 'Periodic Alarm is not set');
+      // }
     });
     AndroidAlarmManager.initialize();
     // Only after at least the action method is set, the notification events are delivered
@@ -238,7 +238,7 @@ class _HomeTabState extends State<HomeTab> {
     }
 
     if (_firstTimeAlarmLoad) {
-      Fluttertoast.showToast(msg: 'Setting Master Alarm');
+      // Fluttertoast.showToast(msg: 'Setting Master Alarm');
       await AndroidAlarmManager.periodic(
           const Duration(minutes: 1), 41, periodicCallback);
       setState(() {
