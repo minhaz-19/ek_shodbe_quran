@@ -265,7 +265,7 @@ class _HomeTabState extends State<HomeTab> {
   @pragma('vm:entry-point')
   static Future<void> periodicCallback(int alarmId) async {
     // set other alarms
-        final prefs = await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
     final String isAlarm1Null = prefs.getString('1') ?? '0';
     final String isAlarm2Null = prefs.getString('2') ?? '0';
     final String isAlarm3Null = prefs.getString('3') ?? '0';
@@ -289,21 +289,27 @@ class _HomeTabState extends State<HomeTab> {
     DateTime nextFajr = alarmPrayerTimes.fajr.add(const Duration(days: 1));
     DateTime nextDhuhr = alarmPrayerTimes.dhuhr.add(const Duration(days: 1));
     DateTime nextAsr = alarmPrayerTimes.asr.add(const Duration(days: 1));
-    DateTime nextMaghrib = alarmPrayerTimes.maghrib.add(const Duration(days: 1));
+    DateTime nextMaghrib =
+        alarmPrayerTimes.maghrib.add(const Duration(days: 1));
     DateTime nextIsha = alarmPrayerTimes.isha.add(const Duration(days: 1));
-    
-    DateTime minBeforeFajr = alarmPrayerTimes.fajr.subtract(const Duration(minutes: 15));
-    DateTime minBeforeDhuhr = alarmPrayerTimes.dhuhr.subtract(const Duration(minutes: 15));
-    DateTime minBeforeAsr = alarmPrayerTimes.asr.subtract(const Duration(minutes: 15));
-    DateTime minBeforeMaghrib = alarmPrayerTimes.maghrib.subtract(const Duration(minutes: 15));
-    DateTime minBeforeIsha = alarmPrayerTimes.isha.subtract(const Duration(minutes: 15));
+
+    DateTime minBeforeFajr =
+        alarmPrayerTimes.fajr.subtract(const Duration(minutes: 15));
+    DateTime minBeforeDhuhr =
+        alarmPrayerTimes.dhuhr.subtract(const Duration(minutes: 15));
+    DateTime minBeforeAsr =
+        alarmPrayerTimes.asr.subtract(const Duration(minutes: 15));
+    DateTime minBeforeMaghrib =
+        alarmPrayerTimes.maghrib.subtract(const Duration(minutes: 15));
+    DateTime minBeforeIsha =
+        alarmPrayerTimes.isha.subtract(const Duration(minutes: 15));
 
     DateTime nextminBeforeFajr = minBeforeFajr.add(const Duration(days: 1));
     DateTime nextminBeforeDhuhr = minBeforeDhuhr.add(const Duration(days: 1));
     DateTime nextminBeforeAsr = minBeforeAsr.add(const Duration(days: 1));
-    DateTime nextminBeforeMaghrib = minBeforeMaghrib.add(const Duration(days: 1));
+    DateTime nextminBeforeMaghrib =
+        minBeforeMaghrib.add(const Duration(days: 1));
     DateTime nextminBeforeIsha = minBeforeIsha.add(const Duration(days: 1));
-
 
     if (isAlarm1Null != '0') {
       await AndroidAlarmManager.oneShotAt(
@@ -408,9 +414,7 @@ class _HomeTabState extends State<HomeTab> {
       );
 
       await AndroidAlarmManager.oneShotAt(
-        DateTime.now().isBefore(minBeforeAsr)
-            ? minBeforeAsr
-            : nextminBeforeAsr,
+        DateTime.now().isBefore(minBeforeAsr) ? minBeforeAsr : nextminBeforeAsr,
         8,
         alarmClock: true,
         allowWhileIdle: true,
@@ -448,10 +452,6 @@ class _HomeTabState extends State<HomeTab> {
     }
   }
 
-
-
-
-
   // The callback for our alarm
   @pragma('vm:entry-point')
   static Future<void> callback(int alarmId) async {
@@ -480,7 +480,7 @@ class _HomeTabState extends State<HomeTab> {
     ));
   }
 
-    // The callback for our durud
+  // The callback for our durud
   @pragma('vm:entry-point')
   static Future<void> durudCallback(int alarmId) async {
     // Show a notification
@@ -508,7 +508,7 @@ class _HomeTabState extends State<HomeTab> {
     ));
   }
 
-    // The background
+  // The background
   static SendPort? uiSendPort;
 
   @override
@@ -654,6 +654,7 @@ class _HomeTabState extends State<HomeTab> {
                                             .push(MaterialPageRoute(
                                                 builder: (context) =>
                                                     const ReadQuran()));
+                                    
                                       },
                                       child: Image.asset(
                                         'assets/icons/rightArrow.png',
