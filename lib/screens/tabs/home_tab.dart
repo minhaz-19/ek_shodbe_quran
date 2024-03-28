@@ -300,7 +300,7 @@ class _HomeTabState extends State<HomeTab> {
     DateTime minBeforeAsr =
         alarmPrayerTimes.asr.subtract(const Duration(minutes: 15));
     DateTime minBeforeMaghrib =
-        alarmPrayerTimes.maghrib.subtract(const Duration(minutes: 15));
+        alarmPrayerTimes.maghrib.subtract(const Duration(minutes: 12));
     DateTime minBeforeIsha =
         alarmPrayerTimes.isha.subtract(const Duration(minutes: 15));
 
@@ -310,6 +310,8 @@ class _HomeTabState extends State<HomeTab> {
     DateTime nextminBeforeMaghrib =
         minBeforeMaghrib.add(const Duration(days: 1));
     DateTime nextminBeforeIsha = minBeforeIsha.add(const Duration(days: 1));
+
+    DateTime current_magrib = alarmPrayerTimes.maghrib.add(const Duration(minutes: 3));
 
     if (isAlarm1Null != '0') {
       await AndroidAlarmManager.oneShotAt(
@@ -322,7 +324,7 @@ class _HomeTabState extends State<HomeTab> {
         exact: true,
         wakeup: true,
         rescheduleOnReboot: true,
-        callback,
+        fazrcallback,
       );
     }
 
@@ -359,7 +361,7 @@ class _HomeTabState extends State<HomeTab> {
     if (isAlarm4Null != '0') {
       await AndroidAlarmManager.oneShotAt(
         DateTime.now().isBefore(alarmPrayerTimes.maghrib)
-            ? alarmPrayerTimes.maghrib
+            ? current_magrib
             : nextMaghrib,
         4,
         alarmClock: true,
@@ -460,6 +462,34 @@ class _HomeTabState extends State<HomeTab> {
         content: NotificationContent(
       id: alarmId,
       channelKey: 'custom_sound',
+      actionType: ActionType.Default,
+      title: 'সালাতের সময় হয়েছে',
+      body: (alarmId == 1)
+          ? 'ফজরের সালাতের সময় হয়েছে'
+          : (alarmId == 2)
+              ? 'যোহরের সালাতের সময় হয়েছে'
+              : (alarmId == 3)
+                  ? 'আসরের সালাতের সময় হয়েছে'
+                  : (alarmId == 4)
+                      ? 'মাগরিবের সালাতের সময় হয়েছে'
+                      : (alarmId == 5)
+                          ? 'এশার সালাতের সময় হয়েছে'
+                          : 'সালাতের সময় হয়েছে',
+      color: Colors.white,
+      wakeUpScreen: true,
+      fullScreenIntent: true,
+      // customSound: 'resource://raw/adhan',
+    ));
+  }
+
+    // The callback for our alarm
+  @pragma('vm:entry-point')
+  static Future<void> fazrcallback(int alarmId) async {
+    // Show a notification
+    AwesomeNotifications().createNotification(
+        content: NotificationContent(
+      id: alarmId,
+      channelKey: 'fazr_sound',
       actionType: ActionType.Default,
       title: 'সালাতের সময় হয়েছে',
       body: (alarmId == 1)

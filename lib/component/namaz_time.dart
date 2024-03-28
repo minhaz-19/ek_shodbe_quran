@@ -90,7 +90,7 @@ class _NamazWaktoState extends State<NamazWakto> {
     AwesomeNotifications().createNotification(
         content: NotificationContent(
       id: alarmId,
-      channelKey: 'custom_sound',
+      channelKey: alarmId==1? 'fazr_sound' : 'custom_sound',
       actionType: ActionType.Default,
       title: 'সালাতের সময় হয়েছে',
       body: (alarmId == 1)
